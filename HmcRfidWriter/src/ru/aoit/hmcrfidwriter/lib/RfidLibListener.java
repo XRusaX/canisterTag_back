@@ -1,0 +1,19 @@
+package ru.aoit.hmcrfidwriter.lib;
+
+import ru.aoit.hmc.rfid.ruslandata.RfidData;
+
+public interface RfidLibListener {
+	void onTouch(int id);
+
+	void onDetouch(int id);
+
+	void onWriteOk(int id);
+
+	void onError(String message);
+
+	void onData(int id, RfidData data);
+	
+	void onDebudMessage(String message);
+	
+	void onClearTag(int id);
+}

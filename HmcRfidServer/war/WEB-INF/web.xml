@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0" xmlns="http://java.sun.com/xml/ns/javaee">
+
+	<!-- Servlets -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>appService</servlet-name>
+		<servlet-class>ru.nppcrts.common.gwt.app.server.AppServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>appService</servlet-name>
+		<url-pattern>/hmcrfidserver/application</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>loginService</servlet-name>
+		<servlet-class>ru.nppcrts.common.gwt.auth.server.LoginServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/hmcrfidserver/login</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>commomdataService</servlet-name>
+		<servlet-class>ru.nppcrts.common.gwt.app.server.commondata.CommonDataServiceImpl2</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>commomdataService</servlet-name>
+		<url-pattern>/hmcrfidserver/commonData</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>RuslanTest</servlet-name>
+		<servlet-class>ru.aoit.hmcapp.servlet.RuslanTestServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RuslanTest</servlet-name>
+		<url-pattern>/test</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Report</servlet-name>
+		<servlet-class>ru.aoit.hmcapp.servlet.HmcReportServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Report</servlet-name>
+		<url-pattern>/report</url-pattern>
+	</servlet-mapping>
+
+	
+	<servlet>
+		<servlet-name>RfidRpc</servlet-name>
+		<servlet-class>ru.aoit.hmcapp.servlet.HmcRfidRpcServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RfidRpc</servlet-name>
+		<url-pattern>/rfidrpc</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>TestRpc</servlet-name>
+		<servlet-class>ru.aoit.hmcapp.servlet.HmcTestRpcServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TestRpc</servlet-name>
+		<url-pattern>/testrpc</url-pattern>
+	</servlet-mapping>
+
+	
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>HmcRfidServer.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>

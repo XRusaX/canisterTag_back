@@ -1,0 +1,33 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.encoding = "UTF-8"
+
+dependencies {
+  compile files('../common-java/Libs/gson-2.8.6.jar')
+  compile files('../common-java/Libs/FlatLaF/flatlaf-1.1.2.jar')
+} 
+
+sourceSets {
+   main {
+    resources {
+        srcDirs 'src'
+		srcDirs "../common-java/Common/src" 
+		srcDirs "../HmcRfidCommon/src" 
+        }
+     java {
+        srcDirs 'src'
+		srcDirs "../common-java/Common/src" 
+		srcDirs "../HmcRfidCommon/src" 
+     }
+   }
+ }
+
+jar {
+ 	baseName = 'rfidwriter'
+    manifest.attributes('Main-Class': "ru.aoit.hmcrfidwriter.RfidWriter")
+    //create a single Jar with all dependencies - otherwise external jar is not included
+    from configurations.compile.collect { zipTree(it) }
+}
