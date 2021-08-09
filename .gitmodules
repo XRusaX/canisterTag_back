@@ -1,0 +1,3 @@
+[submodule "common-java"]
+	path = common-java
+	url = git@git.ao-it.ru:v.krupskii/common-java.git
