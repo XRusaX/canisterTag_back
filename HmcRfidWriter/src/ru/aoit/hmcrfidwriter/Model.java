@@ -84,7 +84,7 @@ public class Model {
 		}
 
 		@Override
-		public void onWriteOk(int id) {
+		public void onWriteOk(Integer id) {
 			SwingUtilities.invokeLater(() -> {
 				setProcessingState(false);
 				try {
@@ -131,7 +131,7 @@ public class Model {
 		}
 
 		@Override
-		public void onDebudMessage(String message) {
+		public void onDebugMessage(String message) {
 			SwingUtilities.invokeLater(() -> {
 				Model.this.modelListener.onDebugMessage(message);
 			});
