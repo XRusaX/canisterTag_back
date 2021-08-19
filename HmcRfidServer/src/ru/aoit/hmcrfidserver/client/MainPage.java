@@ -11,12 +11,11 @@ import ru.aoit.appcommon.shared.AppState;
 import ru.aoit.appcommon.shared.auth.UserData;
 import ru.aoit.hmcdb.shared.Agent;
 import ru.aoit.hmcdb.shared.Company.CompanyType;
+import ru.aoit.hmcdb.shared.Hmc;
 import ru.aoit.hmcdb.shared.Permissions;
-import ru.aoit.hmcdb.shared.rfid.Hmc;
 import ru.aoit.hmcdb.shared.rfid.Quota;
 import ru.aoit.hmcdb.shared.rfid.Report;
 import ru.aoit.hmcdb.shared.rfid.RfidLabel;
-import ru.aoit.hmcdb.shared.rfid.RfidLabelGroup;
 import ru.aoit.hmcdb.shared.test.TestReport;
 import ru.nppcrts.common.gwt.client.AppMainPage;
 import ru.nppcrts.common.gwt.client.AppService;
@@ -97,7 +96,9 @@ public class MainPage extends AppMainPage {
 		}
 
 		eventBus = new PageEventBus();
-		tabPanel.add(new CommonListPanelX("МГЦ", Hmc.class, eventBus), "МГЦ");
+		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
+				.addW(new CommonListPanelX("МГЦ", Hmc.class, eventBus), 30)
+				.addX(new CommonListPanelX("Отчеты", Report.class, eventBus)), "МГЦ");
 
 		if (Login.user.hasPermission(Permissions.PERMISSION_TEST)) {
 			eventBus = new PageEventBus();
@@ -108,9 +109,7 @@ public class MainPage extends AppMainPage {
 		if (Login.user.hasPermission(Permissions.PERMISSION_WRITE_RFID)) {
 			eventBus = new PageEventBus();
 			tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-					.addW(new CommonListPanelX("Группы", RfidLabelGroup.class, eventBus).setEditable(false), 50)//
-					.addW(new CommonListPanelX("Метки", RfidLabel.class, eventBus).setEditable(false), 25)//
-					.addX(new CommonListPanelX("Отчеты", Report.class, eventBus).setEditable(false))//
+					.addX(new CommonListPanelX("Метки", RfidLabel.class, eventBus).setEditable(false))//
 					, "Метки");
 
 			eventBus = new PageEventBus();
@@ -126,9 +125,9 @@ public class MainPage extends AppMainPage {
 			tabPanel.add(new LoggerPanel(true), "Журнал");
 
 		if (Login.user.hasPermission(UserData.PERMISSION_USERS)) {
-//			tabPanel.add(new UsersPage(true), "Пользователи");
-			eventBus = new PageEventBus();
-			tabPanel.add(new CommonListPanelX("Пользователи", UserData.class, eventBus), "Пользователи");
+			tabPanel.add(new UsersPage(true), "Пользователи");
+//			eventBus = new PageEventBus();
+//			tabPanel.add(new CommonListPanelX("Пользователи", UserData.class, eventBus), "Пользователи");
 		}
 
 		if (Login.user.company == null)

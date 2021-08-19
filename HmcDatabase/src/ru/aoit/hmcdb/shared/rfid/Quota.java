@@ -29,12 +29,12 @@ public class Quota {
 	public String userName;
 
 	@UILabel(label = "Производство", sortable = true)
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
 	@UILabel(label = "Средство", sortable = true)
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Agent agent;
 

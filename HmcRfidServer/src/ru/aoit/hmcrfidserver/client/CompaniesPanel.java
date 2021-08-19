@@ -39,7 +39,7 @@ public class CompaniesPanel extends CommonListPanelX {
 							List<String> permissions) {
 						String hashNew = AuthUtils.getPwdHash(user, passwordNew);
 						String hashCur = AuthUtils.getPwdHash(Login.user.name, passwordOld);
-						loginService.addUser(user, hashNew, hashCur, permissions, email, company.id,
+						loginService.addUser(user, hashNew, hashCur, permissions, email, company.getLong("id"),
 								new AlertAsyncCallback<Void>(null));
 					}
 				}.center();
