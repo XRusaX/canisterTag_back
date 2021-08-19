@@ -57,7 +57,8 @@ public class RfidWriter extends JFrame {
 		@Override
 		public void onWriteDoneOk(String writtenData) {
 			tagProperties.setContentType("text/html");
-			tagProperties.setText("<h2>Осталось меток: " + model.getTagsQnt() + "<br><br>Данные успешно записаны</h2>\n\n" + writtenData);
+			tagProperties.setText("<h2>Осталось меток: " + model.getTagsQnt()
+					+ "<br><br>Данные успешно записаны</h2>\n\n" + writtenData);
 			tagProperties.setCaretPosition(0);
 			setMessage(Severity.INFO, "Метка записана", null);
 			indicatorLabel.setIcon(new ImageIcon(RfidWriter.class.getResource("/resources/rfid-ok-96.png")));
@@ -66,7 +67,7 @@ public class RfidWriter extends JFrame {
 		@Override
 		public void onReadOk(String readedData) {
 			tagProperties.setContentType("text/html");
-			tagProperties.setText(readedData);
+			tagProperties.setText("<h2>Данные на метке:</h2>\n\n" + readedData);
 			tagProperties.setCaretPosition(0);
 			setMessage(Severity.INFO, "Метка прочитана", null);
 			indicatorLabel.setIcon(new ImageIcon(RfidWriter.class.getResource("/resources/rfid-ok-96.png")));
@@ -88,7 +89,8 @@ public class RfidWriter extends JFrame {
 			if (writeButton.isSelected()) {
 				tagProperties.setContentType("text/html");
 				String toBeWrite = model.peekNextData();
-				tagProperties.setText("<h2>Осталось меток: " + model.getTagsQnt() + "<br><br>Будут записаны данные:</h2>\n\n" + toBeWrite);
+				tagProperties.setText("<h2>Осталось меток: " + model.getTagsQnt()
+						+ "<br><br>Будут записаны данные:</h2>\n\n" + toBeWrite);
 			} else {
 				tagProperties.setContentType("text/plain");
 				tagProperties.setText("");
@@ -151,7 +153,7 @@ public class RfidWriter extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				model.stop();
 				e.getWindow().setVisible(false);
-                System.exit(0);
+				System.exit(0);
 			}
 		});
 
@@ -182,7 +184,8 @@ public class RfidWriter extends JFrame {
 			if (writeButton.isSelected()) {
 				tagProperties.setContentType("text/html");
 				String toBeWrite = model.peekNextData();
-				tagProperties.setText("<h2>Осталось меток: " + model.getTagsQnt() + "<br><br>Будут записаны данные:</h2>\n\n" + toBeWrite);
+				tagProperties.setText("<h2>Осталось меток: " + model.getTagsQnt()
+						+ "<br><br>Будут записаны данные:</h2>\n\n" + toBeWrite);
 			}
 //			try {
 //				UIManager.setLookAndFeel(writeButton.isSelected() ? new FlatDarkLaf() : new FlatLightLaf());
@@ -307,8 +310,7 @@ public class RfidWriter extends JFrame {
 		loginButton
 				.setText(model.connectionToServer.userData != null ? userPrefs.get("logginedUser", "Войти") : "Войти");
 
-		boolean canWrite = model.connectionToServer.userData != null
-				&& model.connectionToServer.userData.canWrite;
+		boolean canWrite = model.connectionToServer.userData != null && model.connectionToServer.userData.canWrite;
 		writeButton.setEnabled(canWrite);
 		if (!canWrite)
 			writeButton.setSelected(false);
