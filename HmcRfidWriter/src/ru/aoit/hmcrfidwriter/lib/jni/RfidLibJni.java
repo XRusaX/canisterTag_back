@@ -135,6 +135,11 @@ public class RfidLibJni implements RfidLib {
 				listener.onDebudMessage("TEXT_MSG");
 				listener.onError(data.TEXT);
 				break;
+				
+			case Constants.UART_FAILED_MSG:
+				listener.onDebudMessage("UART_FAILED_MSG");
+				listener.onError("UART_FAILED_MSG");
+				break;
 
 			default:
 				break;
