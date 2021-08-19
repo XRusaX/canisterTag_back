@@ -16,6 +16,7 @@ public class HmcUserService extends UserServiceDB {
 	{
 		addPermission(Permissions.PERMISSION_TEST, "Тестирование плат");
 		addPermission(Permissions.PERMISSION_WRITE_RFID, "Запись меток");
+		addPermission(Permissions.PERMISSION_USER, "Пользователь");
 	}
 
 	@Override

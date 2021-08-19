@@ -21,7 +21,8 @@
 	<inherits name='ru.nppcrts.common.gwt.CommonGWT' />
 	<inherits name='ru.nppcrts.common.gwt.app.GwtApp' />
 	<inherits name='ru.aoit.appcommon.AppCommon' />
-	
+	<inherits name='ru.aoit.hmc.rfid.HmcRfidCommon' />
+		
 	<inherits name='ru.aoit.hmcdb.HmcDatabase' />
 
 

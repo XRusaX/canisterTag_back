@@ -22,9 +22,4 @@ public class Agent {
 	public int consumption2_ml_m3;
 	@UILabel(label = "Время аэрации (мин)")
 	public int aeration_min;
-
-	@Override
-	public String toString() {
-		return name;
-	}
 }

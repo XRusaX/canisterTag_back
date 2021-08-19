@@ -19,7 +19,12 @@ public class Company {
 	public String name;
 
 	public enum CompanyType {
-		CANISTER, TEST,
+		@UILabel(label = "Производство канистр")
+		CANISTER, //
+		@UILabel(label = "Тестирование плат")
+		TEST, //
+		@UILabel(label = "Пользователи")
+		CUSTOMER,//
 	}
 
 	@UILabel(label = "Тип", sortable = true)
@@ -33,10 +38,6 @@ public class Company {
 	public String contacts;
 
 	@UILabel(label = "Размер блока меток", sortable = true)
-	public int rfidBlockSize = 10;
+	public Integer rfidBlockSize;
 
-	@Override
-	public String toString() {
-		return name;
-	}
 }

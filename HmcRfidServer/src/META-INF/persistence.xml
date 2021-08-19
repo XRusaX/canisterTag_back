@@ -15,18 +15,12 @@
 		<class>ru.aoit.hmcdb.shared.rfid.Quota</class>
 		<class>ru.aoit.hmcdb.shared.rfid.Report</class>
 		<class>ru.aoit.hmcdb.shared.rfid.RfidLabel</class>
-		<class>ru.aoit.hmcdb.shared.rfid.RfidLabelGroup</class>
 		<class>ru.aoit.hmcdb.shared.test.TestReport</class>
-		<class>ru.aoit.hmcdb.shared.rfid.Hmc</class>
-		
+		<class>ru.aoit.hmcdb.shared.Hmc</class>
+
 		<properties>
 			<property name="javax.persistence.jdbc.driver"
 				value="com.mysql.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url"
-				value="jdbc:mysql://192.168.56.10/HTEST" />
-			<property name="javax.persistence.jdbc.user" value="HTEST" />
-			<property name="javax.persistence.jdbc.password"
-				value="HTEST" />
 			<property name="hibernate.dialect"
 				value="org.hibernate.dialect.MySQL55Dialect" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />

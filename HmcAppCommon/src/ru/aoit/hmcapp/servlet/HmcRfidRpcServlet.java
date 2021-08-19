@@ -33,7 +33,6 @@ import ru.aoit.hmcdb.shared.Company;
 import ru.aoit.hmcdb.shared.Permissions;
 import ru.aoit.hmcdb.shared.rfid.Quota;
 import ru.aoit.hmcdb.shared.rfid.RfidLabel;
-import ru.aoit.hmcdb.shared.rfid.RfidLabelGroup;
 import ru.nppcrts.common.rsa.Sig;
 import ru.nppcrts.common.shared.Severity;
 
@@ -143,24 +142,25 @@ public class HmcRfidRpcServlet extends RpcServlet implements HmcRfidRpcInterface
 				throw new IllegalArgumentException("Ошибка при выделении RFID");
 			}
 
-			RfidLabelGroup rfidLabelGroup = new RfidLabelGroup();
-
-			rfidLabelGroup.canisterVolume = canisterVolume;
-			rfidLabelGroup.agent = agent;
-
-			rfidLabelGroup.time = new Date();
-
-			rfidLabelGroup.userName = user.name;
-			rfidLabelGroup.company = company;
-
-			conn.persist(rfidLabelGroup);
+//			RfidLabelGroup rfidLabelGroup = new RfidLabelGroup();
+//
+//			rfidLabelGroup.canisterVolume = canisterVolume;
+//			rfidLabelGroup.agent = agent;
+//
+//			rfidLabelGroup.time = new Date();
+//
+//			rfidLabelGroup.userName = user.name;
+//			rfidLabelGroup.company = company;
+//
+//			conn.persist(rfidLabelGroup);
 
 			// DBExt.insert(conn, rfidLabelGroup);
 
+			Date time = new Date();
+			
 			for (int i = 0; i < company.rfidBlockSize; i++) {
 
-				RfidLabel rfidLabel = new RfidLabel();
-				rfidLabel.rfidLabelGroup = rfidLabelGroup;
+				RfidLabel rfidLabel = new RfidLabel(0, time, user.name, company, agent, canisterVolume);
 				conn.persist(rfidLabel);
 				rfidLabel.name = (int) rfidLabel.id;
 				conn.persist(rfidLabel);
@@ -184,7 +184,6 @@ public class HmcRfidRpcServlet extends RpcServlet implements HmcRfidRpcInterface
 
 				list.add(data);
 			}
-			database.incrementTableVersion(RfidLabelGroup.class);
 			database.incrementTableVersion(RfidLabel.class);
 		});
 
