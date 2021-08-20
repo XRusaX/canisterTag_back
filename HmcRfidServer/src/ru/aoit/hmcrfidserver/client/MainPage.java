@@ -2,9 +2,11 @@ package ru.aoit.hmcrfidserver.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import ru.aoit.appcommon.shared.AppConfig;
 import ru.aoit.appcommon.shared.AppState;
@@ -29,7 +31,10 @@ import ru.nppcrts.common.gwt.client.commondata.CommonListPanelX;
 import ru.nppcrts.common.gwt.client.commondata.PageEventBus;
 import ru.nppcrts.common.gwt.client.connections.ConnectionsPage;
 import ru.nppcrts.common.gwt.client.logger.LoggerPanel;
+import ru.nppcrts.common.gwt.client.ui.ContextMenu;
 import ru.nppcrts.common.gwt.client.ui.panel.DockLayoutPanelX;
+import ru.nppcrts.common.gwt.client.ui.panel.PropertiesPanel;
+import ru.nppcrts.common.gwt.client.ui.panel.VertPanel;
 import ru.nppcrts.common.gwt.client.ui.toolbar.StatusBar;
 
 public class MainPage extends AppMainPage {
@@ -126,8 +131,9 @@ public class MainPage extends AppMainPage {
 
 		if (Login.user.hasPermission(UserData.PERMISSION_USERS)) {
 			tabPanel.add(new UsersPage(true), "Пользователи");
-//			eventBus = new PageEventBus();
-//			tabPanel.add(new CommonListPanelX("Пользователи", UserData.class, eventBus), "Пользователи");
+			// eventBus = new PageEventBus();
+			// tabPanel.add(new CommonListPanelX("Пользователи", UserData.class,
+			// eventBus), "Пользователи");
 		}
 
 		if (Login.user.company == null)
@@ -136,6 +142,46 @@ public class MainPage extends AppMainPage {
 		if (Login.user.hasPermission(UserData.PERMISSION_SETTINGS))
 			tabPanel.add(new CommonSettingsPanel(null, null), "Настройки");
 		// 10.6.150.102
+
+		FlowList<String> flowList = new FlowList<String>() {
+			@Override
+			protected Widget createWidget(String t) {
+				Label label = new Label(t);
+
+				label.getElement().getStyle().setFontSize(3, Unit.EM);
+				PropertiesPanel pp = new PropertiesPanel("---");
+				// props.forEach((k, v) -> pp.add(k, v));
+
+				pp.add("aaa", "bbb");
+				pp.add("ccc", "ddd");
+
+				VertPanel vertPanel = new VertPanel(label, pp);
+				vertPanel.getElement().getStyle().setBackgroundColor("White");
+
+				return vertPanel;
+			}
+
+			@Override
+			protected void onDoubleClick(String t) {
+				Window.alert(t);
+			}
+
+			@Override
+			protected void prepareContextMenu(ContextMenu menu, String t, Runnable onPrepared) {
+				menu.addItem("del", () -> {
+					Window.alert("del " + t);
+				});
+
+				onPrepared.run();
+			}
+		};
+
+		for (int i = 0; i < 1000; i++) {
+			flowList.add("abc" + i);
+		}
+
+		tabPanel.add(flowList, "XXXX");
+		tabPanel.add(new CommonDataFlowList(Hmc.class), "HMC");
 
 	}
 
