@@ -49,7 +49,7 @@ public class Model {
 			throw new UnsupportedOperationException();
 		}
 	};
-	
+
 	private RfidLib lib;
 
 	private RfidLibListener libListener = new RfidLibListener() {
@@ -112,6 +112,8 @@ public class Model {
 
 		@Override
 		public void onData(int id, RfidData data) {
+			if (writeMode)
+				return;
 			SwingUtilities.invokeLater(() -> {
 
 				System.out.println("onData " + id);
