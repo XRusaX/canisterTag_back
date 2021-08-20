@@ -7,13 +7,13 @@ public interface RfidLibListener {
 
 	void onDetouch(int id);
 
-	void onWriteOk(int id);
+	void onWriteOk(Integer id);
 
 	void onError(String message);
 
 	void onData(int id, RfidData data);
 	
-	void onDebudMessage(String message);
+	void onDebugMessage(String message);
 	
 	void onClearTag(int id);
 }

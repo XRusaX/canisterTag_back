@@ -21,7 +21,7 @@ public class RfidLibJni implements RfidLib {
 
 	@Override
 	public void start() {
-		listener.onDebudMessage("RFIDComponent.start()");
+		listener.onDebugMessage("RFIDComponent.start()");
 		RFIDComponent.start();
 	}
 
@@ -29,31 +29,31 @@ public class RfidLibJni implements RfidLib {
 	public void stop() {
 		stopped = true;
 		RfidData data = new RfidData();
-		data.REQ = Constants.STOP_REQ;
-		listener.onDebudMessage("stop()");
+		data.REQ = Constants.STOP_REQ.value;
+		listener.onDebugMessage("stop()");
 		sendMessage(data);
 	}
 
 	@Override
 	public void writeData(int id, RfidData data) {
-		listener.onDebudMessage("writeData(int id, RfidData data)");
-		data.REQ = Constants.WRITE_DATA_REQ;
+		listener.onDebugMessage("writeData(int id, RfidData data)");
+		data.REQ = Constants.WRITE_DATA_REQ.value;
 		sendMessage(data);
 	}
-	
+
 	@Override
 	public void clearTag(int id) {
-		listener.onDebudMessage("clearTag(int id)");
+		listener.onDebugMessage("clearTag(int id)");
 		RfidData data = new RfidData();
-		data.REQ = Constants.CLEAN_REQ;
+		data.REQ = Constants.CLEAN_REQ.value;
 		sendMessage(data);
 	}
 
 	@Override
 	public void readData(int id) {
-		listener.onDebudMessage("readData(int id)");
+		listener.onDebugMessage("readData(int id)");
 		RfidData data = new RfidData();
-		data.REQ = Constants.READ_DATA_REQ;
+		data.REQ = Constants.READ_DATA_REQ.value;
 		sendMessage(data);
 	}
 
@@ -62,7 +62,7 @@ public class RfidLibJni implements RfidLib {
 		String s = new String();
 		for (byte b : bytes)
 			s += String.format("%02X ", b);
-		listener.onDebudMessage("-> " + s);
+		listener.onDebugMessage("-> " + s);
 		RFIDComponent.sendMessage(bytes);
 	}
 
@@ -81,7 +81,7 @@ public class RfidLibJni implements RfidLib {
 			String s = new String();
 			for (byte b : messageBytes)
 				s += String.format("%02X ", b);
-			listener.onDebudMessage("<- " + s);
+			listener.onDebugMessage("<- " + s);
 
 			RfidData data = RuslanStructIO.read(messageBytes, RfidData.class);
 			processMessage(data);
@@ -91,63 +91,47 @@ public class RfidLibJni implements RfidLib {
 
 	private void processMessage(RfidData data) {
 		if (data.RSP != null) {
-			switch (data.RSP) {
-			case Constants.READ_DATA_REQ:
-				listener.onDebudMessage("RSP + READ_DATA_REQ");
+			Constants rsp = Constants.byValue(data.RSP);
+			listener.onDebugMessage("RSP " + rsp.name());
+
+			switch (rsp) {
+			case READ_DATA_REQ:
 				listener.onData(data.UID, data);
+				break;
+			case WRITE_DATA_REQ:
+				listener.onWriteOk(data.ID);
+				break;
+			default:
+				listener.onError("RSP " + rsp.name());
 				break;
 			}
 		}
 
 		if (data.MSG != null) {
-			switch (data.MSG) {
-			case Constants.RFID_DETECTED_MSG:
-				listener.onDebudMessage("RFID_DETECTED_MSG");
+			Constants msg = Constants.byValue(data.MSG);
+			listener.onDebugMessage("MSG " + msg.name());
+			switch (msg) {
+
+			case RFID_DETECTED_MSG:
 				listener.onTouch(data.UID);
 				break;
 
-			case Constants.RFID_REMOVED_MSG:
-				listener.onDebudMessage("RFID_REMOVED_MSG");
+			case RFID_REMOVED_MSG:
 				listener.onDetouch(data.UID);
 				break;
 
-			case Constants.DATA_MSG:
-				listener.onDebudMessage("DATA_MSG");
+			case DATA_MSG:
 				listener.onData(data.UID, data);
 				break;
 
-			case Constants.READ_ERROR_MSG:
-				listener.onDebudMessage("READ_ERROR_MSG");
-				listener.onError("READ_ERROR_MSG");
-				break;
-
-			case Constants.WRITE_ERROR_MSG:
-				listener.onDebudMessage("WRITE_ERROR_MSG");
-				listener.onError("WRITE_ERROR_MSG");
-				break;
-
-			case Constants.AUTH_ERROR_MSG:
-				listener.onDebudMessage("AUTH_ERROR_MSG");
-				listener.onError("AUTH_ERROR_MSG");
-				break;
-
-			case Constants.TEXT_MSG:
-				listener.onDebudMessage("TEXT_MSG");
-				listener.onError(data.TEXT);
-				break;
-				
-			case Constants.UART_FAILED_MSG:
-				listener.onDebudMessage("UART_FAILED_MSG");
-				listener.onError("UART_FAILED_MSG");
-				break;
-
 			default:
+				listener.onError("MSG " + msg.name());
 				break;
 			}
 		}
 
 		if (data.NAK != null) {
-			listener.onDebudMessage("NAK");
+			listener.onDebugMessage("NAK");
 			listener.onError("NAK");
 		}
 	}

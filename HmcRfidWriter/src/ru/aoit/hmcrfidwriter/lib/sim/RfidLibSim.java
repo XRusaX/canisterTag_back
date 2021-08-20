@@ -80,7 +80,7 @@ public class RfidLibSim implements RfidLib {
 
 	@Override
 	public void clearTag(int id) {
-		listener.onDebudMessage("Метка " + id + " стирается");
+		listener.onDebugMessage("Метка " + id + " стирается");
 		listener.onWriteOk(id);
 	}
 

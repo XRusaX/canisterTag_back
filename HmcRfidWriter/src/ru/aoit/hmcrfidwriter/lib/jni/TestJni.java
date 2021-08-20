@@ -9,7 +9,7 @@ public class TestJni {
 		RfidLibJni lib = new RfidLibJni(new RfidLibListener() {
 
 			@Override
-			public void onWriteOk(int id) {
+			public void onWriteOk(Integer id) {
 				// TODO Auto-generated method stub
 
 			}
@@ -36,7 +36,7 @@ public class TestJni {
 			}
 
 			@Override
-			public void onDebudMessage(String message) {
+			public void onDebugMessage(String message) {
 				// TODO Auto-generated method stub
 				
 			}

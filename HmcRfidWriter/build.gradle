@@ -29,5 +29,6 @@ jar {
  	baseName = 'rfidwriter'
     manifest.attributes('Main-Class': "ru.aoit.hmcrfidwriter.RfidWriter")
     //create a single Jar with all dependencies - otherwise external jar is not included
+    version = '0.9'
     from configurations.compile.collect { zipTree(it) }
 }

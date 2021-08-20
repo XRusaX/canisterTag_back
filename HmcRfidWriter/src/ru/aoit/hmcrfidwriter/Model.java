@@ -49,7 +49,7 @@ public class Model {
 			throw new UnsupportedOperationException();
 		}
 	};
-	
+
 	private RfidLib lib;
 
 	private RfidLibListener libListener = new RfidLibListener() {
@@ -84,7 +84,7 @@ public class Model {
 		}
 
 		@Override
-		public void onWriteOk(int id) {
+		public void onWriteOk(Integer id) {
 			SwingUtilities.invokeLater(() -> {
 				setProcessingState(false);
 				try {
@@ -112,6 +112,8 @@ public class Model {
 
 		@Override
 		public void onData(int id, RfidData data) {
+			if (writeMode)
+				return;
 			SwingUtilities.invokeLater(() -> {
 
 				System.out.println("onData " + id);
@@ -131,7 +133,7 @@ public class Model {
 		}
 
 		@Override
-		public void onDebudMessage(String message) {
+		public void onDebugMessage(String message) {
 			SwingUtilities.invokeLater(() -> {
 				Model.this.modelListener.onDebugMessage(message);
 			});
