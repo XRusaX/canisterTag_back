@@ -28,6 +28,7 @@ import ru.nppcrts.common.gwt.client.SettingsValues;
 import ru.nppcrts.common.gwt.client.auth.Login;
 import ru.nppcrts.common.gwt.client.auth.UsersPage;
 import ru.nppcrts.common.gwt.client.commondata.CommonDataFlowList;
+import ru.nppcrts.common.gwt.client.commondata.CommonListPanel;
 import ru.nppcrts.common.gwt.client.commondata.CommonListPanelX;
 import ru.nppcrts.common.gwt.client.commondata.FlowList;
 import ru.nppcrts.common.gwt.client.commondata.PageEventBus;
@@ -104,28 +105,32 @@ public class MainPage extends AppMainPage {
 
 		eventBus = new PageEventBus();
 		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-				.addW(new CommonListPanelX("МГЦ", Hmc.class, eventBus), 30)
-				.addX(new CommonListPanelX("Отчеты", Report.class, eventBus)), "МГЦ");
+				.addW(new CommonListPanelX(new CommonDataFlowList(), Hmc.class, eventBus), 30)
+				.addX(new CommonListPanelX(new CommonListPanel("Отчеты", 2000), Report.class, eventBus)), "МГЦ");
 
 		if (Login.user.hasPermission(Permissions.PERMISSION_TEST)) {
 			eventBus = new PageEventBus();
 			tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-					.addW(new CommonListPanelX("Тесты", TestReport.class, eventBus), 90), "Тесты");
+					.addW(new CommonListPanelX(new CommonListPanel("Тесты", 2000), TestReport.class, eventBus), 90),
+					"Тесты");
 		}
 
 		if (Login.user.hasPermission(Permissions.PERMISSION_WRITE_RFID)) {
 			eventBus = new PageEventBus();
 			tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-					.addX(new CommonListPanelX("Метки", RfidLabel.class, eventBus).setEditable(false))//
+					.addX(new CommonListPanelX(new CommonListPanel("Метки", 2000).setEditable(false), RfidLabel.class,
+							eventBus))//
 					, "Метки");
 
 			eventBus = new PageEventBus();
 			tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-					.addW(new CommonListPanelX("Средства", Agent.class, eventBus), 90), "Средства");
+					.addW(new CommonListPanelX(new CommonListPanel("Средства", 2000), Agent.class, eventBus), 90),
+					"Средства");
 
 			eventBus = new PageEventBus();
 			tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-					.addW(new CommonListPanelX("Квоты", Quota.class, eventBus), 90), "Квоты");
+					.addW(new CommonListPanelX(new CommonListPanel("Квоты", 2000), Quota.class, eventBus), 90),
+					"Квоты");
 		}
 
 		if (Login.user.company == null)
@@ -183,7 +188,7 @@ public class MainPage extends AppMainPage {
 		}
 
 		tabPanel.add(flowList, "XXXX");
-		tabPanel.add(new CommonDataFlowList(Hmc.class), "HMC");
+		tabPanel.add(new CommonListPanelX(new CommonDataFlowList(), Hmc.class, eventBus), "YYYY");
 
 	}
 
