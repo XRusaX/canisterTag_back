@@ -13,7 +13,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import ru.nppcrts.common.shared.cd.UILabel;
 
 @Entity
-public class Target {
+public class Room {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
@@ -21,12 +21,17 @@ public class Target {
 	@UILabel(label = "Имя", sortable = true)
 	public String name;
 
-	@UILabel(label = "Владелец", sortable = true, nullable = true)
+	@UILabel(label = "Организация", sortable = true, nullable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
-//	@UILabel(label = "Статус", sortable = true)
-//	public transient HmcReportStatus status;
+	public Room() {
+	}
+
+	public Room(String name, Company company) {
+		this.name = name;
+		this.company = company;
+	}
 
 }

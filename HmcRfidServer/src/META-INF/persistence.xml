@@ -10,13 +10,15 @@
 		<!-- Entity classes -->
 		<class>ru.aoit.appcommon.shared.MsgLoggerItem</class>
 		<class>ru.aoit.appcommon.shared.auth.UserData</class>
+		<class>ru.aoit.hmcdb.shared.Hmc</class>
 		<class>ru.aoit.hmcdb.shared.Agent</class>
 		<class>ru.aoit.hmcdb.shared.Company</class>
+		<class>ru.aoit.hmcdb.shared.Operator</class>
+		<class>ru.aoit.hmcdb.shared.Room</class>
 		<class>ru.aoit.hmcdb.shared.rfid.Quota</class>
 		<class>ru.aoit.hmcdb.shared.rfid.Report</class>
 		<class>ru.aoit.hmcdb.shared.rfid.RfidLabel</class>
 		<class>ru.aoit.hmcdb.shared.test.TestReport</class>
-		<class>ru.aoit.hmcdb.shared.Hmc</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver"

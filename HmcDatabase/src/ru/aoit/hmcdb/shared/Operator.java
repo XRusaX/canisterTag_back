@@ -10,30 +10,28 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import ru.aoit.hmc.rfid.shared.HmcReportStatus;
 import ru.nppcrts.common.shared.cd.UILabel;
 
 @Entity
-public class Hmc {
+public class Operator {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
-	@UILabel(label = "Серийный номер", isName = true, sortable = true)
-	public String serialNumber;
+	@UILabel(label = "Имя", sortable = true)
+	public String name;
 
-	@UILabel(label = "Владелец", sortable = true, nullable = true)
+	@UILabel(label = "Организация", sortable = true, nullable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
-	@UILabel(label = "Статус", sortable = true)
-	public transient HmcReportStatus status;
+	public Operator() {
+	}
 
-	public Hmc() {
+	public Operator(String name, Company company) {
+		this.name = name;
+		this.company = company;
 	}
-	
-	public Hmc(String serialNumber) {
-		this.serialNumber = serialNumber;
-	}
+
 }

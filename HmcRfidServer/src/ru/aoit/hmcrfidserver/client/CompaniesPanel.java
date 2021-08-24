@@ -23,8 +23,8 @@ import ru.nppcrts.common.shared.eventbus.EventBus;
 public class CompaniesPanel extends CommonListPanelX {
 	private static final LoginServiceAsync loginService = GWT.create(LoginService.class);
 
-	public CompaniesPanel(EventBus eventBus, CompanyType companyType) {
-		super(new CommonListPanel("Предприятия", 2000) {
+	public CompaniesPanel(EventBus eventBus, String name, CompanyType companyType, List<String> showFields) {
+		super(new CommonListPanel(name, 2000) {
 			@Override
 			protected void prepareContextMenu(ContextMenu menu, Set<CDObject> set) {
 				if (set.size() == 1 && Login.user.hasPermission(UserData.PERMISSION_USERS)) {
@@ -45,9 +45,10 @@ public class CompaniesPanel extends CommonListPanelX {
 
 				super.prepareContextMenu(menu, set);
 			}
-		}, Company.class, eventBus);
+		}.showFields(showFields), Company.class, eventBus);
 		if (companyType != null)
-			filter.stringMap.put("companyType", companyType.name());
+			filter.stringMap.put("companyType",
+					/* CompanyType.class.getName() + ":" + */ companyType.name());
 	}
 
 }
