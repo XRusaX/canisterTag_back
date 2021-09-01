@@ -104,7 +104,7 @@ public class HmcReportServlet extends SpringServlet {
 		if (room != null)
 			return room;
 
-		room = new Room(name, company);
+		room = new Room(name, null, company);
 		em.persist(room);
 
 		database.incrementTableVersion(Room.class);
@@ -118,7 +118,7 @@ public class HmcReportServlet extends SpringServlet {
 		if (hmc != null)
 			return hmc;
 
-		hmc = new Hmc(hmcSerialNumber);
+		hmc = new Hmc(hmcSerialNumber, null);
 		em.persist(hmc);
 
 		msgLogger.add(null, Severity.INFO, "МГЦ " + hmcSerialNumber + " автоматически добавлен");

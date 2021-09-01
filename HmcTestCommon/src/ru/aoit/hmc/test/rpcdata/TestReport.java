@@ -4,4 +4,5 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class TestReport implements Serializable {
+	public String serialNumber;
 }

@@ -15,6 +15,8 @@
 		<class>ru.aoit.hmcdb.shared.Company</class>
 		<class>ru.aoit.hmcdb.shared.Operator</class>
 		<class>ru.aoit.hmcdb.shared.Room</class>
+		<class>ru.aoit.hmcdb.shared.RoomLayer</class>
+		<class>ru.aoit.hmcdb.shared.RoomCell</class>
 		<class>ru.aoit.hmcdb.shared.rfid.Quota</class>
 		<class>ru.aoit.hmcdb.shared.rfid.Report</class>
 		<class>ru.aoit.hmcdb.shared.rfid.RfidLabel</class>

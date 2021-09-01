@@ -1,5 +1,6 @@
 package ru.aoit.hmcdb.shared;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,6 +16,7 @@ public class Company {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
+	@Column(unique = true)
 	@UILabel(label = "Название", sortable = true)
 	public String name;
 
@@ -39,5 +41,16 @@ public class Company {
 
 	@UILabel(label = "Размер блока меток", sortable = true)
 	public Integer rfidBlockSize;
+
+	public Company() {
+	}
+
+	public Company(String name, CompanyType companyType, String addr, String contacts, Integer rfidBlockSize) {
+		this.name = name;
+		this.companyType = companyType;
+		this.addr = addr;
+		this.contacts = contacts;
+		this.rfidBlockSize = rfidBlockSize;
+	}
 
 }

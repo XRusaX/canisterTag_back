@@ -85,6 +85,33 @@ public class MainPage extends AppMainPage {
 
 		TabLayoutPanel tabPanel2 = tabPanel;
 
+		
+		eventBus = new PageEventBus();
+		if (Login.user.company == null) {
+			tabPanel2 = new TabLayoutPanel(2, Unit.EM);
+			tabPanel.add(new DockLayoutPanelX(Unit.PCT)
+					.addW(new CompaniesPanel(eventBus, "Клиенты", CompanyType.CUSTOMER, Arrays.asList("name")), 20)
+					.addX(tabPanel2), "Клиенты");
+		}
+		if (Login.user.hasPermission(Permissions.PERMISSION_USER)) {
+			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
+
+			panel.addW(new CommonListPanelX(new CommonDataFlowList(), Hmc.class, eventBus), 40);
+			panel.add(new CommonListPanelX(new CommonListPanel("Отчеты", 2000).setEditable(Login.user.company == null),
+					Report.class, eventBus));
+			tabPanel2.add(panel, "МГЦ");
+
+			panel = new DockLayoutPanelX(Unit.PCT);
+			panel.addW(new CommonListPanelX(new CommonListPanel(null, 2000), Room.class, eventBus), 30);
+			panel.add(new MapPanel(eventBus));
+			tabPanel2.add(panel, "Объекты");
+
+			panel = new DockLayoutPanelX(Unit.PCT);
+			panel.addW(new CommonListPanelX(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			tabPanel2.add(panel, "Операторы");
+		}
+
+
 		eventBus = new PageEventBus();
 		if (Login.user.company == null) {
 			tabPanel2 = new TabLayoutPanel(2, Unit.EM);
@@ -95,7 +122,8 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_WRITE_RFID)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelX(new CommonListPanel("Квоты", 2000), Quota.class, eventBus), 50);
+			panel.addW(new CommonListPanelX(new CommonListPanel("Квоты", 2000).setEditable(Login.user.company == null),
+					Quota.class, eventBus), 50);
 			panel.add(new CommonListPanelX(new CommonListPanel("Метки", 2000).setEditable(false), RfidLabel.class,
 					eventBus));
 			tabPanel2.add(panel, "Метки");
@@ -110,36 +138,16 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_TEST)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.add(new CommonListPanelX(new CommonListPanel("Тесты", 2000), TestReport.class, eventBus));
+			panel.add(new CommonListPanelX(new CommonListPanel(null, 2000).setEditable(Login.user.company == null),
+					TestReport.class, eventBus));
 			tabPanel2.add(panel, "Тесты");
 		}
 
 		eventBus = new PageEventBus();
-		if (Login.user.company == null) {
-			tabPanel2 = new TabLayoutPanel(2, Unit.EM);
-			tabPanel.add(new DockLayoutPanelX(Unit.PCT)
-					.addW(new CompaniesPanel(eventBus, "Клиенты", CompanyType.CUSTOMER, Arrays.asList("name")), 20)
-					.addX(tabPanel2), "Клиенты");
-		}
-		if (Login.user.hasPermission(Permissions.PERMISSION_USER)) {
-			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-
-			panel.addW(new CommonListPanelX(new CommonDataFlowList(), Hmc.class, eventBus), 40);
-			panel.add(new CommonListPanelX(new CommonListPanel("Отчеты", 2000), Report.class, eventBus));
-			tabPanel2.add(panel, "МГЦ");
-
-			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelX(new CommonListPanel("Объекты", 2000), Room.class, eventBus), 30);
-			tabPanel2.add(panel, "Объекты");
-
-			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelX(new CommonListPanel("Операторы", 2000), Operator.class, eventBus), 30);
-			tabPanel2.add(panel, "Операторы");
-		}
-
-		eventBus = new PageEventBus();
 		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-				.addX(new CommonListPanelX(new CommonListPanel("Средства", 2000), Agent.class, eventBus)), "Средства");
+				.addX(new CommonListPanelX(new CommonListPanel(null, 2000).setEditable(Login.user.company == null),
+						Agent.class, eventBus)),
+				"Средства");
 
 		if (Login.user.company == null)
 			tabPanel.add(new LoggerPanel(true), "Журнал");

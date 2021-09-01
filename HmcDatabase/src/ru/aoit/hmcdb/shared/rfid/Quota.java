@@ -42,6 +42,16 @@ public class Quota {
 	public int volume;
 
 	@UILabel(label = "Остаток")
-	public int counter;
+	public int remain;
 
+	public Quota() {
+	}
+	
+	public Quota(String userName, Company company, Agent agent, int volume, int remain) {
+		this.userName = userName;
+		this.company = company;
+		this.agent = agent;
+		this.volume = volume;
+		this.remain = remain;
+	}
 }

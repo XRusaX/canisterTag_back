@@ -18,7 +18,13 @@ public class TestReport {
 	@UILabel(label = "Дата/время", sortable = true, readOnly = true)
 	public Date time = new Date();
 
+	public String serialNumber;
+
 	public TestReport() {
+	}
+
+	public TestReport(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 
 }

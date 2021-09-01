@@ -10,32 +10,35 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import ru.nppcrts.common.shared.cd.UILabel;
-
 @Entity
-public class Room {
+public class RoomCell {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
-	@UILabel(label = "Имя", sortable = true)
-	public String name;
-
-	@UILabel(label = "Color", sortable = true)
-	public String color;
-
-	@UILabel(label = "Организация", sortable = true, nullable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
-	public Room() {
+	@ManyToOne(cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	public RoomLayer layer;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	public Room room;
+
+	public int x;
+	public int y;
+
+	public RoomCell() {
 	}
 
-	public Room(String name, String color, Company company) {
-		this.name = name;
-		this.color = color;
+	public RoomCell(Company company, RoomLayer layer, Room room, int x, int y) {
 		this.company = company;
+		this.layer = layer;
+		this.room = room;
+		this.x = x;
+		this.y = y;
 	}
-
 }

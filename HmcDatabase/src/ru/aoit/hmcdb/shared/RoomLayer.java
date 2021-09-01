@@ -13,7 +13,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import ru.nppcrts.common.shared.cd.UILabel;
 
 @Entity
-public class Room {
+public class RoomLayer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
@@ -21,21 +21,11 @@ public class Room {
 	@UILabel(label = "Имя", sortable = true)
 	public String name;
 
-	@UILabel(label = "Color", sortable = true)
-	public String color;
-
-	@UILabel(label = "Организация", sortable = true, nullable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
-	public Room() {
-	}
-
-	public Room(String name, String color, Company company) {
-		this.name = name;
-		this.color = color;
-		this.company = company;
+	public RoomLayer() {
 	}
 
 }

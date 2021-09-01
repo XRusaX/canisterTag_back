@@ -71,6 +71,7 @@ public class HmcRfidRpcServlet extends RpcServlet implements HmcRfidRpcInterface
 
 	@Override
 	public synchronized List<RfidData> getSigs(String agentName, int canisterVolume) throws Exception {
+		authComponent.checkPermissions(Permissions.PERMISSION_WRITE_RFID);
 		try {
 			List<RfidData> sigs = _getSigs(agentName, canisterVolume);
 			msgLogger.add(authComponent.getUserName(), Severity.INFO,
@@ -84,7 +85,6 @@ public class HmcRfidRpcServlet extends RpcServlet implements HmcRfidRpcInterface
 	}
 
 	private synchronized List<RfidData> _getSigs(String agentName, int canisterVolume) throws Exception {
-		authComponent.checkPermissions(Permissions.PERMISSION_WRITE_RFID);
 
 		UserData user = authComponent.getUser();
 
@@ -105,7 +105,7 @@ public class HmcRfidRpcServlet extends RpcServlet implements HmcRfidRpcInterface
 				throw new RuntimeException("Вещество " + agentName + " не зарегистрировано с системе");
 
 			List<Quota> quotas = conn.createQuery(
-					"select q from Quota q where company_id=:company_id and agent_id=:agent_id and volume=:volume and counter>0",
+					"select q from Quota q where company_id=:company_id and agent_id=:agent_id and volume=:volume and remain>0",
 					Quota.class)//
 					.setParameter("company_id", user.company)//
 					.setParameter("agent_id", agent.id)//
@@ -119,7 +119,7 @@ public class HmcRfidRpcServlet extends RpcServlet implements HmcRfidRpcInterface
 			// by time", user.company, agent.id,
 			// canisterVolume);
 
-			int rest = quotas.stream().mapToInt(q -> q.counter).sum();
+			int rest = quotas.stream().mapToInt(q -> q.remain).sum();
 			if (company.rfidBlockSize > rest) {
 				throw new IllegalArgumentException("Недостаточно квоты " + agentName + " " + canisterVolume + "ml "
 						+ company.name + " " + company.rfidBlockSize + ">" + rest);
@@ -128,9 +128,9 @@ public class HmcRfidRpcServlet extends RpcServlet implements HmcRfidRpcInterface
 			int allowed = 0;
 
 			for (Quota quota : quotas) {
-				int x = Math.min(company.rfidBlockSize - allowed, quota.counter);
+				int x = Math.min(company.rfidBlockSize - allowed, quota.remain);
 				allowed += x;
-				quota.counter -= x;
+				quota.remain -= x;
 				conn.persist(quota);
 				// DBExt.store(conn, quota);
 				database.incrementTableVersion(Quota.class);

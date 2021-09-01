@@ -1,5 +1,6 @@
 package ru.aoit.hmcdb.shared;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +14,7 @@ public class Agent {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
+	@Column(unique = true)
 	@UILabel(label = "Название", sortable = true)
 	public String name;
 

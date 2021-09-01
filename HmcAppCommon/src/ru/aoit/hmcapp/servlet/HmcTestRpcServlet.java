@@ -25,7 +25,7 @@ import ru.aoit.hmc.test.rpcdata.User;
 import ru.aoit.hmc.test.rpcinterface.HmcTestRpcInterface;
 
 @SuppressWarnings("serial")
-//@WebServlet(HmcTestRpcInterface.servletpath)
+// @WebServlet(HmcTestRpcInterface.servletpath)
 public class HmcTestRpcServlet extends RpcServlet implements HmcTestRpcInterface {
 
 	@Autowired
@@ -72,9 +72,9 @@ public class HmcTestRpcServlet extends RpcServlet implements HmcTestRpcInterface
 
 	@Override
 	public void report(TestReport testReport) throws Exception {
-		ru.aoit.hmcdb.shared.test.TestReport r = new ru.aoit.hmcdb.shared.test.TestReport();
+		ru.aoit.hmcdb.shared.test.TestReport r = new ru.aoit.hmcdb.shared.test.TestReport(testReport.serialNumber);
 
-		database.execVoid(conn -> conn.merge(r));
+		database.execVoid(conn -> conn.persist(r));
 		database.incrementTableVersion(ru.aoit.hmcdb.shared.test.TestReport.class);
 
 	}

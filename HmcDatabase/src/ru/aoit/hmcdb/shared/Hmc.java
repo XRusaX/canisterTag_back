@@ -1,6 +1,7 @@
 package ru.aoit.hmcdb.shared;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +20,7 @@ public class Hmc {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
+	@Column(unique = true)
 	@UILabel(label = "Серийный номер", isName = true, sortable = true)
 	public String serialNumber;
 
@@ -27,13 +29,14 @@ public class Hmc {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
-	@UILabel(label = "Статус", sortable = true)
+	@UILabel(label = "Статус", sortable = true, readOnly = true)
 	public transient HmcReportStatus status;
 
 	public Hmc() {
 	}
-	
-	public Hmc(String serialNumber) {
+
+	public Hmc(String serialNumber, Company company) {
 		this.serialNumber = serialNumber;
+		this.company = company;
 	}
 }
