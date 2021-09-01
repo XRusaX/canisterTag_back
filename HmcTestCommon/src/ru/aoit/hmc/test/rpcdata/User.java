@@ -1,4 +1,7 @@
 package ru.aoit.hmc.test.rpcdata;
 
-public class User {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class User implements Serializable {
 }

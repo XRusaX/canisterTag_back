@@ -1,12 +1,10 @@
 package ru.aoit.hmc.simulator.sim;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
-
-import javax.swing.Timer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru.aoit.hmc.rfid.rpcdata.HmcReport;
 import ru.aoit.hmc.rfid.rpcinterface.TestRpcInterface;
@@ -31,31 +29,37 @@ public class HmcSim {
 		this.serialNum = serialNum;
 	}
 
-	private Timer timer = new Timer(1000, new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			try {
-				HmcReport report = new HmcReport();
-				report.hmcSerialNumber = serialNum;
-				report.durationS = 10;
-				int consumption = 10;
-				report.canisterId = getCanisterId(consumption);
-				report.consumtionML = consumption;
-				report.roomName = company.getRandomRoom();
-				report.status = HmcReportStatus.SUCSESS;
-				report(serverURL, report);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		}
-	});
+	private final Timer timer = new Timer();
+	private TimerTask timerTask;
 
 	public void start() {
-		timer.start();
+		if (timerTask != null)
+			throw new IllegalStateException();
+
+		timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					HmcReport report = new HmcReport();
+					report.hmcSerialNumber = serialNum;
+					report.durationS = 10;
+					int consumption = 10;
+					report.canisterId = getCanisterId(consumption);
+					report.consumtionML = consumption;
+					report.roomName = company.getRandomRoom();
+					report.status = HmcReportStatus.SUCSESS;
+					report(serverURL, report);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					cancel();
+				}
+			}
+		};
+		timer.schedule(timerTask, 1000, 1000);
 	}
 
 	public void stop() {
-		timer.stop();
+		timerTask.cancel();
 	}
 
 	public static String report(String serverURL, HmcReport report) throws IOException {

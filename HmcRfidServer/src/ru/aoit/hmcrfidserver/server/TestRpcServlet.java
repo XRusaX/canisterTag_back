@@ -87,6 +87,13 @@ public class TestRpcServlet extends RpcServlet implements TestRpcInterface {
 	@Override
 	public void createQuota() throws IOException {
 		database.execVoid(em -> {
+			{
+				Company company = new Company("testcompany", CompanyType.TEST, "addr", "contacts", 0);
+				em.persist(company);
+				em.createQuery("update UserData set company=" + company.id + ", companyName='" + company.name
+						+ "' where name='t1'").executeUpdate();
+			}
+
 			Company company = new Company("завод1", CompanyType.CANISTER, "addr", "contacts", 10);
 			em.persist(company);
 			em.createQuery("update UserData set company=" + company.id + ", companyName='" + company.name
