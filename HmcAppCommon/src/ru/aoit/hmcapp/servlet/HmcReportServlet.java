@@ -16,6 +16,7 @@ import ru.aoit.appcommon.Database2;
 import ru.aoit.appcommon.SpringServlet;
 import ru.aoit.appcommon.logger.MsgLoggerImpl;
 import ru.aoit.hmc.rfid.rpcdata.HmcReport;
+import ru.aoit.hmcapp.HmcAppHelper;
 import ru.aoit.hmcdb.shared.Company;
 import ru.aoit.hmcdb.shared.Hmc;
 import ru.aoit.hmcdb.shared.Operator;
@@ -34,6 +35,9 @@ public class HmcReportServlet extends SpringServlet {
 	@Autowired
 	private MsgLoggerImpl msgLogger;
 
+	@Autowired
+	private HmcAppHelper hmcAppHelper;
+
 	@Override
 	protected synchronized void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -48,10 +52,15 @@ public class HmcReportServlet extends SpringServlet {
 				return "error";
 			}
 
-			Hmc hmc = getHmc(em, report.hmcSerialNumber);
+			Hmc hmc = hmcAppHelper.getCreateHmc(em, report.hmcSerialNumber);
 
-			Operator operator = getOperator(em, report.userId, report.userName, hmc.company);
-			Room room = getRoom(em, report.roomId, report.roomName, hmc.company);
+			Operator operator = null;
+			Room room = null;
+
+			if (hmc.company != null) {
+				operator = getOperator(em, report.userId, report.userName, hmc.company);
+				room = getRoom(em, report.roomId, report.roomName, hmc.company);
+			}
 
 			Report report2 = new Report(hmc, report.startTime, report.durationS, label, report.consumtionML,
 					hmc.company, operator, room, report.status);
@@ -71,6 +80,8 @@ public class HmcReportServlet extends SpringServlet {
 	}
 
 	private Operator getOperator(EntityManager em, Long id, String name, Company company) {
+		assert (company != null);
+
 		if (id != null) {
 			Operator operator = em.find(Operator.class, id);
 			if (operator.company != company)
@@ -110,21 +121,6 @@ public class HmcReportServlet extends SpringServlet {
 		database.incrementTableVersion(Room.class);
 
 		return room;
-	}
-
-	private Hmc getHmc(EntityManager em, String hmcSerialNumber) {
-		Hmc hmc = Database2.select(em, Hmc.class).whereEQ("serialNumber", hmcSerialNumber).getResultStream().findFirst()
-				.orElse(null);
-		if (hmc != null)
-			return hmc;
-
-		hmc = new Hmc(hmcSerialNumber, null);
-		em.persist(hmc);
-
-		msgLogger.add(null, Severity.INFO, "МГЦ " + hmcSerialNumber + " автоматически добавлен");
-		database.incrementTableVersion(Hmc.class);
-
-		return hmc;
 	}
 
 	private RfidLabel getLabel(EntityManager em, Integer canisterId) {

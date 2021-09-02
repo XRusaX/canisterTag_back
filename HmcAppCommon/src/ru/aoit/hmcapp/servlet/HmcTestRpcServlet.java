@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,8 @@ import ru.aoit.appcommon.shared.connection.ConnectionStatus.ConnectionType;
 import ru.aoit.hmc.test.rpcdata.TestReport;
 import ru.aoit.hmc.test.rpcdata.User;
 import ru.aoit.hmc.test.rpcinterface.HmcTestRpcInterface;
+import ru.aoit.hmcapp.HmcAppHelper;
+import ru.aoit.hmcdb.shared.Hmc;
 
 @SuppressWarnings("serial")
 // @WebServlet(HmcTestRpcInterface.servletpath)
@@ -39,6 +40,9 @@ public class HmcTestRpcServlet extends RpcServlet implements HmcTestRpcInterface
 
 	@Autowired
 	private MsgLoggerImpl msgLogger;
+
+	@Autowired
+	private HmcAppHelper hmcAppHelper;
 
 	@Autowired
 	private ConnectionStatusModule connectionStatusModule;
@@ -72,9 +76,14 @@ public class HmcTestRpcServlet extends RpcServlet implements HmcTestRpcInterface
 
 	@Override
 	public void report(TestReport testReport) throws Exception {
-		ru.aoit.hmcdb.shared.test.TestReport r = new ru.aoit.hmcdb.shared.test.TestReport(testReport.serialNumber);
 
-		database.execVoid(conn -> conn.persist(r));
+		database.execVoid(conn -> {
+			Hmc hmc = hmcAppHelper.getCreateHmc(conn, testReport.serialNumber);
+			ru.aoit.hmcdb.shared.test.TestReport r = new ru.aoit.hmcdb.shared.test.TestReport(hmc, testReport.testType,
+					testReport.testStatus, testReport.details);
+			conn.persist(r);
+		});
+
 		database.incrementTableVersion(ru.aoit.hmcdb.shared.test.TestReport.class);
 
 	}

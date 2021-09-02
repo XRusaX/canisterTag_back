@@ -18,6 +18,7 @@ import ru.aoit.hmcdb.shared.Agent;
 import ru.aoit.hmcdb.shared.Company;
 import ru.aoit.hmcdb.shared.Company.CompanyType;
 import ru.aoit.hmcdb.shared.Hmc;
+import ru.aoit.hmcdb.shared.Operator;
 import ru.aoit.hmcdb.shared.Room;
 import ru.aoit.hmcdb.shared.RoomCell;
 import ru.aoit.hmcdb.shared.rfid.Quota;
@@ -81,6 +82,16 @@ public class TestRpcServlet extends RpcServlet implements TestRpcInterface {
 				}
 
 			nextColor = (nextColor + 1) % ColorX.contrastColors.length;
+		});
+	}
+
+	@Override
+	public void createOperator(String operatorName, String companyName) throws IOException {
+		database.execVoid(em -> {
+			Company company = Database2.select(em, Company.class).whereEQ("name", companyName).getResultStream()
+					.findFirst().orElse(null);
+			Operator operator = new Operator(operatorName, company);
+			em.persist(operator);
 		});
 	}
 

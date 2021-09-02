@@ -16,4 +16,6 @@ public interface TestRpcInterface {
 
 	void createQuota() throws IOException;
 
+	void createOperator(String operator, String companyName) throws IOException;
+
 }

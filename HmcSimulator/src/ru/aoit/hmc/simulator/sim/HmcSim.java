@@ -47,6 +47,7 @@ public class HmcSim {
 					report.canisterId = getCanisterId(consumption);
 					report.consumtionML = consumption;
 					report.roomName = company.getRandomRoom();
+					report.userName = company.getRandomOperator();
 					report.status = HmcReportStatus.SUCSESS;
 					report(serverURL, report);
 				} catch (Exception e1) {

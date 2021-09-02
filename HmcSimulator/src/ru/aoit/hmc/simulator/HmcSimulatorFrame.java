@@ -48,6 +48,8 @@ public class HmcSimulatorFrame extends JFrame {
 		public int hmcs = 10;
 		@UILabel(label = "rooms")
 		public int rooms = 10;
+		@UILabel(label = "operators")
+		public int operators = 10;
 	}
 
 	private WorldSim worldSim;
