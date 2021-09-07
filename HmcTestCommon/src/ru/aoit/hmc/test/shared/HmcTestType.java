@@ -30,4 +30,6 @@ public enum HmcTestType {
 	TABLET, //
 	@UILabel(label = "Память")
 	FLASH, //
+	@UILabel(label = "Режим работы")
+	MODE, //
 }
