@@ -102,7 +102,7 @@ public class HmcSimulatorFrame extends JFrame {
 		loadPrefs();
 
 		proxy = HttpProxy.makeProxy(TestRpcInterface.class,
-				connectionPanel.getData().serverURL + "/app" + TestRpcInterface.servletPath, null);
+				connectionPanel.getData().serverURL + TestRpcInterface.servletPath, null);
 
 		addWindowListener(new WindowAdapter() {
 			@Override

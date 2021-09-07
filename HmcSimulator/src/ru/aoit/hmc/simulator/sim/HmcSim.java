@@ -66,7 +66,8 @@ public class HmcSim {
 
 	public static String report(String serverURL, HmcReport report) throws IOException {
 		report.startTime = new Date().getTime();
-		String requestJson = GsonUtils.requestJson(new URL(serverURL + "/app/report"), report, String.class, null);
+		String requestJson = GsonUtils.requestJson(new URL(serverURL + "/report"), report,
+				String.class, null);
 		return requestJson;
 	}
 
