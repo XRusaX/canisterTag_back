@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.aoit.hmc.rfid.rpcdata.HmcReport;
+import ru.aoit.hmc.rfid.rpcinterface.HmcRfidRpcInterface;
 import ru.aoit.hmc.rfid.rpcinterface.TestRpcInterface;
 import ru.aoit.hmc.rfid.shared.HmcReportStatus;
 import ru.aoit.hmc.simulator.ConnectionSettings;
@@ -66,7 +67,7 @@ public class HmcSim {
 
 	public static String report(String serverURL, HmcReport report) throws IOException {
 		report.startTime = new Date().getTime();
-		String requestJson = GsonUtils.requestJson(new URL(serverURL + "/report"), report,
+		String requestJson = GsonUtils.requestJson(new URL(serverURL + HmcRfidRpcInterface.api + "/report"), report,
 				String.class, null);
 		return requestJson;
 	}

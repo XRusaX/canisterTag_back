@@ -8,6 +8,7 @@ import ru.aoit.hmc.rfid.ruslandata.RfidData;
 public interface HmcRfidRpcInterface {
 
 	String servletPath = "/rfidrpc";
+	String api = "/api";
 
 	List<RfidData> getSigs(String agentName, int canisterVolume) throws Exception;
 

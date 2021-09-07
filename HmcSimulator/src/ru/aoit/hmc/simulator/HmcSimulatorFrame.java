@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 import com.google.gson.Gson;
 
 import ru.aoit.hmc.rfid.rpcdata.HmcReport;
+import ru.aoit.hmc.rfid.rpcinterface.HmcRfidRpcInterface;
 import ru.aoit.hmc.rfid.rpcinterface.TestRpcInterface;
 import ru.aoit.hmc.simulator.sim.HmcSim;
 import ru.aoit.hmc.simulator.sim.WorldSim;
@@ -102,7 +103,7 @@ public class HmcSimulatorFrame extends JFrame {
 		loadPrefs();
 
 		proxy = HttpProxy.makeProxy(TestRpcInterface.class,
-				connectionPanel.getData().serverURL + TestRpcInterface.servletPath, null);
+				connectionPanel.getData().serverURL + HmcRfidRpcInterface.api + TestRpcInterface.servletPath, null);
 
 		addWindowListener(new WindowAdapter() {
 			@Override

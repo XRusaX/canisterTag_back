@@ -76,7 +76,7 @@ public class CompanySim {
 	public CanisterSim getCanister() throws Exception {
 		if (canisters.isEmpty()) {
 			HmcRfidRpcInterface proxy2 = HttpProxy.makeProxy(HmcRfidRpcInterface.class,
-					connectionSettings.serverURL + HmcRfidRpcInterface.servletPath, null);
+					connectionSettings.serverURL + HmcRfidRpcInterface.api + HmcRfidRpcInterface.servletPath, null);
 			proxy2.login(connectionSettings.rfidUser, connectionSettings.rfidPassword);
 			try {
 				int volume = 3000;
