@@ -5,16 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.aoit.hmc.rfid.rpcinterface.TestRpcInterface;
+import ru.aoit.hmc.simulator.ConnectionSettings;
 import ru.aoit.hmc.simulator.HmcSimulatorFrame.FillParams;
 
 public class WorldSim {
 	private List<CompanySim> companies = new ArrayList<>();
 	private TestRpcInterface proxy;
 
-	public WorldSim(TestRpcInterface proxy, String serverURL, FillParams fillParams) {
+	public WorldSim(TestRpcInterface proxy, ConnectionSettings connectionSettings, FillParams fillParams) {
 		this.proxy = proxy;
 		for (int i = 0; i < fillParams.companies; i++) {
-			CompanySim companySim = new CompanySim(proxy, serverURL, fillParams, i);
+			CompanySim companySim = new CompanySim(proxy, connectionSettings, fillParams, i);
 			companies.add(companySim);
 		}
 	}

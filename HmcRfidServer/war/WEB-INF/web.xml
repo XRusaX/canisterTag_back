@@ -47,34 +47,19 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>Report</servlet-name>
-		<servlet-class>ru.aoit.hmcapp.servlet.HmcReportServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Report</servlet-name>
-		<url-pattern>/report</url-pattern>
-	</servlet-mapping>
+        <servlet-name>app</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value></param-value>
+        </init-param>
+    </servlet>
 
-	
-	<servlet>
-		<servlet-name>RfidRpc</servlet-name>
-		<servlet-class>ru.aoit.hmcapp.servlet.HmcRfidRpcServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>RfidRpc</servlet-name>
-		<url-pattern>/rfidrpc</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>TestRpc</servlet-name>
-		<servlet-class>ru.aoit.hmcapp.servlet.HmcTestRpcServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>TestRpc</servlet-name>
-		<url-pattern>/testrpc</url-pattern>
-	</servlet-mapping>
-
-	
+    <servlet-mapping>
+        <servlet-name>app</servlet-name>
+        <url-pattern>/app/*</url-pattern>
+    </servlet-mapping>
+    
 
 	<!-- Default page to serve -->
 	<welcome-file-list>

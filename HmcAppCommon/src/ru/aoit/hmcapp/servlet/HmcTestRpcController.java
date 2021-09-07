@@ -1,21 +1,17 @@
 package ru.aoit.hmcapp.servlet;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import ru.aoit.appcommon.AuthImpl;
 import ru.aoit.appcommon.Database2;
-import ru.aoit.appcommon.RpcServlet;
-import ru.aoit.appcommon.SpringUtils;
 import ru.aoit.appcommon.ThreadLocalRequest;
 import ru.aoit.appcommon.connection.ConnectionStatusModule;
 import ru.aoit.appcommon.logger.MsgLoggerImpl;
+import ru.aoit.appcommon.rpc.RpcController;
 import ru.aoit.appcommon.shared.auth.AuthUtils;
 import ru.aoit.appcommon.shared.auth.UserData;
 import ru.aoit.appcommon.shared.connection.ConnectionStatus.ConnectionType;
@@ -25,9 +21,9 @@ import ru.aoit.hmc.test.rpcinterface.HmcTestRpcInterface;
 import ru.aoit.hmcapp.HmcAppHelper;
 import ru.aoit.hmcdb.shared.Hmc;
 
-@SuppressWarnings("serial")
-// @WebServlet(HmcTestRpcInterface.servletpath)
-public class HmcTestRpcServlet extends RpcServlet implements HmcTestRpcInterface {
+@RestController
+@RequestMapping(HmcTestRpcInterface.servletpath)
+public class HmcTestRpcController extends RpcController implements HmcTestRpcInterface {
 
 	@Autowired
 	private ThreadLocalRequest threadLocalRequest;
@@ -46,12 +42,6 @@ public class HmcTestRpcServlet extends RpcServlet implements HmcTestRpcInterface
 
 	@Autowired
 	private ConnectionStatusModule connectionStatusModule;
-
-	@Override
-	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		SpringUtils.autowire(request, this);
-		super.service(request, response);
-	}
 
 	@Override
 	public void login(String name, String password) throws Exception {

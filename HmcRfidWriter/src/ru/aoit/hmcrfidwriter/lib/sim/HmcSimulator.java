@@ -39,7 +39,7 @@ public class HmcSimulator extends JDialog {
 
 			HmcReport r = new HmcReport();
 			r.canisterId = data.UNIQUE_ID;
-			r.consumtionML = ml;
+			r.consumptionML = ml;
 
 			try {
 				GsonUtils.requestJson(new URL(clientSettings.serverUrl + "/report"), r, null, null);
