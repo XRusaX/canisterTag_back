@@ -1,26 +1,23 @@
 package ru.aoit.hmcapp.servlet;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import ru.aoit.appcommon.AuthImpl;
 import ru.aoit.appcommon.Database2;
-import ru.aoit.appcommon.RpcServlet;
-import ru.aoit.appcommon.SpringUtils;
 import ru.aoit.appcommon.ThreadLocalRequest;
 import ru.aoit.appcommon.connection.ConnectionStatusModule;
 import ru.aoit.appcommon.logger.MsgLoggerImpl;
+import ru.aoit.appcommon.rpc.RpcController;
 import ru.aoit.appcommon.shared.auth.AuthUtils;
 import ru.aoit.appcommon.shared.auth.UserData;
 import ru.aoit.appcommon.shared.connection.ConnectionStatus.ConnectionType;
@@ -36,9 +33,9 @@ import ru.aoit.hmcdb.shared.rfid.RfidLabel;
 import ru.nppcrts.common.rsa.Sig;
 import ru.nppcrts.common.shared.Severity;
 
-@SuppressWarnings("serial")
-// @WebServlet(HmcRfidRpcInterface.servletPath)
-public class HmcRfidRpcServlet extends RpcServlet implements HmcRfidRpcInterface {
+@RestController
+@RequestMapping(HmcRfidRpcInterface.servletPath)
+public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInterface {
 
 	@Autowired
 	private ThreadLocalRequest threadLocalRequest;
@@ -57,12 +54,6 @@ public class HmcRfidRpcServlet extends RpcServlet implements HmcRfidRpcInterface
 
 	@Autowired
 	private ConnectionStatusModule connectionStatusModule;
-
-	@Override
-	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		SpringUtils.autowire(request, this);
-		super.service(request, response);
-	}
 
 	@Override
 	public void tagWriteDone(String uid) {
@@ -142,22 +133,22 @@ public class HmcRfidRpcServlet extends RpcServlet implements HmcRfidRpcInterface
 				throw new IllegalArgumentException("Ошибка при выделении RFID");
 			}
 
-//			RfidLabelGroup rfidLabelGroup = new RfidLabelGroup();
-//
-//			rfidLabelGroup.canisterVolume = canisterVolume;
-//			rfidLabelGroup.agent = agent;
-//
-//			rfidLabelGroup.time = new Date();
-//
-//			rfidLabelGroup.userName = user.name;
-//			rfidLabelGroup.company = company;
-//
-//			conn.persist(rfidLabelGroup);
+			// RfidLabelGroup rfidLabelGroup = new RfidLabelGroup();
+			//
+			// rfidLabelGroup.canisterVolume = canisterVolume;
+			// rfidLabelGroup.agent = agent;
+			//
+			// rfidLabelGroup.time = new Date();
+			//
+			// rfidLabelGroup.userName = user.name;
+			// rfidLabelGroup.company = company;
+			//
+			// conn.persist(rfidLabelGroup);
 
 			// DBExt.insert(conn, rfidLabelGroup);
 
 			Date time = new Date();
-			
+
 			for (int i = 0; i < company.rfidBlockSize; i++) {
 
 				RfidLabel rfidLabel = new RfidLabel(0, time, user.name, company, agent, canisterVolume);

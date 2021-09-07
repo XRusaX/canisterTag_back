@@ -1,19 +1,18 @@
 package ru.aoit.hmcapp.servlet;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.google.gson.Gson;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import ru.aoit.appcommon.Database2;
-import ru.aoit.appcommon.SpringServlet;
 import ru.aoit.appcommon.logger.MsgLoggerImpl;
 import ru.aoit.hmc.rfid.rpcdata.HmcReport;
 import ru.aoit.hmcapp.HmcAppHelper;
@@ -25,9 +24,8 @@ import ru.aoit.hmcdb.shared.rfid.Report;
 import ru.aoit.hmcdb.shared.rfid.RfidLabel;
 import ru.nppcrts.common.shared.Severity;
 
-//@WebServlet("/report")
-@SuppressWarnings("serial")
-public class HmcReportServlet extends SpringServlet {
+@RestController
+public class HmcReportController {
 
 	@Autowired
 	private Database2 database;
@@ -38,11 +36,40 @@ public class HmcReportServlet extends SpringServlet {
 	@Autowired
 	private HmcAppHelper hmcAppHelper;
 
-	@Override
-	protected synchronized void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	@GetMapping("/lastreport")
+	private long getLastReport(String serialNumber) throws IOException {
+		if (serialNumber == null)
+			return 0;
 
-		HmcReport report = new Gson().fromJson(req.getReader(), HmcReport.class);
+		long result = database.exec(em -> {
+			Report report = hmcAppHelper.getLastReport(em, serialNumber);
+			if (report == null)
+				return 0l;
+			return report.time.getTime();
+		});
+
+		return result;
+	}
+
+	// @Override
+	// protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+	// throws ServletException, IOException {
+	// String serNum = req.getParameter("serialNumber");
+	// if (serNum == null)
+	// return;
+	//
+	// String result = database.exec(em -> {
+	// Report report = hmcAppHelper.getLastReport(em, serNum);
+	// if (report == null)
+	// return null;
+	// return "" + report.time;
+	// });
+	//
+	// resp.getWriter().print(result);
+	// }
+	//
+	@PostMapping("/report")
+	private synchronized String report(@RequestBody HmcReport report) throws IOException {
 
 		String result = database.exec(em -> {
 
@@ -51,18 +78,18 @@ public class HmcReportServlet extends SpringServlet {
 				msgLogger.add(null, Severity.ERROR, "Метка канистры не найдена " + report.canisterId);
 				return "error";
 			}
-
+			// http://127.0.0.1:8888
 			Hmc hmc = hmcAppHelper.getCreateHmc(em, report.hmcSerialNumber);
 
 			Operator operator = null;
 			Room room = null;
 
 			if (hmc.company != null) {
-				operator = getOperator(em, report.userId, report.userName, hmc.company);
+				operator = getOperator(em, report.operatorId, report.operatorName, hmc.company);
 				room = getRoom(em, report.roomId, report.roomName, hmc.company);
 			}
 
-			Report report2 = new Report(hmc, report.startTime, report.durationS, label, report.consumtionML,
+			Report report2 = new Report(hmc, new Date(report.startTime), report.durationS, label, report.consumptionML,
 					hmc.company, operator, room, report.status);
 			em.persist(report2);
 			database.incrementTableVersion(Report.class);
@@ -75,8 +102,7 @@ public class HmcReportServlet extends SpringServlet {
 			return "success";
 		});
 
-		resp.getWriter().write(result);
-
+		return result;
 	}
 
 	private Operator getOperator(EntityManager em, Long id, String name, Company company) {

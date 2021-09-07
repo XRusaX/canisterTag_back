@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import ru.aoit.appcommon.AuthImpl;
 import ru.aoit.appcommon.CommonDataImpl;
-import ru.aoit.appcommon.Database2;
-import ru.aoit.appcommon.Database2.DBSelect.Dir;
 import ru.aoit.hmcdb.shared.Hmc;
 import ru.aoit.hmcdb.shared.rfid.Quota;
 import ru.aoit.hmcdb.shared.rfid.Report;
@@ -24,6 +22,9 @@ public class CommonDataHelpersImpl extends CommonDataHelpersBase {
 
 	@Autowired
 	private CommonDataImpl commonDataImpl;
+
+	@Autowired
+	private HmcAppHelper hmcAppHelper;
 
 	@Override
 	public void onAfterCreate(Object obj) {
@@ -39,10 +40,7 @@ public class CommonDataHelpersImpl extends CommonDataHelpersBase {
 		try {
 			if (obj instanceof Hmc) {
 				Hmc hmc = (Hmc) obj;
-
-				Report report = Database2.select(em, Report.class).whereEQ("hmc", hmc).orderBy("time", Dir.DESC)
-						.getResultStream().findFirst().orElse(null);
-
+				Report report = hmcAppHelper.getLastReport(em, hmc);
 				if (report != null)
 					hmc.status = report.status;
 			}

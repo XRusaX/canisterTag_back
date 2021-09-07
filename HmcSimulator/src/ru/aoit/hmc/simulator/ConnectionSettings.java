@@ -6,9 +6,9 @@ public class ConnectionSettings {
 	@UILabel(label = "Server")
 	public String serverURL;
 
-	@UILabel(label = "User")
-	public String user;
+	@UILabel(label = "RFID User")
+	public String rfidUser;
 
-	@UILabel(label = "Password")
-	public String password;
+	@UILabel(label = "RFID Password")
+	public String rfidPassword;
 }

@@ -2,17 +2,13 @@ package ru.aoit.hmcrfidserver.server;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebServlet;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import ru.aoit.appcommon.Database2;
-import ru.aoit.appcommon.RpcServlet;
-import ru.aoit.appcommon.SpringUtils;
 import ru.aoit.appcommon.logger.MsgLoggerImpl;
+import ru.aoit.appcommon.rpc.RpcController;
 import ru.aoit.hmc.rfid.rpcinterface.TestRpcInterface;
 import ru.aoit.hmcdb.shared.Agent;
 import ru.aoit.hmcdb.shared.Company;
@@ -24,9 +20,9 @@ import ru.aoit.hmcdb.shared.RoomCell;
 import ru.aoit.hmcdb.shared.rfid.Quota;
 import ru.nppcrts.common.shared.color.ColorX;
 
-@SuppressWarnings("serial")
-@WebServlet(TestRpcInterface.servletPath)
-public class TestRpcServlet extends RpcServlet implements TestRpcInterface {
+@RestController
+@RequestMapping(TestRpcInterface.servletPath)
+public class TestRpcController extends RpcController implements TestRpcInterface {
 
 	@Autowired
 	private Database2 database;
@@ -35,12 +31,6 @@ public class TestRpcServlet extends RpcServlet implements TestRpcInterface {
 	private MsgLoggerImpl msgLogger;
 
 	private int nextColor;
-
-	@Override
-	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		SpringUtils.autowire(request, this);
-		super.service(request, response);
-	}
 
 	@Override
 	public void clear() throws IOException {

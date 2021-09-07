@@ -8,8 +8,4 @@ public class CanisterSim {
 		this.id = id;
 		this.rest = volume;
 	}
-
-	
-
-	
 }

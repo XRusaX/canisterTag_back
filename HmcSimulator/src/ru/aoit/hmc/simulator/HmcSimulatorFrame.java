@@ -75,7 +75,7 @@ public class HmcSimulatorFrame extends JFrame {
 		startButton.addActionListener(arg0 -> {
 			savePrefs();
 			if (startButton.isSelected()) {
-				worldSim = new WorldSim(proxy, connectionPanel.getData().serverURL, fillParamsPanel.getData());
+				worldSim = new WorldSim(proxy, connectionPanel.getData(), fillParamsPanel.getData());
 				worldSim.start();
 			} else {
 				if (worldSim != null)
@@ -101,7 +101,8 @@ public class HmcSimulatorFrame extends JFrame {
 
 		loadPrefs();
 
-		proxy = HttpProxy.makeProxy(TestRpcInterface.class, connectionPanel.getData().serverURL + "/testapp", null);
+		proxy = HttpProxy.makeProxy(TestRpcInterface.class,
+				connectionPanel.getData().serverURL + TestRpcInterface.servletPath, null);
 
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -177,7 +178,7 @@ public class HmcSimulatorFrame extends JFrame {
 
 	private void fill() {
 		try {
-			new WorldSim(proxy, connectionPanel.getData().serverURL, fillParamsPanel.getData()).createDB();
+			new WorldSim(proxy, connectionPanel.getData(), fillParamsPanel.getData()).createDB();
 			status.setText("success");
 		} catch (Exception e) {
 			status.setText(e.toString());

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import ru.aoit.hmc.rfid.rpcinterface.HmcRfidRpcInterface;
 import ru.aoit.hmc.rfid.rpcinterface.TestRpcInterface;
 import ru.aoit.hmc.rfid.ruslandata.RfidData;
+import ru.aoit.hmc.simulator.ConnectionSettings;
 import ru.aoit.hmc.simulator.HmcSimulatorFrame.FillParams;
 import ru.nppcrts.common.rpc.HttpProxy;
 
@@ -21,11 +22,11 @@ public class CompanySim {
 	private TestRpcInterface proxy;
 
 	private List<CanisterSim> canisters = new LinkedList<>();
-	private String serverURL;
+	private ConnectionSettings connectionSettings;
 
-	public CompanySim(TestRpcInterface proxy, String serverURL, FillParams fillParams, int num) {
+	public CompanySim(TestRpcInterface proxy, ConnectionSettings connectionSettings, FillParams fillParams, int num) {
 		this.proxy = proxy;
-		this.serverURL = serverURL;
+		this.connectionSettings = connectionSettings;
 		this.name = "company" + num;
 
 		for (int j = 0; j < fillParams.rooms; j++) {
@@ -40,7 +41,7 @@ public class CompanySim {
 
 		for (int j = 0; j < fillParams.hmcs; j++) {
 			String serialNum = "hmc_" + num + "_" + j;
-			HmcSim hmcSim = new HmcSim(proxy, serverURL, this, serialNum);
+			HmcSim hmcSim = new HmcSim(proxy, connectionSettings, this, serialNum);
 			hmcs.add(hmcSim);
 		}
 
@@ -75,8 +76,8 @@ public class CompanySim {
 	public CanisterSim getCanister() throws Exception {
 		if (canisters.isEmpty()) {
 			HmcRfidRpcInterface proxy2 = HttpProxy.makeProxy(HmcRfidRpcInterface.class,
-					serverURL + HmcRfidRpcInterface.servletPath, null);
-			proxy2.login("u1", "p1");
+					connectionSettings.serverURL + HmcRfidRpcInterface.servletPath, null);
+			proxy2.login(connectionSettings.rfidUser, connectionSettings.rfidPassword);
 			try {
 				int volume = 3000;
 				List<RfidData> sigs = proxy2.getSigs("Гриндез", volume);

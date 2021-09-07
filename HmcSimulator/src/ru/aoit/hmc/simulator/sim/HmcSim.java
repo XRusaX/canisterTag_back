@@ -9,22 +9,23 @@ import java.util.TimerTask;
 import ru.aoit.hmc.rfid.rpcdata.HmcReport;
 import ru.aoit.hmc.rfid.rpcinterface.TestRpcInterface;
 import ru.aoit.hmc.rfid.shared.HmcReportStatus;
+import ru.aoit.hmc.simulator.ConnectionSettings;
 import ru.nppcrts.common.gson.GsonUtils;
 
 public class HmcSim {
 
 	private String serialNum;
 
-	private String serverURL;
+	private ConnectionSettings connectionSettings;
 
 	private CompanySim company;
 	private CanisterSim canister;
 
 	private TestRpcInterface proxy;
 
-	public HmcSim(TestRpcInterface proxy, String serverURL, CompanySim company, String serialNum) {
+	public HmcSim(TestRpcInterface proxy, ConnectionSettings connectionSettings, CompanySim company, String serialNum) {
 		this.proxy = proxy;
-		this.serverURL = serverURL;
+		this.connectionSettings = connectionSettings;
 		this.company = company;
 		this.serialNum = serialNum;
 	}
@@ -45,11 +46,11 @@ public class HmcSim {
 					report.durationS = 10;
 					int consumption = 10;
 					report.canisterId = getCanisterId(consumption);
-					report.consumtionML = consumption;
+					report.consumptionML = consumption;
 					report.roomName = company.getRandomRoom();
-					report.userName = company.getRandomOperator();
+					report.operatorName = company.getRandomOperator();
 					report.status = HmcReportStatus.SUCSESS;
-					report(serverURL, report);
+					report(connectionSettings.serverURL, report);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 					cancel();
@@ -64,8 +65,9 @@ public class HmcSim {
 	}
 
 	public static String report(String serverURL, HmcReport report) throws IOException {
-		report.startTime = new Date();
-		String requestJson = GsonUtils.requestJson(new URL(serverURL + "/report"), report, String.class, null);
+		report.startTime = new Date().getTime();
+		String requestJson = GsonUtils.requestJson(new URL(serverURL + "/report"), report,
+				String.class, null);
 		return requestJson;
 	}
 

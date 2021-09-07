@@ -1,7 +1,5 @@
 package ru.aoit.hmc.rfid.rpcdata;
 
-import java.util.Date;
-
 import ru.aoit.hmc.rfid.shared.HmcReportStatus;
 import ru.nppcrts.common.shared.cd.UILabel;
 
@@ -9,7 +7,7 @@ public class HmcReport {
 	@UILabel(label = "SerialNumber")
 	public String hmcSerialNumber;
 
-	public Date startTime;
+	public long startTime;
 
 	@UILabel(label = "durationS")
 	public Integer durationS;
@@ -18,19 +16,14 @@ public class HmcReport {
 	public Integer canisterId;
 
 	@UILabel(label = "consumtionML")
-	public Integer consumtionML;
+	public Integer consumptionML;
 
-	@UILabel(label = "user", nullable = true)
-	public String userName;
+	@UILabel(label = "operator")
+	public String operatorName;
 
-	public Long userId;
+	public Long operatorId;
 
-//	@UILabel(label = "company", nullable = true)
-//	public String companyName;
-//
-//	public Long companyId;
-
-	@UILabel(label = "room", nullable = true)
+	@UILabel(label = "room")
 	public String roomName;
 
 	public Long roomId;
