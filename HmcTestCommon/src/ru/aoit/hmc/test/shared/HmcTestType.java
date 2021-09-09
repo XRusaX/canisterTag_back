@@ -5,31 +5,37 @@ import ru.nppcrts.common.shared.cd.UILabel;
 // НЕ НУЖНО НИЧЕГО УДАЛЯТЬ ИЗ ЭТОГО КЛАССА
 public enum HmcTestType {
 	@UILabel(label = "Часы")
-	RTC, //
+	RTC("Часы"), //
 	@UILabel(label = "Термодатчик")
-	THERMO, //
+	THERMO("Термодатчик"), //
 	@UILabel(label = "Моточасы")
-	WORK_TIME, //
+	WORK_TIME("Моточасы"), //
 	@UILabel(label = "Компрессор")
-	RELAY,
+	RELAY("Компрессор"), //
 	@UILabel(label = "Wi-fi")
-	WIFI,
+	WIFI("Wi-fi"), //
 	@UILabel(label = "Вентиляторы")
-	FAN,
+	FAN("Вентиляторы"), //
 	@UILabel(label = "Датчик уровня жидкости")
-	CAP_SENSOR,
+	CAP_SENSOR("Датчик уровня жидкости"), //
 	@UILabel(label = "Светодиод")
-	LED, //
+	LED("Светодиод"), //
 	@UILabel(label = "Звук")
-	BUZZ, //
+	BUZZ("Звук"), //
 	@UILabel(label = "Кнопки")
-	DEMUX, //
+	DEMUX("Кнопки"), //
 	@UILabel(label = "READER")
-	READER, //
+	READER("READER"), //
 	@UILabel(label = "Планшет")
-	TABLET, //
+	TABLET("Планшет"), //
 	@UILabel(label = "Память")
-	FLASH, //
+	FLASH("Память"), //
 	@UILabel(label = "Режим работы")
-	MODE, //
+	MODE("Режим работы"),;
+
+	public String label;
+
+	HmcTestType(String string) {
+		this.label = string;
+	} //
 }
