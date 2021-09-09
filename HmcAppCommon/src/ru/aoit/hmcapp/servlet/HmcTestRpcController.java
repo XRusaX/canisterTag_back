@@ -61,7 +61,7 @@ public class HmcTestRpcController extends RpcController implements HmcTestRpcInt
 		UserData user = authComponent.getUser();
 		connectionStatusModule.add(threadLocalRequest.getThreadLocalRequest().getRemoteHost(), session.getId(),
 				ConnectionType.WRITER, user == null ? null : user.name);
-		return new User();
+		return user == null ? null : new User();
 	}
 
 	@Override

@@ -4,9 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ResizeComposite;
+import com.google.gwt.user.client.ui.ToggleButton;
 
 import ru.aoit.hmcdb.shared.Company;
 import ru.aoit.hmcdb.shared.Room;
@@ -17,61 +24,119 @@ import ru.nppcrts.common.gwt.client.commondata.CommonDataServiceAsync;
 import ru.nppcrts.common.gwt.client.commondata.PageEventBus;
 import ru.nppcrts.common.gwt.client.commondata.SelChangeEvent;
 import ru.nppcrts.common.gwt.client.ui.canvas.CanvasAdapter;
-import ru.nppcrts.common.shared.canvas.Drawable;
-import ru.nppcrts.common.shared.canvas.PaintTarget;
+import ru.nppcrts.common.gwt.client.ui.panel.HorPanel;
+import ru.nppcrts.common.gwt.client.ui.panel.LayoutHeaderPanel;
 import ru.nppcrts.common.shared.cd.CDObject;
 import ru.nppcrts.common.shared.commondata.Filter;
 
 public class MapPanel extends ResizeComposite {
-	private static final int CELL_SIZE = 8;
-
 	private final CommonDataServiceAsync service = GWT.create(CommonDataService.class);
+	private final HmcServiceAsync hmcService = GWT.create(HmcService.class);
 
-	private List<CDObject> cells;
+	private final EditableData<CDObject> cells = new EditableData<CDObject>() {
+		@Override
+		protected void setXY(CDObject t, int x, int y) {
+			t.set("x", x);
+			t.set("y", y);
+		}
+
+		@Override
+		protected int getY(CDObject t) {
+			return t.getInt("y");
+		}
+
+		@Override
+		protected int getX(CDObject t) {
+			return t.getInt("x");
+		}
+	};
 	private Map<Long, CDObject> rooms;
 	private CDObject room;
 	private Long companyId;
 
-	private Drawable drawable = new Drawable() {
+	private boolean editMode;
+
+	private GEditor<CDObject> drawable = new GEditor<CDObject>(cells) {
+
 		@Override
-		public void draw(PaintTarget paintTarget) {
-
-			if (cells != null && rooms != null) {
-				paintTarget.setColor("lightgray");
-
-				int maxx = cells.stream().mapToInt(c -> c.getInt("x")).max().orElse(0) + 5;
-				int maxy = cells.stream().mapToInt(c -> c.getInt("y")).max().orElse(0) + 5;
-
-				for (int x = 0; x <= maxx + 1; x++)
-					paintTarget.drawLine(x * CELL_SIZE, 0, x * CELL_SIZE, (maxy + 1) * CELL_SIZE);
-
-				for (int y = 0; y <= maxy + 1; y++)
-					paintTarget.drawLine(0, y * CELL_SIZE, (maxx + 1) * CELL_SIZE, y * CELL_SIZE);
-
-				cells.forEach(cell -> {
-					int x = cell.getInt("x");
-					int y = cell.getInt("y");
-
-					Long roomId = cell.getLong("room");
-					if (roomId == null) {
-						paintTarget.setColor("green");
-					} else {
-						paintTarget.setColor(rooms.get(roomId).get("color"));
-					}
-					paintTarget.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-
-					if (roomId != null && Objects.equals(MapPanel.this.room.getId(), roomId)) {
-						paintTarget.setColor("black");
-						paintTarget.drawRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-					}
-				});
-			}
-
+		protected int getX(CDObject t) {
+			return t.getInt("x");
 		}
+
+		@Override
+		protected int getY(CDObject t) {
+			return t.getInt("y");
+		}
+
+		@Override
+		protected String getColor(CDObject t) {
+			Long roomId = t.getLong("room");
+			if (roomId == null)
+				return "gray";
+			return rooms.get(roomId).get("color");
+		}
+
+		@Override
+		protected boolean canEdit() {
+			return editMode;
+		}
+
+		@Override
+		protected boolean isSelected(CDObject t) {
+			Long roomId = t.getLong("room");
+			return roomId != null && MapPanel.this.room != null && Objects.equals(MapPanel.this.room.getId(), roomId);
+		}
+
 	};
 
+	private ToggleButton editButton = new ToggleButton("Редактировать", new ClickHandler() {
+		@Override
+		public void onClick(ClickEvent event) {
+			editMode = editButton.isDown();
+			wallButton.setEnabled(editButton.isDown());
+			clearButton.setEnabled(editButton.isDown());
+			if (!editButton.isDown()) {
+				drawable.dropSel();
+
+				if (Window.confirm("Сохранить?")) {
+					List<CDObject> list = cells.stream().collect(Collectors.toList());
+					hmcService.saveAll(list, companyId, new AlertAsyncCallback<Void>(null));
+				}
+
+			}
+		}
+	});
+
+	private Button wallButton = new Button("Стены", new ClickHandler() {
+		@Override
+		public void onClick(ClickEvent event) {
+			cells.markUndo();
+			drawable.convertSel((x, y, t) -> {
+				CDObject cell = new CDObject();
+				cell.set("company", companyId);
+				cell.set("room", (Long) null);
+				cell.set("x", x);
+				cell.set("y", y);
+				return cell;
+			});
+		}
+	});
+
+	private Button clearButton = new Button("Очистить", (ClickHandler) event -> {
+		cells.markUndo();
+		drawable.convertSel((x, y, t) -> null);
+	});
+
+	private Button undoButton = new Button("<<", (ClickHandler) event -> drawable.undo());
+	private Button redoButton = new Button(">>", (ClickHandler) event -> drawable.redo());
+
 	public MapPanel(PageEventBus eventBus) {
-		initWidget(new CanvasAdapter(drawable));
+
+		wallButton.setEnabled(false);
+		clearButton.setEnabled(false);
+
+		initWidget(new LayoutHeaderPanel(new HorPanel(editButton, wallButton, clearButton)
+				.alignHor(HasAlignment.ALIGN_RIGHT).add(undoButton, redoButton), new CanvasAdapter(drawable)));
 
 		eventBus.registerListener(SelChangeEvent.class, se -> {
 
@@ -101,13 +166,13 @@ public class MapPanel extends ResizeComposite {
 								list.stream().forEach(r -> rooms.put(r.getId(), r));
 								service.loadRange(RoomCell.class.getName(), filter, null,
 										new AlertAsyncCallback<List<CDObject>>(list1 -> {
-											cells = list1;
+											cells.setData(list1);
 											drawable.invalidate();
 										}));
 							}));
 
 				} else {
-					cells = null;
+					cells.clear();
 					rooms = null;
 					drawable.invalidate();
 				}
