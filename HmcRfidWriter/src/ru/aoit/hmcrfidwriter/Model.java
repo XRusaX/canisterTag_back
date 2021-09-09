@@ -216,7 +216,7 @@ public class Model {
 				lib = new RfidLibSim(frame, libListener, clientSettings);
 			}
 		}
-		connectionToServer.setServerUrl(clientSettings.serverUrl + HmcRfidRpcInterface.servletPath);
+		connectionToServer.setServerUrl(clientSettings.serverUrl + HmcRfidRpcInterface.api + HmcRfidRpcInterface.servletPath);
 	}
 
 	public String getServerAddr() {
