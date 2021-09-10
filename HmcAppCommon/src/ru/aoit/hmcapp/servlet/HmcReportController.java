@@ -51,23 +51,6 @@ public class HmcReportController {
 		return result;
 	}
 
-	// @Override
-	// protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-	// throws ServletException, IOException {
-	// String serNum = req.getParameter("serialNumber");
-	// if (serNum == null)
-	// return;
-	//
-	// String result = database.exec(em -> {
-	// Report report = hmcAppHelper.getLastReport(em, serNum);
-	// if (report == null)
-	// return null;
-	// return "" + report.time;
-	// });
-	//
-	// resp.getWriter().print(result);
-	// }
-	//
 	@PostMapping("/report")
 	private synchronized String report(@RequestBody HmcReport report) throws IOException {
 
