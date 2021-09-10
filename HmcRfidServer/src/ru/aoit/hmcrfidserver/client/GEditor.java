@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 
 import ru.nppcrts.common.shared.Pair;
@@ -90,8 +91,10 @@ public abstract class GEditor<T> extends Drawable {
 			this.y1 = y1;
 		}
 
-		public Rect(Rect sel) {
-			this(sel.x0, sel.x1, sel.y0, sel.y1);
+		public Rect normCopy() {
+			int x = getWidth() > 0 ? x0 : x1 + 1;
+			int y = getHeigth() > 0 ? y0 : y1 + 1;
+			return new Rect(x, y, x + Math.abs(getWidth()), y + Math.abs(getHeigth()));
 		}
 
 		public boolean inside(int x, int y) {
@@ -138,6 +141,10 @@ public abstract class GEditor<T> extends Drawable {
 				for (int y = y0; y != y1; y += y1 > y0 ? 1 : -1)
 					consumer.accept(new P(x, y));
 		}
+
+		public boolean isEmpty() {
+			return x0 == x1 && y0 == y1;
+		}
 	}
 
 	private Rect sel;
@@ -159,16 +166,15 @@ public abstract class GEditor<T> extends Drawable {
 		for (int y = 0; y <= maxy + 1; y++)
 			paintTarget.drawLine(0, y * CELL_SIZE, (maxx + 1) * CELL_SIZE, y * CELL_SIZE);
 
+		int dx = drag == null ? 0 : drag.getWidth();
+		int dy = drag == null ? 0 : drag.getHeigth();
+
 		cells.stream().forEach(cell -> {
 			int x = getX(cell);
 			int y = getY(cell);
 
-			if (drag != null && sel.inside(x - drag.getWidth(), y - drag.getHeigth()))
+			if (clipboardData != null && clipboardData.rect.inside(x - dx, y - dy))
 				return;
-
-			if (drag != null && sel.inside(x, y)) {
-				return;
-			}
 
 			paintTarget.setColor(getColor(cell));
 			paintTarget.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
@@ -179,31 +185,24 @@ public abstract class GEditor<T> extends Drawable {
 			}
 		});
 
-		cells.stream().forEach(cell -> {
-			int x = getX(cell);
-			int y = getY(cell);
+		if (clipboardData != null) {
+			paintTarget.setColor("cyan");
 
-			if (drag != null && sel.inside(x, y)) {
-				x += drag.getWidth();
-				y += drag.getHeigth();
+			paintTarget.drawRect((clipboardData.rect.x0 + dx) * CELL_SIZE, (clipboardData.rect.y0 + dy) * CELL_SIZE,
+					clipboardData.rect.getWidth() * CELL_SIZE, clipboardData.rect.getHeigth() * CELL_SIZE);
+			clipboardData.list.stream().forEach(cell -> {
 				paintTarget.setColor(getColor(cell));
+				int x = getX(cell) + dx;
+				int y = getY(cell) + dy;
 				paintTarget.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-			}
-		});
+			});
+		}
 
 		if (sel != null) {
 			paintTarget.setColor("magenta");
-
-			int x = sel.getWidth() > 0 ? sel.x0 : sel.x1 + 1;
-			int y = sel.getHeigth() > 0 ? sel.y0 : sel.y1 + 1;
-
-			if (drag != null) {
-				x += drag.getWidth();
-				y += drag.getHeigth();
-			}
-
-			paintTarget.drawRect(x * CELL_SIZE, y * CELL_SIZE, Math.abs(sel.getWidth()) * CELL_SIZE,
-					Math.abs(sel.getHeigth()) * CELL_SIZE);
+			Rect normCopy = sel.normCopy();
+			paintTarget.drawRect(normCopy.x0 * CELL_SIZE, normCopy.y0 * CELL_SIZE, normCopy.getWidth() * CELL_SIZE,
+					normCopy.getHeigth() * CELL_SIZE);
 		}
 
 	}
@@ -214,6 +213,8 @@ public abstract class GEditor<T> extends Drawable {
 	}
 
 	private void copy() {
+		GWT.log("copy");
+
 		if (sel == null)
 			return;
 
@@ -223,20 +224,21 @@ public abstract class GEditor<T> extends Drawable {
 			int y = getY(cell);
 			return sel.inside(x, y);
 		}).collect(Collectors.toList());
-		data.rect = new Rect(sel);
+		data.rect = sel.normCopy();
 
 		clipboardData = data;
 	}
 
 	private void cut() {
+		GWT.log("cut");
 		copy();
 		convertSel((x, y, t) -> null);
 	}
 
 	private void paste(int x, int y) {
-		
+
 	}
-	
+
 	@Override
 	public boolean onMousePressed(XY xy, boolean shift, boolean control) {
 		if (!canEdit())
@@ -257,6 +259,8 @@ public abstract class GEditor<T> extends Drawable {
 			return false;
 
 		if (drag != null) {
+			if (clipboardData == null && !drag.isEmpty())
+				cut();
 			drag.x1 = getCellX(xy.x);
 			drag.y1 = getCellY(xy.y);
 		} else if (sel != null) {
@@ -272,40 +276,39 @@ public abstract class GEditor<T> extends Drawable {
 		if (!canEdit())
 			return false;
 
-		if (drag != null) {
-			cells.markUndo();
-			List<T> cellsToMove = cells.stream().filter(cell -> {
-				int x = getX(cell);
-				int y = getY(cell);
-				return sel.inside(x, y);
-			}).collect(Collectors.toList());
-
-			// cells.removeAll(cellsToMove);
-
-			removeIf(cell -> {
-				if (cellsToMove.contains(cell))
-					return false;
-				int x = getX(cell) - drag.getWidth();
-				int y = getY(cell) - drag.getHeigth();
-				return sel.inside(x, y);
-			});
-
-			cellsToMove.forEach(cell -> {
-				int x = getX(cell);
-				int y = getY(cell);
-
-				cells.moveTo(cell, x + drag.getWidth(), y + drag.getHeigth());
-			});
-
-			// cells.addAll(cellsToMove);
-
-			checkData();
-
-			sel = null;
-			drag = null;
-		} else if (sel != null) {
-
+		if(clipboardData != null) {
+			
 		}
+		
+		if (drag != null && !drag.isEmpty()) {
+			// cells.markUndo();
+			// List<T> cellsToMove = cells.stream().filter(cell -> {
+			// int x = getX(cell);
+			// int y = getY(cell);
+			// return sel.inside(x, y);
+			// }).collect(Collectors.toList());
+			//
+			// removeIf(cell -> {
+			// if (cellsToMove.contains(cell))
+			// return false;
+			// int x = getX(cell) - drag.getWidth();
+			// int y = getY(cell) - drag.getHeigth();
+			// return sel.inside(x, y);
+			// });
+			//
+			// cellsToMove.forEach(cell -> {
+			// int x = getX(cell);
+			// int y = getY(cell);
+			//
+			// cells.moveTo(cell, x + drag.getWidth(), y + drag.getHeigth());
+			// });
+			//
+			// checkData();
+			//
+		}
+
+		sel = null;
+		drag = null;
 
 		invalidate();
 		return true;

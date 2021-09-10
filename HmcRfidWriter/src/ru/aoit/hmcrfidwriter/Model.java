@@ -181,7 +181,7 @@ public class Model {
 
 	public void onCanisterSettings() {
 		try {
-			boolean ok = cdUtils.editObject(canisterSettings, "Настройки", false);
+			boolean ok = cdUtils.editObject(canisterSettings, "Настройки", false, null);
 			if (ok) {
 				applySettings();
 				GsonUtils.write(canisterSettings, canisterSettingsFile);
@@ -193,7 +193,7 @@ public class Model {
 
 	public void onClientSettings() {
 		try {
-			boolean ok = cdUtils.editObject(clientSettings, "Настройки клиента", false);
+			boolean ok = cdUtils.editObject(clientSettings, "Настройки клиента", false, null);
 			if (ok) {
 				applyClientSettings();
 				GsonUtils.write(clientSettings, clientSettingsFile);
@@ -216,7 +216,8 @@ public class Model {
 				lib = new RfidLibSim(frame, libListener, clientSettings);
 			}
 		}
-		connectionToServer.setServerUrl(clientSettings.serverUrl + HmcRfidRpcInterface.api + HmcRfidRpcInterface.servletPath);
+		connectionToServer
+				.setServerUrl(clientSettings.serverUrl + HmcRfidRpcInterface.api + HmcRfidRpcInterface.servletPath);
 	}
 
 	public String getServerAddr() {
