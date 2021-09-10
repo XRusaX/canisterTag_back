@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.google.gwt.core.client.GWT;
@@ -21,7 +20,7 @@ import ru.nppcrts.common.shared.canvas.XY;
 public abstract class GEditor<T> extends Drawable {
 	private static final int CELL_SIZE = 16;
 
-	private EditableData<T> cells;
+	private EditableData<T> editableData;
 
 	protected abstract int getX(T t);
 
@@ -34,7 +33,7 @@ public abstract class GEditor<T> extends Drawable {
 	protected abstract boolean isSelected(T t);
 
 	public GEditor(EditableData<T> cells) {
-		this.cells = cells;
+		this.editableData = cells;
 	}
 
 	private static int getCellX(double x) {
@@ -157,8 +156,8 @@ public abstract class GEditor<T> extends Drawable {
 	public void draw(PaintTarget paintTarget) {
 		paintTarget.setColor("lightgray");
 
-		int maxx = cells.stream().mapToInt(c -> getX(c)).max().orElse(0) + 5;
-		int maxy = cells.stream().mapToInt(c -> getY(c)).max().orElse(0) + 5;
+		int maxx = editableData.stream().mapToInt(c -> getX(c)).max().orElse(0) + 5;
+		int maxy = editableData.stream().mapToInt(c -> getY(c)).max().orElse(0) + 5;
 
 		for (int x = 0; x <= maxx + 1; x++)
 			paintTarget.drawLine(x * CELL_SIZE, 0, x * CELL_SIZE, (maxy + 1) * CELL_SIZE);
@@ -169,7 +168,7 @@ public abstract class GEditor<T> extends Drawable {
 		int dx = drag == null ? 0 : drag.getWidth();
 		int dy = drag == null ? 0 : drag.getHeigth();
 
-		cells.stream().forEach(cell -> {
+		editableData.stream().forEach(cell -> {
 			int x = getX(cell);
 			int y = getY(cell);
 
@@ -219,11 +218,11 @@ public abstract class GEditor<T> extends Drawable {
 			return;
 
 		ClipboardData<T> data = new ClipboardData<>();
-		data.list = cells.stream().filter(cell -> {
+		data.list = editableData.stream().filter(cell -> {
 			int x = getX(cell);
 			int y = getY(cell);
 			return sel.inside(x, y);
-		}).collect(Collectors.toList());
+		}).map(cell->editableData.getCopy(cell)).  collect(Collectors.toList());
 		data.rect = sel.normCopy();
 
 		clipboardData = data;
@@ -235,8 +234,27 @@ public abstract class GEditor<T> extends Drawable {
 		convertSel((x, y, t) -> null);
 	}
 
-	private void paste(int x, int y) {
+	private void paste(int dx, int dy) {
+		Map<P, T> map = new HashMap<>();
+		clipboardData.list.stream().forEach(cell -> map.put(new P(getX(cell), getY(cell)), cell));
 
+		sel = clipboardData.rect;
+		sel.x0 += dx;
+		sel.x1 += dx;
+		sel.y0 += dy;
+		sel.y1 += dy;
+
+		convertSel((x, y, t) -> {
+			T t2 = map.get(new P(x - dx, y - dy));
+			if (t2 != null) {
+				editableData.moveTo(t2, x, y);
+			}
+			return t2;
+		});
+
+		clipboardData = null;
+
+		checkData();
 	}
 
 	@Override
@@ -259,8 +277,13 @@ public abstract class GEditor<T> extends Drawable {
 			return false;
 
 		if (drag != null) {
-			if (clipboardData == null && !drag.isEmpty())
-				cut();
+			if (clipboardData == null && !drag.isEmpty()) {
+				editableData.markUndo();
+				if (control)
+					copy();
+				else
+					cut();
+			}
 			drag.x1 = getCellX(xy.x);
 			drag.y1 = getCellY(xy.y);
 		} else if (sel != null) {
@@ -276,53 +299,22 @@ public abstract class GEditor<T> extends Drawable {
 		if (!canEdit())
 			return false;
 
-		if(clipboardData != null) {
-			
-		}
-		
-		if (drag != null && !drag.isEmpty()) {
-			// cells.markUndo();
-			// List<T> cellsToMove = cells.stream().filter(cell -> {
-			// int x = getX(cell);
-			// int y = getY(cell);
-			// return sel.inside(x, y);
-			// }).collect(Collectors.toList());
-			//
-			// removeIf(cell -> {
-			// if (cellsToMove.contains(cell))
-			// return false;
-			// int x = getX(cell) - drag.getWidth();
-			// int y = getY(cell) - drag.getHeigth();
-			// return sel.inside(x, y);
-			// });
-			//
-			// cellsToMove.forEach(cell -> {
-			// int x = getX(cell);
-			// int y = getY(cell);
-			//
-			// cells.moveTo(cell, x + drag.getWidth(), y + drag.getHeigth());
-			// });
-			//
-			// checkData();
-			//
+		if (clipboardData != null) {
+
 		}
 
-		sel = null;
-		drag = null;
+		if (drag != null && !drag.isEmpty()) {
+			paste(drag.getWidth(), drag.getHeigth());
+			drag = null;
+		}
 
 		invalidate();
 		return true;
 	}
 
-	// static class P {
-	// public P(int x, int y) {
-	//
-	// }
-	// }
-
 	private void checkData() {
 		Set<Pair<Integer, Integer>> set = new HashSet<>();
-		cells.stream().forEach(t -> {
+		editableData.stream().forEach(t -> {
 			Pair<Integer, Integer> pair = Pair.create(getX(t), getY(t));
 			if (set.contains(pair))
 				Window.alert("Data integrity error!");
@@ -345,7 +337,7 @@ public abstract class GEditor<T> extends Drawable {
 			return;
 
 		Map<P, T> map = new HashMap<>();
-		cells.stream().filter(cell -> sel.inside(getX(cell), getY(cell)))
+		editableData.stream().filter(cell -> sel.inside(getX(cell), getY(cell)))
 				.forEach(cell -> map.put(new P(getX(cell), getY(cell)), cell));
 
 		sel.foreach(xy -> {
@@ -356,9 +348,9 @@ public abstract class GEditor<T> extends Drawable {
 
 			if (t != cell) {
 				if (cell != null)
-					cells.remove(cell);
+					editableData.remove(cell);
 				if (t != null)
-					cells.add(t);
+					editableData.add(t);
 			}
 		});
 
@@ -366,18 +358,19 @@ public abstract class GEditor<T> extends Drawable {
 		checkData();
 	}
 
-	private void removeIf(Predicate<T> p) {
-		cells.stream().filter(cell -> p.test(cell)).collect(Collectors.toList()).forEach(t -> cells.remove(t));
-	}
+//	private void removeIf(Predicate<T> p) {
+//		editableData.stream().filter(cell -> p.test(cell)).collect(Collectors.toList())
+//				.forEach(t -> editableData.remove(t));
+//	}
 
 	public void undo() {
-		cells.undo();
+		editableData.undo();
 		invalidate();
 		checkData();
 	}
 
 	public void redo() {
-		cells.redo();
+		editableData.redo();
 		invalidate();
 		checkData();
 	}
