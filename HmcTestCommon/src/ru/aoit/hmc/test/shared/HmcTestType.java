@@ -25,7 +25,7 @@ public enum HmcTestType {
 	@UILabel(label = "Кнопки")
 	DEMUX("Кнопки"), //
 	@UILabel(label = "READER")
-	READER("READER"), //
+	READER("Чтение меток"), //
 	@UILabel(label = "Планшет")
 	TABLET("Планшет"), //
 	@UILabel(label = "Память")
