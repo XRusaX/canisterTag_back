@@ -5,37 +5,38 @@ import ru.nppcrts.common.shared.cd.UILabel;
 // НЕ НУЖНО НИЧЕГО УДАЛЯТЬ ИЗ ЭТОГО КЛАССА
 public enum HmcTestType {
 	@UILabel(label = "Часы")
-	RTC("Часы"), //
+	RTC(), //
 	@UILabel(label = "Термодатчик")
-	THERMO("Термодатчик"), //
+	THERMO(), //
 	@UILabel(label = "Моточасы")
-	WORK_TIME("Моточасы"), //
+	WORK_TIME(), //
 	@UILabel(label = "Компрессор")
-	RELAY("Компрессор"), //
+	RELAY(), //
 	@UILabel(label = "Wi-fi")
-	WIFI("Wi-fi"), //
+	WIFI(), //
 	@UILabel(label = "Вентиляторы")
-	FAN("Вентиляторы"), //
+	FAN(), //
 	@UILabel(label = "Датчик уровня жидкости")
-	CAP_SENSOR("Датчик уровня жидкости"), //
+	CAP_SENSOR(), //
 	@UILabel(label = "Светодиод")
-	LED("Светодиод"), //
+	LED(), //
 	@UILabel(label = "Звук")
-	BUZZ("Звук"), //
+	BUZZ(), //
 	@UILabel(label = "Кнопки")
-	DEMUX("Кнопки"), //
-	@UILabel(label = "READER")
-	READER("Чтение меток"), //
+	DEMUX(), //
+	@UILabel(label = "Чтение меток")
+	READER(), //
 	@UILabel(label = "Планшет")
-	TABLET("Планшет"), //
+	TABLET(), //
 	@UILabel(label = "Память")
-	FLASH("Память"), //
+	FLASH(), //
 	@UILabel(label = "Режим работы")
-	MODE("Режим работы"),;
+	MODE(),;
 
-	public String label;
 
-	HmcTestType(String string) {
-		this.label = string;
-	} //
+	public static String getLabel(Enum<?> e) throws NoSuchFieldException {
+
+		return e.getClass().getDeclaredField(e.name()).getAnnotation(UILabel.class).label();
+
+	}
 }
