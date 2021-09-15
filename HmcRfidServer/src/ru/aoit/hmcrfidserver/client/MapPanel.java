@@ -33,7 +33,7 @@ public class MapPanel extends ResizeComposite {
 	private final CommonDataServiceAsync service = GWT.create(CommonDataService.class);
 	private final HmcServiceAsync hmcService = GWT.create(HmcService.class);
 
-	private final EditableData<CDObject> cells = new EditableData<CDObject>() {
+	private final EditableData<CDObject> data = new EditableData<CDObject>() {
 		@Override
 		protected void setXY(CDObject t, int x, int y) {
 			t.set("x", x);
@@ -49,6 +49,11 @@ public class MapPanel extends ResizeComposite {
 		protected int getX(CDObject t) {
 			return t.getInt("x");
 		}
+
+		@Override
+		public CDObject getCopy(CDObject cell) {
+			return new CDObject(cell);
+		}
 	};
 	private Map<Long, CDObject> rooms;
 	private CDObject room;
@@ -56,7 +61,7 @@ public class MapPanel extends ResizeComposite {
 
 	private boolean editMode;
 
-	private GEditor<CDObject> drawable = new GEditor<CDObject>(cells) {
+	private GEditor<CDObject> drawable = new GEditor<CDObject>(data) {
 
 		@Override
 		protected int getX(CDObject t) {
@@ -99,7 +104,7 @@ public class MapPanel extends ResizeComposite {
 				drawable.dropSel();
 
 				if (Window.confirm("Сохранить?")) {
-					List<CDObject> list = cells.stream().collect(Collectors.toList());
+					List<CDObject> list = data.stream().collect(Collectors.toList());
 					hmcService.saveAll(list, companyId, new AlertAsyncCallback<Void>(null));
 				}
 
@@ -110,7 +115,7 @@ public class MapPanel extends ResizeComposite {
 	private Button wallButton = new Button("Стены", new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
-			cells.markUndo();
+			data.markUndo();
 			drawable.convertSel((x, y, t) -> {
 				CDObject cell = new CDObject();
 				cell.set("company", companyId);
@@ -123,7 +128,7 @@ public class MapPanel extends ResizeComposite {
 	});
 
 	private Button clearButton = new Button("Очистить", (ClickHandler) event -> {
-		cells.markUndo();
+		data.markUndo();
 		drawable.convertSel((x, y, t) -> null);
 	});
 
@@ -166,13 +171,13 @@ public class MapPanel extends ResizeComposite {
 								list.stream().forEach(r -> rooms.put(r.getId(), r));
 								service.loadRange(RoomCell.class.getName(), filter, null,
 										new AlertAsyncCallback<List<CDObject>>(list1 -> {
-											cells.setData(list1);
+											data.setData(list1);
 											drawable.invalidate();
 										}));
 							}));
 
 				} else {
-					cells.clear();
+					data.clear();
 					rooms = null;
 					drawable.invalidate();
 				}

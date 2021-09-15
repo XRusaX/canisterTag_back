@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public abstract class EditableData<T> {
+	public abstract T getCopy(T cell);
 
 	protected abstract void setXY(T t, int x, int y);
 
@@ -84,8 +85,10 @@ public abstract class EditableData<T> {
 		redoList.clear();
 		moveTo(t, x, y, undoList, redoList);
 	}
-	
+
 	public void markUndo() {
+		if (undoList.isEmpty() || undoList.getLast() == null)
+			return;
 		undoList.add(null);
 	}
 
@@ -94,7 +97,7 @@ public abstract class EditableData<T> {
 			redoList.add(null);
 		while (!undoList.isEmpty()) {
 			Runnable last = undoList.removeLast();
-			if(last == null)
+			if (last == null)
 				break;
 			last.run();
 		}
@@ -105,9 +108,10 @@ public abstract class EditableData<T> {
 			undoList.add(null);
 		while (!redoList.isEmpty()) {
 			Runnable last = redoList.removeLast();
-			if(last == null)
+			if (last == null)
 				break;
 			last.run();
 		}
 	}
+
 }
