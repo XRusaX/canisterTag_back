@@ -27,8 +27,7 @@ sourceSets {
 
 jar {
  	baseName = 'rfidwriter'
-    manifest.attributes('Main-Class': "ru.aoit.hmcrfidwriter.RfidWriter")
-    //create a single Jar with all dependencies - otherwise external jar is not included
+    manifest.attributes('Main-Class': "com.ma.hmcrfidwriter.RfidWriter")
     version = '0.9'
-    from configurations.compile.collect { zipTree(it) }
+    from configurations.compile.collect { zipTree(it) } //create a single Jar with all dependencies - otherwise external jar is not included
 }

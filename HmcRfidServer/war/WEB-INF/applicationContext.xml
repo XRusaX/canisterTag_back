@@ -17,12 +17,12 @@
 	<mvc:annotation-driven />
 
 	<context:component-scan
-		base-package="ru.nppcrts.springgwt.server" />
+		base-package="com.ma.springgwt.server" />
 
 	<context:component-scan
-		base-package="ru.nppcrts.common.gwt" />
+		base-package="com.ma.common.gwt" />
 
-	<context:component-scan base-package="ru.aoit" />
+	<context:component-scan base-package="com.ma" />
 
 	<mvc:default-servlet-handler />
 

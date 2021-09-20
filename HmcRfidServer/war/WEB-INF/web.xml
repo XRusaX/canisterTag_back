@@ -11,7 +11,7 @@
 
 	<servlet>
 		<servlet-name>appService</servlet-name>
-		<servlet-class>ru.nppcrts.common.gwt.app.server.AppServiceImpl</servlet-class>
+		<servlet-class>com.ma.common.gwt.app.server.AppServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>appService</servlet-name>
@@ -20,7 +20,7 @@
 
 	<servlet>
 		<servlet-name>loginService</servlet-name>
-		<servlet-class>ru.nppcrts.common.gwt.auth.server.LoginServiceImpl</servlet-class>
+		<servlet-class>com.ma.common.gwt.auth.server.LoginServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>loginService</servlet-name>
@@ -29,7 +29,7 @@
 
 	<servlet>
 		<servlet-name>commomdataService</servlet-name>
-		<servlet-class>ru.nppcrts.common.gwt.app.server.commondata.CommonDataServiceImpl2</servlet-class>
+		<servlet-class>com.ma.common.gwt.app.server.commondata.CommonDataServiceImpl2</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>commomdataService</servlet-name>
@@ -39,7 +39,7 @@
 
 	<servlet>
 		<servlet-name>RuslanTest</servlet-name>
-		<servlet-class>ru.aoit.hmcapp.servlet.RuslanTestServlet</servlet-class>
+		<servlet-class>com.ma.hmcapp.servlet.RuslanTestServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>RuslanTest</servlet-name>

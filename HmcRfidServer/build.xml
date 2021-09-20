@@ -2,7 +2,7 @@
 
 	<property name="warfile" value="disinfection.war" />
 	<property name="entrypoint"
-		value="ru.aoit.hmcrfidserver.HmcRfidServer" />
+		value="com.ma.hmcrfidserver.HmcRfidServer" />
 
 	<multirootfileset id="srcdirs">
 		<basedir file="src" />

@@ -8,19 +8,19 @@
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
 		<!-- Entity classes -->
-		<class>ru.aoit.appcommon.shared.MsgLoggerItem</class>
-		<class>ru.aoit.appcommon.shared.auth.UserData</class>
-		<class>ru.aoit.hmcdb.shared.Hmc</class>
-		<class>ru.aoit.hmcdb.shared.Agent</class>
-		<class>ru.aoit.hmcdb.shared.Company</class>
-		<class>ru.aoit.hmcdb.shared.Operator</class>
-		<class>ru.aoit.hmcdb.shared.Room</class>
-		<class>ru.aoit.hmcdb.shared.RoomLayer</class>
-		<class>ru.aoit.hmcdb.shared.RoomCell</class>
-		<class>ru.aoit.hmcdb.shared.rfid.Quota</class>
-		<class>ru.aoit.hmcdb.shared.rfid.Report</class>
-		<class>ru.aoit.hmcdb.shared.rfid.RfidLabel</class>
-		<class>ru.aoit.hmcdb.shared.test.TestReport</class>
+		<class>com.ma.appcommon.shared.MsgLoggerItem</class>
+		<class>com.ma.appcommon.shared.auth.UserData</class>
+		<class>com.ma.hmcdb.shared.Hmc</class>
+		<class>com.ma.hmcdb.shared.Agent</class>
+		<class>com.ma.hmcdb.shared.Company</class>
+		<class>com.ma.hmcdb.shared.Operator</class>
+		<class>com.ma.hmcdb.shared.Room</class>
+		<class>com.ma.hmcdb.shared.RoomLayer</class>
+		<class>com.ma.hmcdb.shared.RoomCell</class>
+		<class>com.ma.hmcdb.shared.rfid.Quota</class>
+		<class>com.ma.hmcdb.shared.rfid.Report</class>
+		<class>com.ma.hmcdb.shared.rfid.RfidLabel</class>
+		<class>com.ma.hmcdb.shared.test.TestReport</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver"
