@@ -8,11 +8,11 @@ import java.util.stream.Stream;
 public abstract class EditableData<T> {
 	public abstract T getCopy(T cell);
 
-	protected abstract void setXY(T t, int x, int y);
+	public abstract void setXY(T t, int x, int y);
 
-	protected abstract int getY(T t);
+	public abstract int getY(T t);
 
-	protected abstract int getX(T t);
+	public abstract int getX(T t);
 
 	private final List<T> cells = new ArrayList<>();
 

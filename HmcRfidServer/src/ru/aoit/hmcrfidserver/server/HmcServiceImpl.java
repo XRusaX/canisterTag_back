@@ -29,7 +29,7 @@ public class HmcServiceImpl extends SpringRemoteServiceServlet implements HmcSer
 	private CommonDataHelpers helpers;
 
 	@Override
-	public void saveAll(List<CDObject> list, long companyId) throws Exception {
+	public void saveRoomCells(List<CDObject> list, long companyId) throws Exception {
 		try {
 			Class<?> clazz = RoomCell.class;
 			database.execVoid(em -> {

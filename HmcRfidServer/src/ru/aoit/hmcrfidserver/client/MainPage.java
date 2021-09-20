@@ -85,7 +85,6 @@ public class MainPage extends AppMainPage {
 
 		TabLayoutPanel tabPanel2 = tabPanel;
 
-		
 		eventBus = new PageEventBus();
 		if (Login.user.company == null) {
 			tabPanel2 = new TabLayoutPanel(2, Unit.EM);
@@ -110,7 +109,6 @@ public class MainPage extends AppMainPage {
 			panel.addW(new CommonListPanelX(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Операторы");
 		}
-
 
 		eventBus = new PageEventBus();
 		if (Login.user.company == null) {
@@ -161,6 +159,9 @@ public class MainPage extends AppMainPage {
 
 		if (Login.user.company == null)
 			tabPanel.add(new ConnectionsPage(), "Подключения");
+
+		if (Login.user.company == null && Login.user.hasPermission(UserData.PERMISSION_SETTINGS))
+			tabPanel.add(new FirmwarePage(), "Прошивки");
 
 		if (Login.user.hasPermission(UserData.PERMISSION_SETTINGS))
 			tabPanel.add(new CommonSettingsPanel(null, null), "Настройки");

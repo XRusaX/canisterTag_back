@@ -20,6 +20,7 @@ import ru.aoit.hmc.test.rpcdata.User;
 import ru.aoit.hmc.test.rpcinterface.HmcTestRpcInterface;
 import ru.aoit.hmcapp.HmcAppHelper;
 import ru.aoit.hmcdb.shared.Hmc;
+import ru.aoit.hmcdb.shared.Permissions;
 
 @RestController
 @RequestMapping(HmcTestRpcInterface.servletpath)
@@ -66,6 +67,7 @@ public class HmcTestRpcController extends RpcController implements HmcTestRpcInt
 
 	@Override
 	public void report(TestReport testReport) throws Exception {
+		authComponent.checkPermissions(Permissions.PERMISSION_TEST);
 
 		database.execVoid(conn -> {
 			Hmc hmc = hmcAppHelper.getCreateHmc(conn, testReport.serialNumber);

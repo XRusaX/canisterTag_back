@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import ru.aoit.hmc.rfid.rpcinterface.HmcRfidRpcInterface;
@@ -24,23 +25,70 @@ public class CompanySim {
 	private List<CanisterSim> canisters = new LinkedList<>();
 	private ConnectionSettings connectionSettings;
 
+	String[] companies = {
+			"СмартМи Инжиниринг",
+			"E3 Investment",
+			"ПК Марион",
+			"Best Friend",
+			"Полимертехпром",
+			"“ИНГ ВАР” Инженерный консалтинг",
+			"ООО Севзап АКБ",
+			"ООО ТРИКОТАЖНЫЕ ТЕХНОЛОГИИ",
+			"ООО \"М.Т.Д\"",
+			"Криошоп",
+			"Агентство маркетинга и коммуникаций",
+			"Кафе Чеснок",
+	};
+
+	String[] rooms2 = {
+			"Конференц-зал",
+			"Директор",
+			"Приемная",
+			"Спортзал",
+			"Каб 101",
+			"Каб 102",
+			"Каб 103",
+			"Каб 104",
+			"Каб 105",
+			"Каб 106",
+			"Туалет",
+	};
+	
+	String[] operators2 = {
+			"Виктория Лоскунова",
+			"Сергей Воротников",
+			"Вадим Докумов",
+			"Дмитрий Алексеев",
+			"Данила Коробейников",
+			"Андрей Косых",
+			"Александр Ленивец",
+			"Денис Ерошин",
+			"Влад Горбатюк",
+			"Александр Фокин"
+	};
+	
+	
 	public CompanySim(TestRpcInterface proxy, ConnectionSettings connectionSettings, FillParams fillParams, int num) {
 		this.proxy = proxy;
 		this.connectionSettings = connectionSettings;
-		this.name = "company" + num;
+		//this.name = "company" + num;
+		
+		this.name = companies[num];
 
 		for (int j = 0; j < fillParams.rooms; j++) {
-			String roomName = "room_" + j;
+			String roomName = rooms2[j];
 			rooms.add(roomName);
 		}
 
 		for (int j = 0; j < fillParams.operators; j++) {
-			String name = "Баба Маня " + j;
+			String name = operators2[j];
 			operators.add(name);
 		}
 
+		Random r = new Random(67723547);
+		
 		for (int j = 0; j < fillParams.hmcs; j++) {
-			String serialNum = "hmc_" + num + "_" + j;
+			String serialNum = String.format("%08X%02d",  r.nextInt(), num) ;
 			HmcSim hmcSim = new HmcSim(proxy, connectionSettings, this, serialNum);
 			hmcs.add(hmcSim);
 		}

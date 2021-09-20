@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 import ru.aoit.appcommon.Database2;
 import ru.aoit.appcommon.logger.MsgLoggerImpl;
 import ru.aoit.hmc.rfid.rpcdata.HmcReport;
@@ -51,13 +53,15 @@ public class HmcReportController {
 		return result;
 	}
 
-	@PostMapping("/report")
-	private synchronized String report(@RequestBody HmcReport report) throws IOException {
+	@PostMapping(value = "/report")
+	private synchronized String report(@RequestBody String strreport) throws IOException {
 
+		HmcReport report = new Gson().fromJson(strreport, HmcReport.class);
+		
 		String result = database.exec(em -> {
 
 			RfidLabel label = getLabel(em, report.canisterId);
-			if (label == null) {
+			if (label == null) { 
 				msgLogger.add(null, Severity.ERROR, "Метка канистры не найдена " + report.canisterId);
 				return "error";
 			}

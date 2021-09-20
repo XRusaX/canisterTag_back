@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import ru.aoit.hmcdb.shared.Company;
 import ru.aoit.hmcdb.shared.Room;
 import ru.aoit.hmcdb.shared.RoomCell;
+import ru.aoit.hmcrfidserver.client.geditor.GEditor;
 import ru.nppcrts.common.gwt.client.AlertAsyncCallback;
 import ru.nppcrts.common.gwt.client.commondata.CommonDataService;
 import ru.nppcrts.common.gwt.client.commondata.CommonDataServiceAsync;
@@ -35,18 +36,18 @@ public class MapPanel extends ResizeComposite {
 
 	private final EditableData<CDObject> data = new EditableData<CDObject>() {
 		@Override
-		protected void setXY(CDObject t, int x, int y) {
+		public void setXY(CDObject t, int x, int y) {
 			t.set("x", x);
 			t.set("y", y);
 		}
 
 		@Override
-		protected int getY(CDObject t) {
+		public int getY(CDObject t) {
 			return t.getInt("y");
 		}
 
 		@Override
-		protected int getX(CDObject t) {
+		public int getX(CDObject t) {
 			return t.getInt("x");
 		}
 
@@ -105,7 +106,7 @@ public class MapPanel extends ResizeComposite {
 
 				if (Window.confirm("Сохранить?")) {
 					List<CDObject> list = data.stream().collect(Collectors.toList());
-					hmcService.saveAll(list, companyId, new AlertAsyncCallback<Void>(null));
+					hmcService.saveRoomCells(list, companyId, new AlertAsyncCallback<Void>(null));
 				}
 
 			}

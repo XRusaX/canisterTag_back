@@ -9,6 +9,6 @@ import ru.nppcrts.common.shared.cd.CDObject;
 
 @RemoteServiceRelativePath("hmc")
 public interface HmcService extends RemoteService {
-	void saveAll(List<CDObject> list, long companyId) throws Exception;
+	void saveRoomCells(List<CDObject> list, long companyId) throws Exception;
 	
 }

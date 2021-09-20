@@ -34,9 +34,14 @@ public class TestRpcController extends RpcController implements TestRpcInterface
 
 	@Override
 	public void clear() throws IOException {
-		database.execVoid(em -> {
-			em.createQuery("delete from Company").executeUpdate();
-		});
+		try {
+			database.execVoid(em -> {
+				em.createQuery("delete from Company").executeUpdate();
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@Override

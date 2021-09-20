@@ -27,25 +27,10 @@ public class Report {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
-	@UILabel(label = "Получено", sortable = true, readOnly = true)
-	public Date time = new Date();
-
-	@UILabel(label = "МГЦ", sortable = true)
+	@UILabel(label = "Организация", nullable = true, sortable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Hmc hmc;
-
-	@UILabel(label = "Статус", sortable = true)
-	@Enumerated(EnumType.STRING)
-	public HmcReportStatus status;
-
-	@UILabel(label = "Метка", sortable = true)
-	@ManyToOne(cascade = CascadeType.ALL)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	public RfidLabel rfidLabel;
-
-	@UILabel(label = "Расход (ml)")
-	public int consumtion_ml;
+	public Company company;
 
 	@UILabel(label = "Начало работы", sortable = true)
 	public Date startTime;
@@ -53,10 +38,14 @@ public class Report {
 	@UILabel(label = "Продолж. работы (с)")
 	public Integer durationS;
 
-	@UILabel(label = "Организация", nullable = true, sortable = true)
+	@UILabel(label = "Статус", sortable = true)
+	@Enumerated(EnumType.STRING)
+	public HmcReportStatus status;
+
+	@UILabel(label = "МГЦ", sortable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Company company;
+	public Hmc hmc;
 
 	@UILabel(label = "Оператор", nullable = true, sortable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -67,6 +56,17 @@ public class Report {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Room room;
+
+	@UILabel(label = "Расход (ml)")
+	public int consumtion_ml;
+
+	@UILabel(label = "Метка", sortable = true)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	public RfidLabel rfidLabel;
+
+	// @UILabel(label = "Получено", sortable = true, readOnly = true)
+	public Date time = new Date();
 
 	public Report() {
 	}

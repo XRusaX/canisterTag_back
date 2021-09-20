@@ -18,10 +18,10 @@ public class Room {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
-	@UILabel(label = "Имя", sortable = true)
+	@UILabel(label = "Название", sortable = true)
 	public String name;
 
-	@UILabel(label = "Color", sortable = true)
+	//@UILabel(label = "Color", sortable = true)
 	public String color;
 
 	@UILabel(label = "Организация", sortable = true, nullable = true)
