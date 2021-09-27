@@ -13,12 +13,12 @@
 		<basedir file="../common-java/GwtApp/src" />
 		<basedir file="../common-java/AppCommon/src" />
 		<basedir file="../common-java/AppCommonApi/src" />
-		
+
 		<basedir file="../HmcRfidCommon/src" />
 		<basedir file="../HmcTestCommon/src" />
 		<basedir file="../HmcDatabase/src" />
 		<basedir file="../HmcAppCommon/src" />
-			</multirootfileset>
+	</multirootfileset>
 
 	<property name="gwtdir" value="../common-java/Libs/gwt-2.8.1" />
 

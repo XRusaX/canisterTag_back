@@ -3,6 +3,8 @@ package com.ma.hmcrfidserver.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +19,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,9 +30,10 @@ import com.ma.appcommon.ThreadLocalRequest;
 import com.ma.appcommon.WorkingDir;
 import com.ma.appcommon.shared.auth.UserData;
 import com.ma.common.shared.Severity;
+import com.ma.hmcrfidserver.client.FirmwarePage.HmcLine;
 
 @RestController
-public class FileUploadController {
+public class FirmwareController {
 
 	@Autowired
 	private MsgLogger msgLogger;
@@ -46,16 +49,21 @@ public class FileUploadController {
 
 	@ResponseBody
 	@PostMapping("/firmware")
-	public String handleFileUpload(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public String handleFileUpload(HttpServletRequest req, HttpServletResponse resp, @RequestParam("line") String line)
+			throws IOException {
 		threadLocalRequest.setRequest(req);
 		if (!authComponent.getUser().hasPermission(UserData.PERMISSION_SETTINGS))
 			return "failure";
+
+		File dir = new File(getOutputDir(), line);
+		dir.mkdirs();
+		FileUtils.cleanDirectory(dir);
 
 		try {
 			FileItemIterator iter = new ServletFileUpload().getItemIterator(req);
 			if (iter.hasNext()) {
 				FileItemStream item = iter.next();
-				FileUtils.copyInputStreamToFile(item.openStream(), new File(getOutputDir(), item.getName()));
+				FileUtils.copyInputStreamToFile(item.openStream(), new File(dir, item.getName()));
 			}
 		} catch (Exception e) {
 			msgLogger.add(null, Severity.ERROR, e);
@@ -66,10 +74,22 @@ public class FileUploadController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/firmware/{file_name:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public ResponseEntity<InputStreamResource> handleFileDownload(@PathVariable("file_name") String fileName)
+	@GetMapping(value = "/firmware/version")
+	public String handleVersion(@RequestParam("line") String line) throws IOException {
+		File dir = new File(getOutputDir(), line);
+		String[] files = dir.list();
+		return files[0];
+	}
+
+	@ResponseBody
+	@GetMapping(value = "/firmware", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public ResponseEntity<InputStreamResource> handleFileDownload(@RequestParam("line") String line)
 			throws IOException {
-		File file = new File(workingDir.getWorkingDir(), "firmware/" + fileName);
+
+		File dir = new File(getOutputDir(), line);
+		String[] files = dir.list();
+
+		File file = new File(dir, files[0]);
 		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
 		return ResponseEntity.ok()
@@ -84,5 +104,16 @@ public class FileUploadController {
 
 	protected File getOutputDir() {
 		return new File(workingDir.getWorkingDir(), "firmware");
+	}
+
+	public Map<String, String> getFirmwareList() {
+		Map<String, String> res = new LinkedHashMap<>();
+		for (HmcLine line : HmcLine.values()) {
+			File dir = new File(getOutputDir(), line.name());
+			String[] files = dir.list();
+			if (files != null && files.length > 0)
+				res.put(line.name(), files[0]);
+		}
+		return res;
 	}
 }
