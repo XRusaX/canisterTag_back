@@ -1,28 +1,20 @@
 package com.ma.hmcrfidserver.client.geditor;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
-import com.ma.common.shared.Pair;
 import com.ma.common.shared.canvas.Drawable;
 import com.ma.common.shared.canvas.PaintTarget;
 import com.ma.common.shared.canvas.XY;
 import com.ma.hmcrfidserver.client.EditableData;
 
 public abstract class GEditor<T> extends Drawable {
-	private static final int CELL_SIZE = 16;
+	private final int CELL_SIZE;
 
 	private EditableData<T> editableData;
-
-	protected abstract int getX(T t);
-
-	protected abstract int getY(T t);
 
 	protected abstract String getColor(T t);
 
@@ -30,15 +22,24 @@ public abstract class GEditor<T> extends Drawable {
 
 	protected abstract boolean isSelected(T t);
 
-	public GEditor(EditableData<T> cells) {
+	public GEditor(int CELL_SIZE, EditableData<T> cells) {
+		this.CELL_SIZE = CELL_SIZE;
 		this.editableData = cells;
 	}
 
-	private static int getCellX(double x) {
+	// public P getCellPos(P p) {
+	// return getCellPos(p.x, p.y);
+	// }
+
+	public P getCellPos(double x, double y) {
+		return new P(getCellX(x), getCellY(y));
+	}
+
+	public int getCellX(double x) {
 		return (int) x / CELL_SIZE;
 	}
 
-	private static int getCellY(double y) {
+	public int getCellY(double y) {
 		return (int) y / CELL_SIZE;
 	}
 
@@ -50,31 +51,30 @@ public abstract class GEditor<T> extends Drawable {
 	public void draw(PaintTarget paintTarget) {
 		paintTarget.setColor("lightgray");
 
-		int maxx = editableData.stream().mapToInt(c -> getX(c)).max().orElse(0) + 5;
-		int maxy = editableData.stream().mapToInt(c -> getY(c)).max().orElse(0) + 5;
+		Rect bounds = editableData.getBounds();
 
-		for (int x = 0; x <= maxx + 1; x++)
-			paintTarget.drawLine(x * CELL_SIZE, 0, x * CELL_SIZE, (maxy + 1) * CELL_SIZE);
+		for (int x = bounds.x0; x <= bounds.x1; x++)
+			paintTarget.drawLine(x * CELL_SIZE, bounds.y0 * CELL_SIZE, x * CELL_SIZE, bounds.y1 * CELL_SIZE);
 
-		for (int y = 0; y <= maxy + 1; y++)
-			paintTarget.drawLine(0, y * CELL_SIZE, (maxx + 1) * CELL_SIZE, y * CELL_SIZE);
+		for (int y = bounds.y0; y <= bounds.y1; y++)
+			paintTarget.drawLine(bounds.x0 * CELL_SIZE, y * CELL_SIZE, bounds.x1 * CELL_SIZE, y * CELL_SIZE);
 
 		int dx = drag == null ? 0 : drag.getWidth();
 		int dy = drag == null ? 0 : drag.getHeigth();
 
 		editableData.stream().forEach(cell -> {
-			int x = getX(cell);
-			int y = getY(cell);
+			P pos = editableData.getPos(cell);
 
-			if (clipboardData != null && clipboardData.list != null && clipboardData.rect.inside(x - dx, y - dy))
+			if (clipboardData != null && clipboardData.list != null
+					&& clipboardData.rect.inside(pos.x - dx, pos.y - dy))
 				return;
 
 			paintTarget.setColor(getColor(cell));
-			paintTarget.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+			paintTarget.fillRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 
 			if (isSelected(cell)) {
 				paintTarget.setColor("black");
-				paintTarget.drawRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+				paintTarget.drawRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 			}
 		});
 
@@ -84,8 +84,9 @@ public abstract class GEditor<T> extends Drawable {
 			if (clipboardData.list != null)
 				clipboardData.list.stream().forEach(cell -> {
 					paintTarget.setColor(getColor(cell));
-					int x = getX(cell) + dx;
-					int y = getY(cell) + dy;
+					P pos = editableData.getPos(cell);
+					int x = pos.x + dx;
+					int y = pos.y + dy;
 					paintTarget.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 				});
 			paintTarget.setLineWidth(4);
@@ -100,7 +101,7 @@ public abstract class GEditor<T> extends Drawable {
 
 	}
 
-	private static void drawRect(PaintTarget paintTarget, Rect rect, String color) {
+	private void drawRect(PaintTarget paintTarget, Rect rect, String color) {
 		paintTarget.setColor(color);
 		rect = rect.normCopy();
 		paintTarget.drawRect(rect.x0 * CELL_SIZE, rect.y0 * CELL_SIZE, rect.getWidth() * CELL_SIZE,
@@ -117,38 +118,38 @@ public abstract class GEditor<T> extends Drawable {
 
 		public void move(int dx, int dy) {
 			rect.move(dx, dy);
-			list.forEach(cell -> editableData.setXY(cell, editableData.getX(cell) + dx, editableData.getY(cell) + dy));
+			list.forEach(cell -> {
+				P pos = editableData.getPos(cell);
+				editableData.setPos(cell, new P(pos.x + dx, pos.y + dy));
+			});
 		}
 	}
 
 	private void copy() {
 		GWT.log("copy");
 
-		clipboardData.list = editableData.stream().filter(cell -> {
-			int x = getX(cell);
-			int y = getY(cell);
-			return clipboardData.rect.inside(x, y);
-		}).map(cell -> editableData.getCopy(cell)).collect(Collectors.toList());
+		clipboardData.list = editableData.stream().filter(cell -> clipboardData.rect.inside(editableData.getPos(cell)))
+				.map(cell -> editableData.getCopy(cell)).collect(Collectors.toList());
 	}
 
 	private void cut() {
 		GWT.log("cut");
 		copy();
-		convertRect(clipboardData.rect, (x, y, t) -> null);
+		convertRect(clipboardData.rect, (p, t) -> null);
 	}
 
 	private void paste() {
 		GWT.log("paste");
 
 		Map<P, T> map = new HashMap<>();
-		clipboardData.list.stream().forEach(cell -> map.put(new P(getX(cell), getY(cell)), cell));
+		clipboardData.list.stream().forEach(cell -> map.put(editableData.getPos(cell), cell));
 
-		convertRect(clipboardData.rect, (x, y, t) -> {
-			T t2 = map.get(new P(x, y));
+		convertRect(clipboardData.rect, (p, t) -> {
+			T t2 = map.get(p);
 			return t2;
 		});
 
-		checkData();
+		editableData.checkData();
 	}
 
 	@Override
@@ -156,7 +157,7 @@ public abstract class GEditor<T> extends Drawable {
 		if (!canEdit())
 			return false;
 
-		if (clipboardData != null && !clipboardData.rect.inside(getCellX(xy.x), getCellY(xy.y))) {
+		if (clipboardData != null && !clipboardData.rect.inside(getCellPos(xy.x, xy.y))) {
 			if (clipboardData.list != null)
 				paste();
 			clipboardData = null;
@@ -171,8 +172,7 @@ public abstract class GEditor<T> extends Drawable {
 		if (!canEdit())
 			return false;
 
-		if (clipboardData != null && clipboardData.list == null
-				&& clipboardData.rect.inside(getCellX(xy.x), getCellY(xy.y))) {
+		if (clipboardData != null && clipboardData.list == null && clipboardData.rect.inside(getCellPos(xy.x, xy.y))) {
 			editableData.markUndo();
 			if (control)
 				copy();
@@ -211,16 +211,6 @@ public abstract class GEditor<T> extends Drawable {
 		return true;
 	}
 
-	private void checkData() {
-		Set<Pair<Integer, Integer>> set = new HashSet<>();
-		editableData.stream().forEach(t -> {
-			Pair<Integer, Integer> pair = Pair.create(getX(t), getY(t));
-			if (set.contains(pair))
-				Window.alert("Data integrity error!");
-			set.add(pair);
-		});
-	}
-
 	public void dropSel() {
 		clipboardData = null;
 		drag = null;
@@ -228,17 +218,17 @@ public abstract class GEditor<T> extends Drawable {
 	}
 
 	public interface FF<T> {
-		T apply(int x, int y, T old);
+		T apply(P pos, T old);
 	}
 
 	public void convertRect(Rect rect, FF<T> f) {
 		Map<P, T> map = new HashMap<>();
-		editableData.stream().filter(cell -> rect.inside(getX(cell), getY(cell)))
-				.forEach(cell -> map.put(new P(getX(cell), getY(cell)), cell));
+		editableData.stream().filter(cell -> rect.inside(editableData.getPos(cell)))
+				.forEach(cell -> map.put(editableData.getPos(cell), cell));
 
 		rect.foreach(xy -> {
 			T cell = map.get(xy);
-			T t = f.apply(xy.x, xy.y, cell);
+			T t = f.apply(xy, cell);
 			if (t != cell) {
 				if (cell != null)
 					editableData.remove(cell);
@@ -248,7 +238,7 @@ public abstract class GEditor<T> extends Drawable {
 		});
 
 		invalidate();
-		checkData();
+		editableData.checkData();
 
 	}
 
@@ -263,13 +253,13 @@ public abstract class GEditor<T> extends Drawable {
 		dropSel();
 		editableData.undo();
 		invalidate();
-		checkData();
+		editableData.checkData();
 	}
 
 	public void redo() {
 		dropSel();
 		editableData.redo();
 		invalidate();
-		checkData();
+		editableData.checkData();
 	}
 }

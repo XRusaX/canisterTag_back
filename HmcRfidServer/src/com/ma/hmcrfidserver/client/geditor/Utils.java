@@ -7,29 +7,25 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class Utils {
-	public Set<P> getPolygonForCoords(int x, int y, int maxx, int maxy, Predicate<P> isWall) {
+	public static Set<P> findFilledArea(P p, Rect bounds, Predicate<P> toFill) {
 		Set<P> result = new HashSet<>();
 		Queue<P> queue = new LinkedList<>();
-		queue.add(new P(x, y));
+		queue.add(p);
 
 		while (!queue.isEmpty()) {
 			P coord = queue.poll();
 
-			if (coord.x < 0 || coord.y < 0 || coord.x >= maxx || coord.y >= maxy
-					|| result.contains(coord))
+			if (!bounds.inside(coord) || result.contains(coord))
 				continue;
-			
-//			Cell point = getCell(coord.x, coord.y);
-//			if (point == null || point.room != null) {
-//				result.add(new P(coord.x, coord.y));
-//				queue.add(new P(coord.x + 1, coord.y));
-//				queue.add(new P(coord.x - 1, coord.y));
-//				queue.add(new P(coord.x, coord.y + 1));
-//				queue.add(new P(coord.x, coord.y - 1));
-//
-//			}
+
+			if (toFill.test(coord)) {
+				result.add(new P(coord.x, coord.y));
+				queue.add(new P(coord.x + 1, coord.y));
+				queue.add(new P(coord.x - 1, coord.y));
+				queue.add(new P(coord.x, coord.y + 1));
+				queue.add(new P(coord.x, coord.y - 1));
+			}
 		}
 		return result;
 	}
-
 }

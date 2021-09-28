@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.gwt.core.shared.GWT;
@@ -17,8 +18,10 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.ma.common.gwt.client.AlertAsyncCallback;
 import com.ma.common.gwt.client.commondata.CommonDataService;
 import com.ma.common.gwt.client.commondata.CommonDataServiceAsync;
+import com.ma.common.gwt.client.commondata.ContextMenuHandlerX;
 import com.ma.common.gwt.client.commondata.PageEventBus;
 import com.ma.common.gwt.client.commondata.SelChangeEvent;
+import com.ma.common.gwt.client.ui.ContextMenu;
 import com.ma.common.gwt.client.ui.canvas.CanvasAdapter;
 import com.ma.common.gwt.client.ui.panel.HorPanel;
 import com.ma.common.gwt.client.ui.panel.LayoutHeaderPanel;
@@ -28,6 +31,9 @@ import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Room;
 import com.ma.hmcdb.shared.RoomCell;
 import com.ma.hmcrfidserver.client.geditor.GEditor;
+import com.ma.hmcrfidserver.client.geditor.P;
+import com.ma.hmcrfidserver.client.geditor.Rect;
+import com.ma.hmcrfidserver.client.geditor.Utils;
 
 public class MapPanel extends ResizeComposite {
 	private final CommonDataServiceAsync service = GWT.create(CommonDataService.class);
@@ -35,19 +41,14 @@ public class MapPanel extends ResizeComposite {
 
 	private final EditableData<CDObject> data = new EditableData<CDObject>() {
 		@Override
-		public void setXY(CDObject t, int x, int y) {
-			t.set("x", x);
-			t.set("y", y);
+		public void setPos(CDObject t, P pos) {
+			t.set("x", pos.x);
+			t.set("y", pos.y);
 		}
 
 		@Override
-		public int getY(CDObject t) {
-			return t.getInt("y");
-		}
-
-		@Override
-		public int getX(CDObject t) {
-			return t.getInt("x");
+		public P getPos(CDObject t) {
+			return new P(t.getInt("x"), t.getInt("y"));
 		}
 
 		@Override
@@ -61,18 +62,9 @@ public class MapPanel extends ResizeComposite {
 
 	private boolean editMode;
 
-	private GEditor<CDObject> drawable = new GEditor<CDObject>(data) {
+	private final int CELL_SIZE = 16;
 
-		@Override
-		protected int getX(CDObject t) {
-			return t.getInt("x");
-		}
-
-		@Override
-		protected int getY(CDObject t) {
-			return t.getInt("y");
-		}
-
+	private GEditor<CDObject> gEditor = new GEditor<CDObject>(CELL_SIZE, data) {
 		@Override
 		protected String getColor(CDObject t) {
 			Long roomId = t.getLong("room");
@@ -101,7 +93,7 @@ public class MapPanel extends ResizeComposite {
 			wallButton.setEnabled(editButton.isDown());
 			clearButton.setEnabled(editButton.isDown());
 			if (!editButton.isDown()) {
-				drawable.dropSel();
+				gEditor.dropSel();
 
 				if (Window.confirm("Сохранить?")) {
 					List<CDObject> list = data.stream().collect(Collectors.toList());
@@ -116,32 +108,66 @@ public class MapPanel extends ResizeComposite {
 		@Override
 		public void onClick(ClickEvent event) {
 			data.markUndo();
-			drawable.convertSel((x, y, t) -> {
-				CDObject cell = new CDObject();
-				cell.set("company", companyId);
-				cell.set("room", (Long) null);
-				cell.set("x", x);
-				cell.set("y", y);
-				return cell;
+			gEditor.convertSel((p, t) -> {
+				return newCell(p, null);
 			});
 		}
+
 	});
 
 	private Button clearButton = new Button("Очистить", (ClickHandler) event -> {
 		data.markUndo();
-		drawable.convertSel((x, y, t) -> null);
+		gEditor.convertSel((p, t) -> null);
 	});
 
-	private Button undoButton = new Button("<<", (ClickHandler) event -> drawable.undo());
-	private Button redoButton = new Button(">>", (ClickHandler) event -> drawable.redo());
+	private Button undoButton = new Button("<<", (ClickHandler) event -> gEditor.undo());
+	private Button redoButton = new Button(">>", (ClickHandler) event -> gEditor.redo());
 
 	public MapPanel(PageEventBus eventBus) {
 
 		wallButton.setEnabled(false);
 		clearButton.setEnabled(false);
 
+		CanvasAdapter canvasAdapter = new CanvasAdapter(gEditor);
+
+		new ContextMenuHandlerX(canvasAdapter) {
+			@Override
+			protected void prepareContextMenu(ContextMenu menu, int x, int y, Runnable onPrepared) {
+				menu.addItem("<<", () -> gEditor.undo());
+				menu.addItem(">>", () -> gEditor.redo());
+
+				Map<P, CDObject> map = data.getMap();
+				Rect bounds = data.getBounds();
+				Set<P> setToFill = Utils.findFilledArea(gEditor.getCellPos(x, y), bounds, p -> {
+					CDObject object = map.get(p);
+					return object == null || object.getLong("room") != null;
+				});
+
+				Rect bounds1 = new Rect(bounds.x0 + 1, bounds.y0 + 1, bounds.x1 - 1, bounds.y1 - 1);
+
+				if (!setToFill.isEmpty() && setToFill.stream().allMatch(p -> bounds1.inside(p))) {
+					menu.addSeparator();
+					rooms.values().forEach(room -> {
+						menu.addItem(room.get("name"), () -> {
+							data.markUndo();
+							setToFill.forEach(pos -> {
+								CDObject t = map.get(pos);
+								if (t != null)
+									data.remove(t);
+								data.add(newCell(pos, room.getId()));
+							});
+							data.checkData();
+							gEditor.invalidate();
+						});
+					});
+				}
+
+				onPrepared.run();
+			}
+		};
+
 		initWidget(new LayoutHeaderPanel(new HorPanel(editButton, wallButton, clearButton)
-				.alignHor(HasAlignment.ALIGN_RIGHT).add(undoButton, redoButton), new CanvasAdapter(drawable)));
+				.alignHor(HasAlignment.ALIGN_RIGHT).add(undoButton, redoButton), canvasAdapter));
 
 		eventBus.registerListener(SelChangeEvent.class, se -> {
 
@@ -152,7 +178,7 @@ public class MapPanel extends ResizeComposite {
 				if (room != null) {
 					cId = room.getLong("company");
 				}
-				drawable.invalidate();
+				gEditor.invalidate();
 			}
 			if (se.clazz == Company.class) {
 				cId = se.selectedSet.size() == 1 ? se.selectedSet.iterator().next().getId() : null;
@@ -172,18 +198,33 @@ public class MapPanel extends ResizeComposite {
 								service.loadRange(RoomCell.class.getName(), filter, null,
 										new AlertAsyncCallback<List<CDObject>>(list1 -> {
 											data.setData(list1);
-											drawable.invalidate();
+											gEditor.invalidate();
 										}));
 							}));
 
 				} else {
 					data.clear();
 					rooms = null;
-					drawable.invalidate();
+					gEditor.invalidate();
 				}
 
 			}
 		});
 
+	}
+
+	private void checkFill() {
+		
+		
+	}
+	
+	
+	private CDObject newCell(P pos, Long room) {
+		CDObject cell = new CDObject();
+		cell.set("company", companyId);
+		cell.set("room", room);
+		cell.set("x", pos.x);
+		cell.set("y", pos.y);
+		return cell;
 	}
 }

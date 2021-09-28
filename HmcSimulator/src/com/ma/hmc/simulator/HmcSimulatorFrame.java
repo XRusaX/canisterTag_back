@@ -15,8 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import com.google.gson.Gson;
 import com.ma.common.cd.swing.SwingObjectEditorPanel;
+import com.ma.common.prefs.PreferencesUtils;
 import com.ma.common.rpc.HttpProxy;
 import com.ma.common.shared.cd.UILabel;
 import com.ma.common.ui.HorPanel;
@@ -113,38 +113,21 @@ public class HmcSimulatorFrame extends JFrame {
 	}
 
 	private void loadPrefs() {
-		ConnectionSettings conn = fromPrefs(userPrefs, "connection", ConnectionSettings.class,
+		ConnectionSettings conn = PreferencesUtils.fromPrefs(userPrefs, "connection", ConnectionSettings.class,
 				new ConnectionSettings());
 		connectionPanel.setData(conn);
 
-		HmcReport hmcReport = fromPrefs(userPrefs, "hmc", HmcReport.class, new HmcReport());
+		HmcReport hmcReport = PreferencesUtils.fromPrefs(userPrefs, "hmc", HmcReport.class, new HmcReport());
 		reportPanel.setData(hmcReport);
 
-		FillParams fillParams = fromPrefs(userPrefs, "fillParams", FillParams.class, new FillParams());
+		FillParams fillParams = PreferencesUtils.fromPrefs(userPrefs, "fillParams", FillParams.class, new FillParams());
 		fillParamsPanel.setData(fillParams);
 	}
 
 	private void savePrefs() {
-		toPrefs(userPrefs, "connection", connectionPanel.getData());
-		toPrefs(userPrefs, "hmc", reportPanel.getData());
-		toPrefs(userPrefs, "fillParams", fillParamsPanel.getData());
-	}
-
-	public static void toPrefs(Preferences userPrefs, String key, Object o) {
-		userPrefs.put(key, new Gson().toJson(o));
-	}
-
-	public static <T> T fromPrefs(Preferences userPrefs, String key, Class<T> clazz, T defaultValue) {
-		String str = userPrefs.get(key, null);
-		if (str == null)
-			return defaultValue;
-		try {
-			T t = new Gson().fromJson(str, clazz);
-			return t;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return defaultValue;
-		}
+		PreferencesUtils.toPrefs(userPrefs, "connection", connectionPanel.getData());
+		PreferencesUtils.toPrefs(userPrefs, "hmc", reportPanel.getData());
+		PreferencesUtils.toPrefs(userPrefs, "fillParams", fillParamsPanel.getData());
 	}
 
 	public static void main(String[] args) {

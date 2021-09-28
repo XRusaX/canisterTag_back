@@ -38,6 +38,10 @@ public class Rect {
 		y1 += dy;
 	}
 
+	public boolean inside(P p) {
+		return inside(p.x, p.y);
+	}
+
 	public boolean inside(int x, int y) {
 		int xx0 = x0;
 		int xx1 = x1;

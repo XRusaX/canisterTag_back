@@ -1,18 +1,25 @@
 package com.ma.hmcrfidserver.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.google.gwt.user.client.Window;
+import com.ma.hmcrfidserver.client.geditor.P;
+import com.ma.hmcrfidserver.client.geditor.Rect;
 
 public abstract class EditableData<T> {
 	public abstract T getCopy(T cell);
 
-	public abstract void setXY(T t, int x, int y);
+	public abstract void setPos(T t, P pos);
 
-	public abstract int getY(T t);
-
-	public abstract int getX(T t);
+	public abstract P getPos(T t);
 
 	private final List<T> cells = new ArrayList<>();
 
@@ -43,16 +50,23 @@ public abstract class EditableData<T> {
 				add(t, redoList, undoList);
 			}
 		});
-		cells.remove(t);
+
+		boolean removed = cells.remove(t);
+		if(!removed)
+			throw new IllegalArgumentException();
 	}
 
 	private void add(T t, LinkedList<Runnable> undoList, LinkedList<Runnable> redoList) {
+		if (t == null)
+			throw new IllegalArgumentException();
+
 		undoList.add(new Runnable() {
 			@Override
 			public void run() {
 				remove(t, redoList, undoList);
 			}
 		});
+
 		cells.add(t);
 	}
 
@@ -66,24 +80,23 @@ public abstract class EditableData<T> {
 		remove(t, undoList, redoList);
 	}
 
-	private void moveTo(T t, int x, int y, LinkedList<Runnable> undoList, LinkedList<Runnable> redoList) {
+	private void moveTo(T t, P pos, LinkedList<Runnable> undoList, LinkedList<Runnable> redoList) {
 
-		int x1 = getX(t);
-		int y1 = getY(t);
+		P pos1 = getPos(t);
 
 		undoList.add(new Runnable() {
 			@Override
 			public void run() {
-				moveTo(t, x1, y1, redoList, undoList);
+				moveTo(t, pos1, redoList, undoList);
 			}
 		});
 
-		setXY(t, x, y);
+		setPos(t, pos);
 	}
 
-	public void moveTo(T t, int x, int y) {
+	public void moveTo(T t, P pos) {
 		redoList.clear();
-		moveTo(t, x, y, undoList, redoList);
+		moveTo(t, pos, undoList, redoList);
 	}
 
 	public void markUndo() {
@@ -112,6 +125,31 @@ public abstract class EditableData<T> {
 				break;
 			last.run();
 		}
+	}
+
+	public Rect getBounds() {
+		List<P> coords = stream().map(c -> getPos(c)).collect(Collectors.toList());
+		int minx = coords.stream().mapToInt(c -> c.x).min().orElse(0);
+		int miny = coords.stream().mapToInt(c -> c.y).min().orElse(0);
+		int maxx = coords.stream().mapToInt(c -> c.x + 1).max().orElse(0);
+		int maxy = coords.stream().mapToInt(c -> c.y + 1).max().orElse(0);
+		return new Rect(minx, miny, maxx, maxy);
+	}
+
+	public Map<P, T> getMap() {
+		Map<P, T> map = new HashMap<>();
+		stream().forEach(cell -> map.put(getPos(cell), cell));
+		return map;
+	}
+
+	public void checkData() {
+		Set<P> set = new HashSet<>();
+		stream().forEach(t -> {
+			P p = getPos(t);
+			if (set.contains(p))
+				Window.alert("Data integrity error!");
+			set.add(p);
+		});
 	}
 
 }
