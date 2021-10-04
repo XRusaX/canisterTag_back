@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Date;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 
@@ -16,6 +18,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import com.ma.common.cd.swing.SwingObjectEditorPanel;
+import com.ma.common.gson.GsonUtils;
 import com.ma.common.prefs.PreferencesUtils;
 import com.ma.common.rpc.HttpProxy;
 import com.ma.common.shared.cd.UILabel;
@@ -24,7 +27,6 @@ import com.ma.common.ui.VertPanel;
 import com.ma.hmc.rfid.rpcdata.HmcReport;
 import com.ma.hmc.rfid.rpcinterface.HmcRfidRpcInterface;
 import com.ma.hmc.rfid.rpcinterface.TestRpcInterface;
-import com.ma.hmc.simulator.sim.HmcSim;
 import com.ma.hmc.simulator.sim.WorldSim;
 
 @SuppressWarnings("serial")
@@ -62,7 +64,7 @@ public class HmcSimulatorFrame extends JFrame {
 			savePrefs();
 			String report;
 			try {
-				report = HmcSim.report(connectionPanel.getData().serverURL, reportPanel.getData());
+				report = report(connectionPanel.getData().serverURL, reportPanel.getData());
 				status.setText(report);
 			} catch (IOException e) {
 				status.setText(e.toString());
@@ -117,7 +119,7 @@ public class HmcSimulatorFrame extends JFrame {
 				new ConnectionSettings());
 		connectionPanel.setData(conn);
 
-		HmcReport hmcReport = PreferencesUtils.fromPrefs(userPrefs, "hmc", HmcReport.class, new HmcReport());
+		HmcReport hmcReport = PreferencesUtils.fromPrefs(userPrefs, "hmc", HmcReport.class, new HmcReport(null));
 		reportPanel.setData(hmcReport);
 
 		FillParams fillParams = PreferencesUtils.fromPrefs(userPrefs, "fillParams", FillParams.class, new FillParams());
@@ -167,4 +169,12 @@ public class HmcSimulatorFrame extends JFrame {
 			status.setText(e.toString());
 		}
 	}
+
+	public static String report(String serverURL, HmcReport report) throws IOException {
+		report.startTime = new Date().getTime();
+		String requestJson = GsonUtils.requestJson(new URL(serverURL + HmcRfidRpcInterface.api + "/report"), report,
+				String.class, null);
+		return requestJson;
+	}
+
 }

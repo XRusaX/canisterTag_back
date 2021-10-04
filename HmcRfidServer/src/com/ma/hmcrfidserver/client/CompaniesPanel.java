@@ -12,14 +12,14 @@ import com.ma.common.gwt.client.auth.LoginService;
 import com.ma.common.gwt.client.auth.LoginServiceAsync;
 import com.ma.common.gwt.client.auth.UserDialog;
 import com.ma.common.gwt.client.commondata.CommonListPanel;
-import com.ma.common.gwt.client.commondata.CommonListPanelX;
+import com.ma.common.gwt.client.commondata.CommonListPanelWrapper;
 import com.ma.common.gwt.client.ui.ContextMenu;
 import com.ma.common.shared.cd.CDObject;
 import com.ma.common.shared.eventbus.EventBus;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Company.CompanyType;
 
-public class CompaniesPanel extends CommonListPanelX {
+public class CompaniesPanel extends CommonListPanelWrapper {
 	private static final LoginServiceAsync loginService = GWT.create(LoginService.class);
 
 	public CompaniesPanel(EventBus eventBus, String name, CompanyType companyType, List<String> showFields) {

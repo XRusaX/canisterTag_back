@@ -72,7 +72,7 @@ public class TestRpcController extends RpcController implements TestRpcInterface
 
 			for (int x = 0; x < 3; x++)
 				for (int y = 0; y < 3; y++) {
-					RoomCell roomCell = new RoomCell(company, null, room, x + nextColor * 4, y);
+					RoomCell roomCell = new RoomCell(company, null, room, x + nextColor * 4, y, null);
 					em.persist(roomCell);
 				}
 

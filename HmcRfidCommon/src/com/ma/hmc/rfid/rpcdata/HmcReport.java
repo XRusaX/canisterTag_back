@@ -18,6 +18,12 @@ public class HmcReport {
 	@UILabel(label = "consumtionML")
 	public Integer consumptionML;
 
+	@UILabel(label = "remainML")
+	public Integer remainML;
+
+	@UILabel(label = "cleaningId")
+	public Integer cleaningId;
+
 	@UILabel(label = "operator")
 	public String operatorName;
 
@@ -30,4 +36,27 @@ public class HmcReport {
 
 	@UILabel(label = "status")
 	public HmcReportStatus status;
+
+	public HmcReport() {
+	}
+
+	public HmcReport(String serialNum) {
+		hmcSerialNumber = serialNum;
+	}
+
+	public static HmcReport cleaningOk(String serialNum, Integer cleaningId, Integer canisterId, Integer spent,
+			Integer remainML, String roomName, String operatorName) {
+		HmcReport report = new HmcReport(serialNum);
+
+		report.status = HmcReportStatus.SUCSESS;
+		report.durationS = 10;
+		report.canisterId = canisterId;
+		report.consumptionML = spent;
+		report.remainML = remainML;
+		report.cleaningId = cleaningId;
+		report.roomName = roomName;
+		report.operatorName = operatorName;
+
+		return report;
+	}
 }

@@ -14,13 +14,10 @@ import com.ma.common.gwt.client.ui.UploadForm;
 import com.ma.common.gwt.client.ui.panel.HorPanel;
 import com.ma.common.gwt.client.ui.panel.PropertiesPanel;
 import com.ma.common.gwt.client.ui.panel.VertPanel;
+import com.ma.hmcdb.shared.Hmc.HmcType;
 
 public class FirmwarePage extends Composite {
 	private final HmcServiceAsync hmcService = GWT.create(HmcService.class);
-
-	public enum HmcLine {
-		HMC_1, HMC_2, HMC_3, HMC_4,
-	}
 
 	private UploadForm uploadForm = new UploadForm("api/firmware", true) {
 		@Override
@@ -32,7 +29,7 @@ public class FirmwarePage extends Composite {
 	private PropertiesPanel propertiesPanel = new PropertiesPanel("---");
 
 	public FirmwarePage() {
-		Arrays.stream(HmcLine.values()).forEach(l -> listBox.addItem(l.name(), l.name()));
+		Arrays.stream(HmcType.values()).forEach(l -> listBox.addItem(l.name(), l.name()));
 		listBox.addChangeHandler(event -> setAction());
 		setAction();
 		updateList();

@@ -9,19 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ma.appcommon.AuthImpl;
-import com.ma.appcommon.CommonDataImpl;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.rfid.Quota;
 import com.ma.hmcdb.shared.rfid.Report;
+import com.ma.hmcdb.shared.rfid.RfidLabel;
 
 @Component
 public class CommonDataHelpersImpl extends CommonDataHelpersBase {
 
 	@Autowired
 	private AuthImpl authComponent;
-
-	@Autowired
-	private CommonDataImpl commonDataImpl;
 
 	@Autowired
 	private HmcAppHelper hmcAppHelper;
@@ -41,8 +38,15 @@ public class CommonDataHelpersImpl extends CommonDataHelpersBase {
 			if (obj instanceof Hmc) {
 				Hmc hmc = (Hmc) obj;
 				Report report = hmcAppHelper.getLastReport(em, hmc);
-				if (report != null)
+				if (report != null) {
 					hmc.status = report.status;
+					hmc.remainML = report.remain_ml;
+
+					RfidLabel rfidLabel = em.find(RfidLabel.class, report.rfidLabel.id);
+					if (rfidLabel != null) {
+						hmc.canisterVolumeML = rfidLabel.canisterVolume;
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

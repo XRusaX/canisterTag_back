@@ -30,7 +30,7 @@ import com.ma.appcommon.ThreadLocalRequest;
 import com.ma.appcommon.WorkingDir;
 import com.ma.appcommon.shared.auth.UserData;
 import com.ma.common.shared.Severity;
-import com.ma.hmcrfidserver.client.FirmwarePage.HmcLine;
+import com.ma.hmcdb.shared.Hmc.HmcType;
 
 @RestController
 public class FirmwareController {
@@ -108,7 +108,7 @@ public class FirmwareController {
 
 	public Map<String, String> getFirmwareList() {
 		Map<String, String> res = new LinkedHashMap<>();
-		for (HmcLine line : HmcLine.values()) {
+		for (HmcType line : HmcType.values()) {
 			File dir = new File(getOutputDir(), line.name());
 			String[] files = dir.list();
 			if (files != null && files.length > 0)

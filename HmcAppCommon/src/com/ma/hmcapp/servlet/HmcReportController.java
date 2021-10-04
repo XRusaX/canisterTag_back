@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.hibernate.EmptyInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,11 +57,11 @@ public class HmcReportController {
 	private synchronized String report(@RequestBody String strreport) throws IOException {
 
 		HmcReport report = new Gson().fromJson(strreport, HmcReport.class);
-		
+
 		String result = database.exec(em -> {
 
 			RfidLabel label = getLabel(em, report.canisterId);
-			if (label == null) { 
+			if (label == null) {
 				msgLogger.add(null, Severity.ERROR, "Метка канистры не найдена " + report.canisterId);
 				return "error";
 			}
@@ -75,10 +76,12 @@ public class HmcReportController {
 				room = getRoom(em, report.roomId, report.roomName, hmc.company);
 			}
 
-			Report report2 = new Report(hmc, new Date(report.startTime), report.durationS, label, report.consumptionML,
-					hmc.company, operator, room, report.status);
+			Report report2 = new Report(hmc, new Date(report.startTime), report.durationS, label, report.cleaningId, report.consumptionML,
+					report.remainML, hmc.company, operator, room, report.status);
 			em.persist(report2);
 			database.incrementTableVersion(Report.class);
+			database.incrementTableVersion(Hmc.class);
+			database.incrementTableVersion(Room.class);
 
 			List<Report> reports = Database2.select(em, Report.class).whereEQ("rfidLabel", label).getResultList();
 			int sum_consumption = reports.stream().mapToInt(r -> r.consumtion_ml).sum();
@@ -87,6 +90,8 @@ public class HmcReportController {
 
 			return "success";
 		});
+
+		EmptyInterceptor emptyInterceptor;
 
 		return result;
 	}

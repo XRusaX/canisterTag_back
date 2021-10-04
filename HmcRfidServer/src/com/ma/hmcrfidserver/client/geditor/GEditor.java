@@ -1,29 +1,24 @@
 package com.ma.hmcrfidserver.client.geditor;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.google.gwt.core.client.GWT;
-import com.ma.common.shared.canvas.Drawable;
 import com.ma.common.shared.canvas.PaintTarget;
 import com.ma.common.shared.canvas.XY;
-import com.ma.hmcrfidserver.client.EditableData;
+import com.ma.hmcrfidserver.client.EditableData2;
 
-public abstract class GEditor<T> extends Drawable {
-	private final int CELL_SIZE;
+public abstract class GEditor<T> extends GEditorBase{
+	private final int cellSize;
 
-	private EditableData<T> editableData;
-
-	protected abstract String getColor(T t);
+	private EditableData2<T> editableData;
 
 	protected abstract boolean canEdit();
 
-	protected abstract boolean isSelected(T t);
+	protected abstract void drawCell(PaintTarget paintTarget, P pos, T cell);
 
-	public GEditor(int CELL_SIZE, EditableData<T> cells) {
-		this.CELL_SIZE = CELL_SIZE;
+	public GEditor(int cellSize, EditableData2<T> cells) {
+		this.cellSize = cellSize;
 		this.editableData = cells;
 	}
 
@@ -36,16 +31,18 @@ public abstract class GEditor<T> extends Drawable {
 	}
 
 	public int getCellX(double x) {
-		return (int) x / CELL_SIZE;
+		return (int) x / cellSize;
 	}
 
 	public int getCellY(double y) {
-		return (int) y / CELL_SIZE;
+		return (int) y / cellSize;
 	}
 
 	private Rect drag;
 
 	private ClipboardData clipboardData;
+
+	private P pressed;
 
 	@Override
 	public void draw(PaintTarget paintTarget) {
@@ -54,40 +51,30 @@ public abstract class GEditor<T> extends Drawable {
 		Rect bounds = editableData.getBounds();
 
 		for (int x = bounds.x0; x <= bounds.x1; x++)
-			paintTarget.drawLine(x * CELL_SIZE, bounds.y0 * CELL_SIZE, x * CELL_SIZE, bounds.y1 * CELL_SIZE);
+			paintTarget.drawLine(x * cellSize, bounds.y0 * cellSize, x * cellSize, bounds.y1 * cellSize);
 
 		for (int y = bounds.y0; y <= bounds.y1; y++)
-			paintTarget.drawLine(bounds.x0 * CELL_SIZE, y * CELL_SIZE, bounds.x1 * CELL_SIZE, y * CELL_SIZE);
+			paintTarget.drawLine(bounds.x0 * cellSize, y * cellSize, bounds.x1 * cellSize, y * cellSize);
 
 		int dx = drag == null ? 0 : drag.getWidth();
 		int dy = drag == null ? 0 : drag.getHeigth();
 
-		editableData.stream().forEach(cell -> {
-			P pos = editableData.getPos(cell);
-
-			if (clipboardData != null && clipboardData.list != null
-					&& clipboardData.rect.inside(pos.x - dx, pos.y - dy))
+		editableData.forEach((pos, cell) -> {
+			if (clipboardData != null && clipboardData.map != null && clipboardData.rect.inside(pos.x - dx, pos.y - dy))
 				return;
 
-			paintTarget.setColor(getColor(cell));
-			paintTarget.fillRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+			drawCell(paintTarget, pos, cell);
 
-			if (isSelected(cell)) {
-				paintTarget.setColor("black");
-				paintTarget.drawRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-			}
 		});
 
 		if (clipboardData != null) {
 			Rect copy = clipboardData.rect.normCopy();
 			copy.move(dx, dy);
-			if (clipboardData.list != null)
-				clipboardData.list.stream().forEach(cell -> {
-					paintTarget.setColor(getColor(cell));
-					P pos = editableData.getPos(cell);
+			if (clipboardData.map != null)
+				clipboardData.map.forEach((pos, cell) -> {
 					int x = pos.x + dx;
 					int y = pos.y + dy;
-					paintTarget.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+					drawCell(paintTarget, new P(x, y), cell);
 				});
 			paintTarget.setLineWidth(4);
 			drawRect(paintTarget, copy, "magenta");
@@ -104,52 +91,47 @@ public abstract class GEditor<T> extends Drawable {
 	private void drawRect(PaintTarget paintTarget, Rect rect, String color) {
 		paintTarget.setColor(color);
 		rect = rect.normCopy();
-		paintTarget.drawRect(rect.x0 * CELL_SIZE, rect.y0 * CELL_SIZE, rect.getWidth() * CELL_SIZE,
-				rect.getHeigth() * CELL_SIZE);
+		paintTarget.drawRect(rect.x0 * cellSize, rect.y0 * cellSize, rect.getWidth() * cellSize,
+				rect.getHeigth() * cellSize);
 	}
 
 	class ClipboardData {
 		private Rect rect;
-		public List<T> list;
+		public Map<P, T> map;
 
 		public ClipboardData(Rect drag) {
 			rect = drag.normCopy();
 		}
 
-		public void move(int dx, int dy) {
+		public void moveBy(int dx, int dy) {
 			rect.move(dx, dy);
-			list.forEach(cell -> {
-				P pos = editableData.getPos(cell);
-				editableData.setPos(cell, new P(pos.x + dx, pos.y + dy));
+			Map<P, T> map2 = new HashMap<>();
+			map.forEach((p, t) -> {
+				P p2 = new P(p.x + dx, p.y + dy);
+				map2.put(p2, t);
 			});
+			map = map2;
 		}
 	}
 
 	private void copy() {
 		GWT.log("copy");
-
-		clipboardData.list = editableData.stream().filter(cell -> clipboardData.rect.inside(editableData.getPos(cell)))
-				.map(cell -> editableData.getCopy(cell)).collect(Collectors.toList());
+		clipboardData.map = new HashMap<>();
+		editableData.forEach((p, cell) -> {
+			if (clipboardData.rect.inside(p))
+				clipboardData.map.put(p, editableData.getCopy(cell));
+		});
 	}
 
 	private void cut() {
 		GWT.log("cut");
 		copy();
-		convertRect(clipboardData.rect, (p, t) -> null);
+		clipboardData.rect.foreach(p -> editableData.replace(p, null));
 	}
 
 	private void paste() {
 		GWT.log("paste");
-
-		Map<P, T> map = new HashMap<>();
-		clipboardData.list.stream().forEach(cell -> map.put(editableData.getPos(cell), cell));
-
-		convertRect(clipboardData.rect, (p, t) -> {
-			T t2 = map.get(p);
-			return t2;
-		});
-
-		editableData.checkData();
+		clipboardData.rect.foreach(p -> editableData.replace(p, clipboardData.map.get(p)));
 	}
 
 	@Override
@@ -157,8 +139,10 @@ public abstract class GEditor<T> extends Drawable {
 		if (!canEdit())
 			return false;
 
-		if (clipboardData != null && !clipboardData.rect.inside(getCellPos(xy.x, xy.y))) {
-			if (clipboardData.list != null)
+		pressed = new P(getCellX(xy.x), getCellY(xy.y));
+
+		if (clipboardData != null && !clipboardData.rect.inside(pressed)) {
+			if (clipboardData.map != null)
 				paste();
 			clipboardData = null;
 		}
@@ -172,7 +156,7 @@ public abstract class GEditor<T> extends Drawable {
 		if (!canEdit())
 			return false;
 
-		if (clipboardData != null && clipboardData.list == null && clipboardData.rect.inside(getCellPos(xy.x, xy.y))) {
+		if (clipboardData != null && clipboardData.map == null && clipboardData.rect.inside(pressed)) {
 			editableData.markUndo();
 			if (control)
 				copy();
@@ -181,7 +165,7 @@ public abstract class GEditor<T> extends Drawable {
 		}
 
 		if (drag == null)
-			drag = new Rect(getCellX(xy.x), getCellY(xy.y));
+			drag = new Rect(pressed.x, pressed.y);
 
 		drag.x1 = getCellX(xy.x);
 		drag.y1 = getCellY(xy.y);
@@ -202,8 +186,8 @@ public abstract class GEditor<T> extends Drawable {
 
 		if (clipboardData == null)
 			clipboardData = new ClipboardData(drag);
-		else if (clipboardData.list != null)
-			clipboardData.move(drag.getWidth(), drag.getHeigth());
+		else if (clipboardData.map != null)
+			clipboardData.moveBy(drag.getWidth(), drag.getHeigth());
 
 		drag = null;
 
@@ -221,45 +205,19 @@ public abstract class GEditor<T> extends Drawable {
 		T apply(P pos, T old);
 	}
 
-	public void convertRect(Rect rect, FF<T> f) {
-		Map<P, T> map = new HashMap<>();
-		editableData.stream().filter(cell -> rect.inside(editableData.getPos(cell)))
-				.forEach(cell -> map.put(editableData.getPos(cell), cell));
-
-		rect.foreach(xy -> {
-			T cell = map.get(xy);
-			T t = f.apply(xy, cell);
-			if (t != cell) {
-				if (cell != null)
-					editableData.remove(cell);
-				if (t != null)
-					editableData.add(t);
-			}
-		});
-
-		invalidate();
-		editableData.checkData();
-
-	}
-
-	public void convertSel(FF<T> f) {
-		if (clipboardData == null)
-			return;
-		convertRect(clipboardData.rect, f);
-		clipboardData.list = null;
-	}
-
 	public void undo() {
 		dropSel();
 		editableData.undo();
 		invalidate();
-		editableData.checkData();
 	}
 
 	public void redo() {
 		dropSel();
 		editableData.redo();
 		invalidate();
-		editableData.checkData();
+	}
+
+	public Rect getSel() {
+		return clipboardData == null ? null : clipboardData.rect;
 	}
 }

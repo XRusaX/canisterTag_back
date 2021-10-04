@@ -58,7 +58,13 @@ public class Report {
 	public Room room;
 
 	@UILabel(label = "Расход (ml)")
-	public int consumtion_ml;
+	public Integer consumtion_ml;
+
+	@UILabel(label = "Остаток")
+	public Integer remain_ml;
+
+	@UILabel(label = "cleaningId")
+	public Integer cleaningId;
 
 	@UILabel(label = "Метка", sortable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -71,13 +77,15 @@ public class Report {
 	public Report() {
 	}
 
-	public Report(Hmc hmc, Date startTime, Integer durationS, RfidLabel rfidLabel, int consumtion_ml, Company company,
-			Operator operator, Room room, HmcReportStatus status) {
+	public Report(Hmc hmc, Date startTime, Integer durationS, RfidLabel rfidLabel, Integer cleaningId, Integer consumtion_ml,
+			Integer remain_ml, Company company, Operator operator, Room room, HmcReportStatus status) {
 		this.hmc = hmc;
 		this.startTime = startTime;
 		this.durationS = durationS;
 		this.rfidLabel = rfidLabel;
+		this.cleaningId = cleaningId;
 		this.consumtion_ml = consumtion_ml;
+		this.remain_ml = remain_ml;
 		this.company = company;
 		this.operator = operator;
 		this.room = room;

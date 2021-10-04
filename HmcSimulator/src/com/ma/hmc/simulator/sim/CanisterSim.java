@@ -2,10 +2,11 @@ package com.ma.hmc.simulator.sim;
 
 public class CanisterSim {
 	public final int id;
-	public int rest;
+	public final int volumeML;
+	public int remainML;
 
 	public CanisterSim(int id, int volume) {
 		this.id = id;
-		this.rest = volume;
+		this.remainML = this.volumeML = volume;
 	}
 }
