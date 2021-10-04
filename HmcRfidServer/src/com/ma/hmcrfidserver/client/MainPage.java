@@ -18,20 +18,20 @@ import com.ma.common.gwt.client.MainToolbar;
 import com.ma.common.gwt.client.SettingsValues;
 import com.ma.common.gwt.client.auth.Login;
 import com.ma.common.gwt.client.auth.UsersPage;
-import com.ma.common.gwt.client.commondata.CommonDataFlowList;
 import com.ma.common.gwt.client.commondata.CommonListPanel;
 import com.ma.common.gwt.client.commondata.CommonListPanelWrapper;
+import com.ma.common.gwt.client.commondata.HmcFlowList;
 import com.ma.common.gwt.client.commondata.PageEventBus;
 import com.ma.common.gwt.client.connections.ConnectionsPage;
 import com.ma.common.gwt.client.logger.LoggerPanel;
 import com.ma.common.gwt.client.ui.panel.DockLayoutPanelX;
 import com.ma.common.gwt.client.ui.toolbar.StatusBar;
 import com.ma.hmcdb.shared.Agent;
+import com.ma.hmcdb.shared.Company.CompanyType;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.Operator;
 import com.ma.hmcdb.shared.Permissions;
 import com.ma.hmcdb.shared.Room;
-import com.ma.hmcdb.shared.Company.CompanyType;
 import com.ma.hmcdb.shared.rfid.Quota;
 import com.ma.hmcdb.shared.rfid.Report;
 import com.ma.hmcdb.shared.rfid.RfidLabel;
@@ -94,9 +94,12 @@ public class MainPage extends AppMainPage {
 		if (Login.user.hasPermission(Permissions.PERMISSION_USER)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 
-			panel.addW(new CommonListPanelWrapper(new CommonDataFlowList(), Hmc.class, eventBus), 40);
-			panel.add(new CommonListPanelWrapper(new CommonListPanel("Отчеты", 2000).setEditable(Login.user.company == null),
-					Report.class, eventBus));
+			panel.addW(new CommonListPanelWrapper(new HmcFlowList(), Hmc.class, eventBus), 40);
+			// panel.addW(new CommonListPanelX(new CommonDataFlowList(),
+			// Hmc.class, eventBus), 40);
+			panel.add(new CommonListPanelWrapper(
+					new CommonListPanel("Отчеты", 2000).setEditable(Login.user.company == null), Report.class,
+					eventBus));
 			tabPanel2.add(panel, "МГЦ");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
@@ -119,8 +122,9 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_WRITE_RFID)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel("Квоты", 2000).setEditable(Login.user.company == null),
-					Quota.class, eventBus), 50);
+			panel.addW(new CommonListPanelWrapper(
+					new CommonListPanel("Квоты", 2000).setEditable(Login.user.company == null), Quota.class, eventBus),
+					50);
 			panel.add(new CommonListPanelWrapper(new CommonListPanel("Метки", 2000).setEditable(false), RfidLabel.class,
 					eventBus));
 			tabPanel2.add(panel, "Метки");
@@ -135,15 +139,17 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_TEST)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.add(new CommonListPanelWrapper(new CommonListPanel(null, 2000).setEditable(Login.user.company == null),
-					TestReport.class, eventBus));
+			panel.add(
+					new CommonListPanelWrapper(new CommonListPanel(null, 2000).setEditable(Login.user.company == null),
+							TestReport.class, eventBus));
 			tabPanel2.add(panel, "Тесты");
 		}
 
 		eventBus = new PageEventBus();
 		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-				.addX(new CommonListPanelWrapper(new CommonListPanel(null, 2000).setEditable(Login.user.company == null),
-						Agent.class, eventBus)),
+				.addX(new CommonListPanelWrapper(
+						new CommonListPanel(null, 2000).setEditable(Login.user.company == null), Agent.class,
+						eventBus)),
 				"Средства");
 
 		if (Login.user.company == null)

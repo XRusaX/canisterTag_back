@@ -1,43 +1,44 @@
 /** Add css rules here for your application. */
-
-
 /** Example rules used by the template application (remove for your app) */
 h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+	font-size: 2em;
+	font-weight: bold;
+	color: #777777;
+	margin: 40px 0px 70px;
+	text-align: center;
 }
 
 .sendButton {
-  display: block;
-  font-size: 16pt;
+	display: block;
+	font-size: 16pt;
 }
 
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
-  width: 400px;
+	width: 400px;
 }
 
 .dialogVPanel {
-  margin: 5px;
+	margin: 5px;
 }
 
 .serverResponseLabelError {
-  color: red;
+	color: red;
 }
 
 /** Set ids using widget.getElement().setId("idOfElement") */
 #closeButton {
-  margin: 15px 6px 6px;
+	margin: 15px 6px 6px;
 }
 
 .color-red {
 	color: red;
 }
+
 .color-blue {
-	color: blue;
+	color: #2F4254;
+	font-size: 2rem;
+	font-family: sans-serif;
 }
 
 .color-green {
@@ -50,4 +51,77 @@ h1 {
 
 .color-lightgray {
 	color: lightgray;
+}
+
+.rounded-panel {
+	padding: 20px 20px 20px 20px;
+	border-radius: 12px;
+	background-color: #e3ebed;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.rounded-panel2 {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 20px;
+	letter-spacing: 0px;
+	word-spacing: 0px;
+	color: #000000;
+	font-weight: 400;
+	text-decoration: none solid rgb(68, 68, 68);
+	font-style: normal;
+	font-variant: normal;
+	text-transform: none;
+}
+
+.hmc-image {
+	background-image:
+		url("http://geonode.ciifen.org/static/documents/png-placeholder.png");
+	background-color: #F2F6F9;
+	font-size: 13px;
+	margin: 7px 2px 4px 1px;
+	padding-bottom: 3px;
+	padding-left: 8px;
+	padding-top: 6px
+}
+
+.slider-vert {
+	/* Color & Background */
+	background-color: #fce94f;
+	background-image:
+		url("https://www.sessions.edu/wp-content/themes/divi-child/color-calculator/slider-gradient.png");
+	/* Box */
+	border-radius: 10px;
+	margin-left: 40px;
+	/* Positioning */
+	position: relative;
+	display: inline-block;
+	width: 20px;
+	height: 150px;
+}
+
+.slider-hor {
+	/* Color & Background */
+	background-color: #fce94f;
+	/* Box */
+	height: 20px; #
+	width: 150px;
+	border-radius: 10px;
+	margin-top: 20px;
+	margin-left: 2%;
+	margin-right: 2%;
+	/* Positioning */
+	position: relative;
+	top: 0px;
+	display: block;
+}
+
+progress { #
+	border: 0; #
+	width: 150px; #
+	height: 20px; #
+	border-radius: 5px; #
+	background: #f1f1f1; #
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); #
+	box-sizing: border-box;
+	transform: rotate(270deg)
 }
