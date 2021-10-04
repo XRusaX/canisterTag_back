@@ -30,7 +30,7 @@ import com.ma.appcommon.ThreadLocalRequest;
 import com.ma.appcommon.WorkingDir;
 import com.ma.appcommon.shared.auth.UserData;
 import com.ma.common.shared.Severity;
-import com.ma.hmcdb.shared.Hmc.HmcType;
+import com.ma.hmc.iface.shared.HmcType;
 
 @RestController
 public class FirmwareController {

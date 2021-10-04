@@ -1,19 +1,10 @@
 package com.ma.hmcrfidserver.server;
 
 import java.awt.Point;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.HttpCookie;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import com.ma.common.net.NetUtils;
-import com.ma.common.rpc.Resp;
 
 public class Test3 {
 	public static void main(String[] args) throws Exception {

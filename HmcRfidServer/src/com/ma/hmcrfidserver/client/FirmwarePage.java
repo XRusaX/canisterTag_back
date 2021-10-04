@@ -14,7 +14,7 @@ import com.ma.common.gwt.client.ui.UploadForm;
 import com.ma.common.gwt.client.ui.panel.HorPanel;
 import com.ma.common.gwt.client.ui.panel.PropertiesPanel;
 import com.ma.common.gwt.client.ui.panel.VertPanel;
-import com.ma.hmcdb.shared.Hmc.HmcType;
+import com.ma.hmc.iface.shared.HmcType;
 
 public class FirmwarePage extends Composite {
 	private final HmcServiceAsync hmcService = GWT.create(HmcService.class);

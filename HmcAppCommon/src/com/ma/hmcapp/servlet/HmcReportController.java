@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.hibernate.EmptyInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +16,7 @@ import com.google.gson.Gson;
 import com.ma.appcommon.Database2;
 import com.ma.appcommon.logger.MsgLoggerImpl;
 import com.ma.common.shared.Severity;
-import com.ma.hmc.rfid.rpcdata.HmcReport;
+import com.ma.hmc.iface.report.HmcReport;
 import com.ma.hmcapp.HmcAppHelper;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Hmc;
@@ -66,7 +65,7 @@ public class HmcReportController {
 				return "error";
 			}
 			// http://127.0.0.1:8888
-			Hmc hmc = hmcAppHelper.getCreateHmc(em, report.hmcSerialNumber);
+			Hmc hmc = hmcAppHelper.getCreateHmc(em, report.hmcType, report.hmcSerialNumber);
 
 			Operator operator = null;
 			Room room = null;
@@ -76,8 +75,8 @@ public class HmcReportController {
 				room = getRoom(em, report.roomId, report.roomName, hmc.company);
 			}
 
-			Report report2 = new Report(hmc, new Date(report.startTime), report.durationS, label, report.cleaningId, report.consumptionML,
-					report.remainML, hmc.company, operator, room, report.status);
+			Report report2 = new Report(hmc, new Date(report.startTime), report.durationS, label, report.cleaningId,
+					report.consumptionML, report.remainML, hmc.company, operator, room, report.status);
 			em.persist(report2);
 			database.incrementTableVersion(Report.class);
 			database.incrementTableVersion(Hmc.class);
@@ -90,8 +89,6 @@ public class HmcReportController {
 
 			return "success";
 		});
-
-		EmptyInterceptor emptyInterceptor;
 
 		return result;
 	}

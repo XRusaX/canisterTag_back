@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ma.hmc.rfid.rpcinterface.TestRpcInterface;
+import com.ma.hmc.iface.servertest.rpcinterface.ServerTestRpcInterface;
 import com.ma.hmc.simulator.ConnectionSettings;
 import com.ma.hmc.simulator.HmcSimulatorFrame.FillParams;
 
 public class WorldSim {
 	private List<CompanySim> companies = new ArrayList<>();
-	private TestRpcInterface proxy;
+	private ServerTestRpcInterface proxy;
 
-	public WorldSim(TestRpcInterface proxy, ConnectionSettings connectionSettings, FillParams fillParams) {
+	public WorldSim(ServerTestRpcInterface proxy, ConnectionSettings connectionSettings, FillParams fillParams) {
 		this.proxy = proxy;
 		for (int i = 0; i < fillParams.companies; i++) {
 			CompanySim companySim = new CompanySim(proxy, connectionSettings, fillParams, i);

@@ -9,6 +9,7 @@ import com.ma.appcommon.Database2;
 import com.ma.appcommon.Database2.DBSelect.Dir;
 import com.ma.appcommon.logger.MsgLoggerImpl;
 import com.ma.common.shared.Severity;
+import com.ma.hmc.iface.shared.HmcType;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.rfid.Report;
 
@@ -21,12 +22,12 @@ public class HmcAppHelper {
 	private MsgLoggerImpl msgLogger;
 
 
-	public Hmc getCreateHmc(EntityManager em, String hmcSerialNumber) {
+	public Hmc getCreateHmc(EntityManager em, HmcType hmcType, String hmcSerialNumber) {
 		Hmc hmc = getHmc(em, hmcSerialNumber);
 		if (hmc != null)
 			return hmc;
 
-		hmc = new Hmc(hmcSerialNumber, null);
+		hmc = new Hmc(hmcType, hmcSerialNumber, null);
 		em.persist(hmc);
 		database.incrementTableVersion(Hmc.class);
 

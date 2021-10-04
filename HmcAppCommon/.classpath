@@ -18,8 +18,7 @@
 	<classpathentry kind="lib" path="/Libs/gwt-2.8.2/gwt-user.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>
 	<classpathentry kind="lib" path="/Libs/gson-2.8.6.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/HmcRfidCommon"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/HmcTestCommon"/>
 	<classpathentry kind="lib" path="/Libs/commons-io-2.6.jar" sourcepath="C:/Users/v.krupskii/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6-sources.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/HmcInterface"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
