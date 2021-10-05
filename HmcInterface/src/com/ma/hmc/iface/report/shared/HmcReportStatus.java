@@ -3,9 +3,9 @@ package com.ma.hmc.iface.report.shared;
 import com.ma.common.shared.cd.UILabel;
 
 public enum HmcReportStatus {
-	@UILabel(label="Успешно")
+	@UILabel(label = "Успешно")
 	SUCSESS, //
-	@UILabel(label="Работа прервана")
+	@UILabel(label = "Работа прервана")
 	INTERRUPTED, //
 	// FAILURE,
 
