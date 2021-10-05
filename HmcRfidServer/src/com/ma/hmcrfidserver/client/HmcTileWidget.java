@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.ma.common.gwt.client.ui.panel.VertPanel;
 import com.ma.common.shared.cd.CDObject;
+import com.ma.hmc.iface.report.shared.HmcReportStatus;
 
 public class HmcTileWidget extends Composite {
 	public HmcTileWidget(CDObject t) {
@@ -72,9 +73,12 @@ public class HmcTileWidget extends Composite {
 		panel.add(hPanel);
 		InlineHTML label = new InlineHTML();
 		label.setStyleName("status-label", true);
+
+		HmcReportStatus status = t.getEnum(HmcReportStatus.class, "status");
+
 		label.setText(t.getDisplay("status"));
 		if (label.getText() != null) {
-			label.addStyleName(label.getText().equalsIgnoreCase("успешно") ? "success" : "warning");
+			label.addStyleName(status == HmcReportStatus.SUCSESS ? "success" : "warning");
 			// panel.addStyleName("other");
 		}
 		panel.add(label);
