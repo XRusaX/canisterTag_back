@@ -20,7 +20,6 @@ import com.ma.common.gwt.client.auth.Login;
 import com.ma.common.gwt.client.auth.UsersPage;
 import com.ma.common.gwt.client.commondata.CommonListPanel;
 import com.ma.common.gwt.client.commondata.CommonListPanelWrapper;
-import com.ma.common.gwt.client.commondata.HmcFlowList;
 import com.ma.common.gwt.client.commondata.PageEventBus;
 import com.ma.common.gwt.client.connections.ConnectionsPage;
 import com.ma.common.gwt.client.logger.LoggerPanel;

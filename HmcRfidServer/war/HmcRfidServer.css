@@ -60,12 +60,19 @@ h1 {
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
-.rounded-panel2 {
+.hmc-image {
+	#border-radius: 10px; 
+	#box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.status-label {
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 20px;
 	letter-spacing: 0px;
 	word-spacing: 0px;
-	color: #000000;
+	padding: 5px;
+	color: #FFFFFF;
+	border-radius: 10px;
 	font-weight: 400;
 	text-decoration: none solid rgb(68, 68, 68);
 	font-style: normal;
@@ -73,16 +80,22 @@ h1 {
 	text-transform: none;
 }
 
-.hmc-image {
-	background-image:
-		url("http://geonode.ciifen.org/static/documents/png-placeholder.png");
-	background-color: #F2F6F9;
-	font-size: 13px;
-	margin: 7px 2px 4px 1px;
-	padding-bottom: 3px;
-	padding-left: 8px;
-	padding-top: 6px
-}
+.success {
+	background-color: #04AA6D;
+} 
+.info {
+	background-color: #2196F3;
+} 
+.warning {
+	background-color: #ff9800;
+} 
+.danger {
+	background-color: #f44336;
+} 
+.other {
+	background-color: #e7e7e7;
+	color: black;
+} 
 
 .slider-vert {
 	/* Color & Background */
