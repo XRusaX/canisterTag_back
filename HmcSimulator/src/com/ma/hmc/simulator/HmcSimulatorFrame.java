@@ -24,9 +24,9 @@ import com.ma.common.rpc.HttpProxy;
 import com.ma.common.shared.cd.UILabel;
 import com.ma.common.ui.HorPanel;
 import com.ma.common.ui.VertPanel;
-import com.ma.hmc.rfid.rpcdata.HmcReport;
-import com.ma.hmc.rfid.rpcinterface.HmcRfidRpcInterface;
-import com.ma.hmc.rfid.rpcinterface.TestRpcInterface;
+import com.ma.hmc.iface.report.HmcReport;
+import com.ma.hmc.iface.rfid.rpcinterface.HmcRfidRpcInterface;
+import com.ma.hmc.iface.servertest.rpcinterface.ServerTestRpcInterface;
 import com.ma.hmc.simulator.sim.WorldSim;
 
 @SuppressWarnings("serial")
@@ -109,9 +109,9 @@ public class HmcSimulatorFrame extends JFrame {
 		});
 	}
 
-	private TestRpcInterface getProxy() {
-		return HttpProxy.makeProxy(TestRpcInterface.class,
-				connectionPanel.getData().serverURL + HmcRfidRpcInterface.api + TestRpcInterface.servletPath, null);
+	private ServerTestRpcInterface getProxy() {
+		return HttpProxy.makeProxy(ServerTestRpcInterface.class,
+				connectionPanel.getData().serverURL + HmcRfidRpcInterface.api + ServerTestRpcInterface.servletPath, null);
 	}
 
 	private void loadPrefs() {

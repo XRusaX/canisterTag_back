@@ -15,7 +15,7 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/AppCommonApi"/>
 	<classpathentry kind="lib" path="/Libs/gwt-2.8.2/gwt-user.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/HmcRfidCommon"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/HmcTestCommon"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CommonUI"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/HmcInterface"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

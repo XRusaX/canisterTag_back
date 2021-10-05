@@ -8,9 +8,9 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.ma.common.rpc.HttpProxy;
-import com.ma.hmc.rfid.rpcinterface.HmcRfidRpcInterface;
-import com.ma.hmc.rfid.rpcinterface.TestRpcInterface;
-import com.ma.hmc.rfid.ruslandata.RfidData;
+import com.ma.hmc.iface.rfid.rpcinterface.HmcRfidRpcInterface;
+import com.ma.hmc.iface.rfid.ruslandata.RfidData;
+import com.ma.hmc.iface.servertest.rpcinterface.ServerTestRpcInterface;
 import com.ma.hmc.simulator.ConnectionSettings;
 import com.ma.hmc.simulator.HmcSimulatorFrame.FillParams;
 
@@ -20,7 +20,7 @@ public class CompanySim {
 	private List<String> rooms = new ArrayList<>();
 	private List<String> operators = new ArrayList<>();
 	public final String name;
-	private TestRpcInterface proxy;
+	private ServerTestRpcInterface proxy;
 
 	private List<CanisterSim> canisters = new LinkedList<>();
 	private ConnectionSettings connectionSettings;
@@ -68,7 +68,7 @@ public class CompanySim {
 	};
 	
 	
-	public CompanySim(TestRpcInterface proxy, ConnectionSettings connectionSettings, FillParams fillParams, int num) {
+	public CompanySim(ServerTestRpcInterface proxy, ConnectionSettings connectionSettings, FillParams fillParams, int num) {
 		this.proxy = proxy;
 		this.connectionSettings = connectionSettings;
 		//this.name = "company" + num;
@@ -88,7 +88,9 @@ public class CompanySim {
 		Random r = new Random(67723547);
 		
 		for (int j = 0; j < fillParams.hmcs; j++) {
-			String serialNum = String.format("%08X%02d",  r.nextInt(), num) ;
+			int randomInt = r.nextInt();
+			String serialNum = String.format("%08X%02d",  randomInt, num) ;
+			//HmcT
 			HmcSim hmcSim = new HmcSim(proxy, connectionSettings, this, serialNum);
 			hmcs.add(hmcSim);
 		}

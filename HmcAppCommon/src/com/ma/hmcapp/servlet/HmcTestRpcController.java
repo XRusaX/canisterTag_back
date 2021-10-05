@@ -10,14 +10,13 @@ import com.ma.appcommon.AuthImpl;
 import com.ma.appcommon.Database2;
 import com.ma.appcommon.ThreadLocalRequest;
 import com.ma.appcommon.connection.ConnectionStatusModule;
-import com.ma.appcommon.logger.MsgLoggerImpl;
 import com.ma.appcommon.rpc.RpcController;
 import com.ma.appcommon.shared.auth.AuthUtils;
 import com.ma.appcommon.shared.auth.UserData;
 import com.ma.appcommon.shared.connection.ConnectionStatus.ConnectionType;
-import com.ma.hmc.test.rpcdata.TestReport;
-import com.ma.hmc.test.rpcdata.User;
-import com.ma.hmc.test.rpcinterface.HmcTestRpcInterface;
+import com.ma.hmc.iface.boardtest.rpcdata.TestReport;
+import com.ma.hmc.iface.boardtest.rpcdata.User;
+import com.ma.hmc.iface.boardtest.rpcinterface.HmcTestRpcInterface;
 import com.ma.hmcapp.HmcAppHelper;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.Permissions;
@@ -35,8 +34,8 @@ public class HmcTestRpcController extends RpcController implements HmcTestRpcInt
 	@Autowired
 	private AuthImpl authComponent;
 
-	@Autowired
-	private MsgLoggerImpl msgLogger;
+//	@Autowired
+//	private MsgLoggerImpl msgLogger;
 
 	@Autowired
 	private HmcAppHelper hmcAppHelper;
@@ -70,7 +69,7 @@ public class HmcTestRpcController extends RpcController implements HmcTestRpcInt
 		authComponent.checkPermissions(Permissions.PERMISSION_TEST);
 
 		database.execVoid(conn -> {
-			Hmc hmc = hmcAppHelper.getCreateHmc(conn, testReport.serialNumber);
+			Hmc hmc = hmcAppHelper.getCreateHmc(conn, testReport.hmcType, testReport.serialNumber);
 			com.ma.hmcdb.shared.test.TestReport r = new com.ma.hmcdb.shared.test.TestReport(hmc, testReport.testType,
 					testReport.testStatus, testReport.details);
 			conn.persist(r);

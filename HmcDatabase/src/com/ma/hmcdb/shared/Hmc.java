@@ -14,14 +14,11 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.ma.common.shared.cd.UILabel;
-import com.ma.hmc.rfid.shared.HmcReportStatus;
+import com.ma.hmc.iface.report.shared.HmcReportStatus;
+import com.ma.hmc.iface.shared.HmcType;
 
 @Entity
 public class Hmc {
-	public enum HmcType {
-		HMC_1, HMC_2, HMC_3, HMC_4,
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
@@ -42,16 +39,17 @@ public class Hmc {
 	@UILabel(label = "Статус", sortable = true, readOnly = true)
 	public transient HmcReportStatus status;
 
-	@UILabel(label = "Остаток")
+	@UILabel(label = "Остаток", readOnly = true)
 	public transient Integer remainML;
 
-	@UILabel(label = "Объем канистры")
+	@UILabel(label = "Объем канистры", readOnly = true)
 	public transient Integer canisterVolumeML;
 
 	public Hmc() {
 	}
 
-	public Hmc(String serialNumber, Company company) {
+	public Hmc(HmcType hmcType, String serialNumber, Company company) {
+		this.hmcType = hmcType;
 		this.serialNumber = serialNumber;
 		this.company = company;
 	}

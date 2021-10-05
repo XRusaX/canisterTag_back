@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.ma.hmc.rfid.rpcdata.HmcReport;
-import com.ma.hmc.rfid.rpcinterface.TestRpcInterface;
-import com.ma.hmc.rfid.shared.HmcReportStatus;
+import com.ma.hmc.iface.report.HmcReport;
+import com.ma.hmc.iface.servertest.rpcinterface.ServerTestRpcInterface;
+import com.ma.hmc.iface.shared.HmcType;
 import com.ma.hmc.simulator.ConnectionSettings;
 import com.ma.hmc.simulator.HmcSimulatorFrame;
 
@@ -18,9 +18,9 @@ public class HmcSim {
 
 	private CompanySim company;
 
-	private TestRpcInterface proxy;
+	private ServerTestRpcInterface proxy;
 
-	public HmcSim(TestRpcInterface proxy, ConnectionSettings connectionSettings, CompanySim company, String serialNum) {
+	public HmcSim(ServerTestRpcInterface proxy, ConnectionSettings connectionSettings, CompanySim company, String serialNum) {
 		this.proxy = proxy;
 		this.connectionSettings = connectionSettings;
 		this.company = company;
@@ -86,7 +86,7 @@ public class HmcSim {
 	}
 
 	public void createDB() throws IOException {
-		proxy.createHmc(serialNum, company.name);
+		proxy.createHmc(HmcType.HMC_1, serialNum, company.name);
 	}
 
 }
