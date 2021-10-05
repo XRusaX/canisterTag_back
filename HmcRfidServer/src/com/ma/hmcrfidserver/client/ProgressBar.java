@@ -23,7 +23,6 @@ public class ProgressBar extends VerticalPanel {
 	public ProgressBar() {
 
 		canvas = Canvas.createIfSupported();
-		canvas.addMouseOutHandler(event -> setProgress(Random.nextInt(101)));
 
 		VerticalPanel disLevelContainer = new VerticalPanel();
 		disLevelContainer.add(canvas);

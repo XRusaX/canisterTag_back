@@ -73,8 +73,8 @@ public class HmcTileWidget extends Composite {
 		panel.add(label);
 
 		initWidget(panel);
-		disLevel.setProgress(10);
-		disLevel.setProgress(20);
-		disLevel.setProgress(90);
+		Integer canVol = t.getInt("canisterVolumeML");
+		Integer remain = t.getInt("remainML");
+		disLevel.setProgress(remain / (canVol / 100));
 	}
 }
