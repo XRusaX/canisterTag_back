@@ -2,6 +2,8 @@ package com.ma.hmcrfidserver.server;
 
 import java.io.IOException;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,6 +51,7 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 		database.execVoid(em -> {
 			Company company = new Company(name, CompanyType.CUSTOMER, "addr", "contacts", 0);
 			em.persist(company);
+			updateUser(em, company);
 		});
 	}
 
@@ -70,11 +73,11 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 			Room room = new Room(roomName, String.format("#%06X", ColorX.contrastColors[nextColor].value), company);
 			em.persist(room);
 
-			for (int x = 0; x < 3; x++)
-				for (int y = 0; y < 3; y++) {
-					RoomCell roomCell = new RoomCell(company, null, room, x + nextColor * 4, y, null);
-					em.persist(roomCell);
-				}
+//			for (int x = 0; x < 3; x++)
+//				for (int y = 0; y < 3; y++) {
+//					RoomCell roomCell = new RoomCell(company, null, room, x + nextColor * 4, y, null);
+//					em.persist(roomCell);
+//				}
 
 			nextColor = (nextColor + 1) % ColorX.contrastColors.length;
 		});
@@ -96,20 +99,23 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 			{
 				Company company = new Company("testcompany", CompanyType.TEST, "addr", "contacts", 0);
 				em.persist(company);
-				em.createQuery("update UserData set company=" + company.id + ", companyName='" + company.name
-						+ "' where name='t1'").executeUpdate();
+				updateUser(em, company);
 			}
 
 			Company company = new Company("завод1", CompanyType.CANISTER, "addr", "contacts", 10);
 			em.persist(company);
-			em.createQuery("update UserData set company=" + company.id + ", companyName='" + company.name
-					+ "' where name='u1'").executeUpdate();
+			updateUser(em, company);
 
 			Agent agent = Database2.select(em, Agent.class).whereEQ("name", "Гриндез").getSingleResult();
 
 			Quota q = new Quota("u1", company, agent, 3000, 10000);
 			em.persist(q);
 		});
+	}
+
+	private static void updateUser(EntityManager em, Company company) {
+		em.createQuery("update UserData set company=" + company.id + " where companyName='" + company.name + "'")
+				.executeUpdate();
 	}
 
 }

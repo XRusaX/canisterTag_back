@@ -10,4 +10,7 @@ public interface HmcServiceAsync {
 	void saveRoomCells(List<CDObject> list, long companyId, AsyncCallback<Void> callback);
 
 	void getFirmwareList(AsyncCallback<Map<String, String>> callback);
+
+	void addUserCompany(String newCompanyName, String adminName, String adminPasswordHash, String adminEmail,
+			AsyncCallback<Void> callback);
 }
