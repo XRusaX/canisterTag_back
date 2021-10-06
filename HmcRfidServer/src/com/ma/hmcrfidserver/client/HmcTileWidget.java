@@ -1,10 +1,8 @@
 package com.ma.hmcrfidserver.client;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ErrorEvent;
-import com.google.gwt.event.dom.client.ErrorHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -16,7 +14,7 @@ import com.ma.common.gwt.client.ui.panel.VertPanel;
 import com.ma.common.shared.cd.CDObject;
 import com.ma.hmc.iface.report.shared.HmcReportStatus;
 
-public class HmcTileWidget extends Composite {
+public class HmcTileWidget extends Composite implements ImageResources {
 	public HmcTileWidget(CDObject t) {
 		VerticalPanel panel = new VerticalPanel();
 		HorizontalPanel hPanel = new HorizontalPanel();
@@ -28,14 +26,24 @@ public class HmcTileWidget extends Composite {
 		panel.setStyleName("rounded-panel");
 
 		String hmcType = t.get("hmcType");
-		Image hmcImg = new Image();
-
-		hmcImg.addErrorHandler(new ErrorHandler() {
-			@Override
-			public void onError(ErrorEvent event) {
-				hmcImg.setUrl("images/not_found.png");
-			}
-		});
+		Image hmcImg;
+		switch (hmcType) {
+		case "HMC_1":
+			hmcImg = new Image(IMAGE_RESOURCES.hmc1());
+			break;
+		case "HMC_2":
+			hmcImg = new Image(IMAGE_RESOURCES.hmc2());
+			break;
+		case "HMC_3":
+			hmcImg = new Image(IMAGE_RESOURCES.hmc3());
+			break;
+		case "HMC_4":
+			hmcImg = new Image(IMAGE_RESOURCES.notFound());
+			break;
+		default:
+			hmcImg = new Image(IMAGE_RESOURCES.noType());
+			break;
+		}
 
 		hmcImg.addLoadHandler(new LoadHandler() {
 
@@ -56,8 +64,6 @@ public class HmcTileWidget extends Composite {
 
 		hPanel.add(sp);
 
-		hmcImg.setUrl("images/" + (hmcType == null ? "no_type" : hmcType) + ".png");
-
 		hPanel.add(disLevel);
 
 		panel.add(hPanel);
@@ -76,5 +82,35 @@ public class HmcTileWidget extends Composite {
 		Integer canVol = t.getInt("canisterVolumeML");
 		Integer remain = t.getInt("remainML");
 		disLevel.setProgress(remain / (canVol / 100));
+	}
+
+	@Override
+	public ImageResource hmc1() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ImageResource hmc2() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ImageResource hmc3() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ImageResource noType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ImageResource notFound() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
