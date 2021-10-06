@@ -1,5 +1,6 @@
 package com.ma.hmcrfidserver.client;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -10,5 +11,10 @@ import com.ma.common.shared.cd.CDObject;
 @RemoteServiceRelativePath("hmc")
 public interface HmcService extends RemoteService {
 	void saveRoomCells(List<CDObject> list, long companyId) throws Exception;
+
 	Map<String, String> getFirmwareList();
+
+	void addUserCompany(String newCompanyName, String adminName, String adminPasswordHash, String adminEmail)
+			throws IOException;
+
 }
