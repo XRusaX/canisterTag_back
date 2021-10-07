@@ -1,6 +1,6 @@
 package com.ma.hmc.iface.boardtest.shared;
 
-import com.ma.common.shared.cd.UILabel;
+import com.ma.commonui.shared.annotations.UILabel;
 
 // НЕ НУЖНО НИЧЕГО УДАЛЯТЬ ИЗ ЭТОГО КЛАССА
 public enum HmcTestType {

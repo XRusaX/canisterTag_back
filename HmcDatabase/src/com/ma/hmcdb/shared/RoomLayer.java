@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.ma.common.shared.cd.UILabel;
+import com.ma.commonui.shared.annotations.UILabel;
 
 @Entity
 public class RoomLayer {

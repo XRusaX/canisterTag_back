@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.ma.common.gwt.client.ui.panel.VertPanel;
-import com.ma.common.shared.cd.CDObject;
+import com.ma.common.gwtapp.client.ui.panel.VertPanel;
+import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmc.iface.report.shared.HmcReportStatus;
 
 public class HmcTileWidget extends Composite implements ImageResources {

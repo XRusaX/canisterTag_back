@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.ma.common.shared.cd.UILabel;
+import com.ma.commonui.shared.annotations.UILabel;
 import com.ma.hmc.iface.report.shared.HmcReportStatus;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Hmc;

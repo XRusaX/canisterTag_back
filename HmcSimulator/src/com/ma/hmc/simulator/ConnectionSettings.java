@@ -1,6 +1,6 @@
 package com.ma.hmc.simulator;
 
-import com.ma.common.shared.cd.UILabel;
+import com.ma.commonui.shared.annotations.UILabel;
 
 public class ConnectionSettings {
 	@UILabel(label = "Server")

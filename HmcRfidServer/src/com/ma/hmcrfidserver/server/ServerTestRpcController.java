@@ -19,7 +19,6 @@ import com.ma.hmcdb.shared.Company.CompanyType;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.Operator;
 import com.ma.hmcdb.shared.Room;
-import com.ma.hmcdb.shared.RoomCell;
 import com.ma.hmcdb.shared.rfid.Quota;
 
 @RestController
@@ -114,6 +113,7 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 	}
 
 	private static void updateUser(EntityManager em, Company company) {
+		System.out.println("updateUser " + company.id + " " + company.name);
 		em.createQuery("update UserData set company=" + company.id + " where companyName='" + company.name + "'")
 				.executeUpdate();
 	}

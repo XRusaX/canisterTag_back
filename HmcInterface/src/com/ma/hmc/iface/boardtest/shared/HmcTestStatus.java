@@ -1,6 +1,6 @@
 package com.ma.hmc.iface.boardtest.shared;
 
-import com.ma.common.shared.cd.UILabel;
+import com.ma.commonui.shared.annotations.UILabel;
 
 public enum HmcTestStatus {
 	@UILabel(label="Успешно")

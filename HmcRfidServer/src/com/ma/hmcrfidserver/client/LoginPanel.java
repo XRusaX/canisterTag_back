@@ -11,9 +11,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.ma.common.gwt.client.auth.Constants;
-import com.ma.common.gwt.client.auth.LoginPageBase;
-import com.ma.common.gwt.client.ui.FlexTableX;
+import com.ma.common.gwtapp.client.auth.Constants;
+import com.ma.common.gwtapp.client.auth.LoginPageBase;
+import com.ma.common.gwtapp.client.ui.FlexTableX;
 
 public class LoginPanel extends LoginPageBase {
 	private final Constants constants = GWT.create(Constants.class);

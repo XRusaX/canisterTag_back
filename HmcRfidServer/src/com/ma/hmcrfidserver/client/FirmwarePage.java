@@ -8,12 +8,12 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.ma.common.gwt.client.AlertAsyncCallback;
-import com.ma.common.gwt.client.ui.Gap;
-import com.ma.common.gwt.client.ui.UploadForm;
-import com.ma.common.gwt.client.ui.panel.HorPanel;
-import com.ma.common.gwt.client.ui.panel.PropertiesPanel;
-import com.ma.common.gwt.client.ui.panel.VertPanel;
+import com.ma.common.gwtapp.client.AlertAsyncCallback;
+import com.ma.common.gwtapp.client.ui.Gap;
+import com.ma.common.gwtapp.client.ui.UploadForm;
+import com.ma.common.gwtapp.client.ui.panel.HorPanel;
+import com.ma.common.gwtapp.client.ui.panel.PropertiesPanel;
+import com.ma.common.gwtapp.client.ui.panel.VertPanel;
 import com.ma.hmc.iface.shared.HmcType;
 
 public class FirmwarePage extends Composite {

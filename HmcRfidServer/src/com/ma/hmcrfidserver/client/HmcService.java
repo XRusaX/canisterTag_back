@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.ma.common.shared.cd.CDObject;
+import com.ma.commonui.shared.cd.CDObject;
 
 @RemoteServiceRelativePath("hmc")
 public interface HmcService extends RemoteService {

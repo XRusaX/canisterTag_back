@@ -1,6 +1,6 @@
 package com.ma.hmc.iface.report;
 
-import com.ma.common.shared.cd.UILabel;
+import com.ma.commonui.shared.annotations.UILabel;
 import com.ma.hmc.iface.report.shared.HmcReportStatus;
 import com.ma.hmc.iface.shared.HmcType;
 

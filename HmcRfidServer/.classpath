@@ -8,7 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CommonGWT"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GwtApp"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.3.3.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io-2.6.jar"/>
@@ -28,5 +27,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/HmcAppCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/HmcDatabase"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/HmcInterface"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CommonUI"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

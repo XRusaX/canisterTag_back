@@ -1,8 +1,8 @@
 package com.ma.hmcrfidserver.client;
 
 import com.google.gwt.user.client.ui.Widget;
-import com.ma.common.gwt.client.commondata.CommonDataFlowList;
-import com.ma.common.shared.cd.CDObject;
+import com.ma.common.gwtapp.client.commondata.CommonDataFlowList;
+import com.ma.commonui.shared.cd.CDObject;
 
 public class HmcFlowList extends CommonDataFlowList {
 
