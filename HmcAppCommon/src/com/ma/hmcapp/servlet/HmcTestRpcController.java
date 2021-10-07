@@ -73,9 +73,9 @@ public class HmcTestRpcController extends RpcController implements HmcTestRpcInt
 			com.ma.hmcdb.shared.test.TestReport r = new com.ma.hmcdb.shared.test.TestReport(hmc, testReport.testType,
 					testReport.testStatus, testReport.details);
 			conn.persist(r);
+			database.incrementTableVersion(conn, r);
 		});
 
-		database.incrementTableVersion(com.ma.hmcdb.shared.test.TestReport.class);
 
 	}
 

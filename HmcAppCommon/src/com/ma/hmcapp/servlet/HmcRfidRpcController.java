@@ -124,7 +124,7 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				quota.remain -= x;
 				conn.persist(quota);
 				// DBExt.store(conn, quota);
-				database.incrementTableVersion(Quota.class);
+				database.incrementTableVersion(conn, quota);
 				if (allowed == company.rfidBlockSize)
 					break;
 			}
@@ -174,8 +174,9 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				}
 
 				list.add(data);
+				
+				database.incrementTableVersion(conn, rfidLabel);
 			}
-			database.incrementTableVersion(RfidLabel.class);
 		});
 
 		return list;

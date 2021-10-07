@@ -66,15 +66,21 @@ public class HmcTileWidget extends Composite {
 
 		HmcReportStatus status = t.getEnum(HmcReportStatus.class, "status");
 
-		label.setText(t.getDisplay("status"));
-		if (label.getText() != null) {
-			label.addStyleName(status == HmcReportStatus.SUCSESS ? "success" : "warning");
+		if (status != null) {
+			label.setText(t.getDisplay("status"));
+			if (label.getText() != null) {
+				label.addStyleName(status == HmcReportStatus.SUCSESS ? "success" : "warning");
+			}
 		}
 		panel.add(label);
 
 		initWidget(panel);
 		Integer canVol = t.getInt("canisterVolumeML");
 		Integer remain = t.getInt("remainML");
-		disLevel.setProgress(remain / (canVol / 100));
+
+		if (canVol != null && remain != null)
+			disLevel.setProgress(remain * 100 / canVol);
+		else
+			disLevel.setProgress(0);
 	}
 }

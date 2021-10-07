@@ -29,7 +29,7 @@ public class HmcAppHelper {
 
 		hmc = new Hmc(hmcType, hmcSerialNumber, null);
 		em.persist(hmc);
-		database.incrementTableVersion(Hmc.class);
+		database.incrementTableVersion(em, hmc);
 
 		msgLogger.add(null, Severity.INFO, "МГЦ " + hmcSerialNumber + " автоматически добавлен");
 

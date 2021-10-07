@@ -43,22 +43,21 @@ public class HmcServiceImpl extends SpringRemoteServiceServlet implements HmcSer
 	@Override
 	public void saveRoomCells(List<CDObject> list, long companyId) throws Exception {
 		try {
-			Class<?> clazz = RoomCell.class;
 			database.execVoid(em -> {
 				Company company = em.find(Company.class, companyId);
 				em.createQuery("delete from RoomCell rc where company=:company").setParameter("company", company)
 						.executeUpdate();
 				CDUtils2 utils = new CDUtils2(em);
 				for (CDObject cdObject : list) {
-					Object obj = clazz.newInstance();
+					Object obj = new RoomCell();
 					helpers.onBeforeStore(em, obj);
 					utils.setCDObject(obj, cdObject);
 					em.merge(obj);
 					helpers.onAfterStore(em, obj);
+					database.incrementTableVersion(em, obj);
 				}
 			});
 
-			database.incrementTableVersion(clazz);
 
 		} catch (IOException e) {
 			throw new Exception(e.getMessage());

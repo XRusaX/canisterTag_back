@@ -257,18 +257,16 @@ public class MapPanel extends ResizeComposite {
 					Filter filter = new Filter();
 					filter.stringMap.put("company", "" + companyId);
 
-					service.loadRange(Room.class.getName(), filter, null,
-							new AlertAsyncCallback<List<CDObject>>(list -> {
-								rooms = new HashMap<>();
-								list.stream().forEach(r -> rooms.put(r.getId(), r));
-								service.loadRange(RoomCell.class.getName(), filter, null,
-										new AlertAsyncCallback<List<CDObject>>(list1 -> {
-											data.clear();
-											list1.forEach(o -> data.replace(getPos(o), o));
-											data.clearUndoRedo();
-											gEditor.invalidate();
-										}));
-							}));
+					service.loadRange(Room.class.getName(), filter, null, new AlertAsyncCallback<>(list -> {
+						rooms = new HashMap<>();
+						list.range.stream().forEach(r -> rooms.put(r.getId(), r));
+						service.loadRange(RoomCell.class.getName(), filter, null, new AlertAsyncCallback<>(list1 -> {
+							data.clear();
+							list1.range.forEach(o -> data.replace(getPos(o), o));
+							data.clearUndoRedo();
+							gEditor.invalidate();
+						}));
+					}));
 
 				} else {
 					data.clear();

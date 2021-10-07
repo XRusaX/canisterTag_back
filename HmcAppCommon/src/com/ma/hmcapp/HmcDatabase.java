@@ -8,12 +8,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ma.appcommon.Database2;
 import com.ma.appcommon.SettingsHolder;
+import com.ma.hmcdb.shared.Company;
+import com.ma.hmcdb.shared.Hmc;
+import com.ma.hmcdb.shared.rfid.Report;
 
 @Component
 public class HmcDatabase extends Database2 {
@@ -32,7 +36,6 @@ public class HmcDatabase extends Database2 {
 		Map<String, String> properties = new HashMap<>();
 
 		String databaseHost = settingsHolder.getSettingsRO().databaseHost;
-//		databaseHost = "192.168.56.10";
 
 		properties.put("javax.persistence.jdbc.url", "jdbc:mysql://" + databaseHost + "/" + dbname);
 		properties.put("javax.persistence.jdbc.user", user);
@@ -40,10 +43,6 @@ public class HmcDatabase extends Database2 {
 
 		create(properties);
 	}
-
-	// private final static String dbName = "HMC";
-	// private final static String userName = "HMC";
-	// private final static String password = "HMC";
 
 	@Autowired
 	private SettingsHolder<Settings, SettingsRO> settingsHolder;
@@ -64,8 +63,6 @@ public class HmcDatabase extends Database2 {
 				+ "&useSSL=false";
 
 		String databaseHost = settingsHolder.getSettingsRO().databaseHost;
-		//databaseHost = "192.168.56.10";
-
 
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://" + databaseHost + params, user, password);
 				Statement stmt = conn.createStatement();) {
@@ -75,35 +72,14 @@ public class HmcDatabase extends Database2 {
 		}
 	}
 
-	// @Autowired
-	// private SettingsHolderImpl<Settings, SettingsRO> settingsHolder;
-	//
-	// @PostConstruct
-	// private void init() {
-	// connectionProvider = new
-	// MysqlConnectionProvider(settingsHolder.getSettingsRO().databaseHost,
-	// dbName, userName,
-	// password);
-	// try {
-	// Class<?>[] classes = { //
-	// Company.class, //
-	// Agent.class, //
-	// UserData.class, //
-	// MsgLoggerItem.class, //
-	//
-	// RfidLabel.class, //
-	// RfidLabelGroup.class, //
-	// Quota.class, //
-	// Report.class, //
-	//
-	// TestReport.class, //
-	// };
-	//
-	// SchemaConverter.updateSchema(connectionProvider, classes);
-	// } catch (SQLException e) {
-	// e.printStackTrace();
-	// }
-	// }
+	@Override
+	public void incrementTableVersion(EntityManager em, Object o) {
+		if (o instanceof Report) {
+			Company company = ((Report) o).company;
+			_incrementTableVersion(em, Hmc.class, company == null ? null : company.id);
+		}
+		super.incrementTableVersion(em, o);
+	}
 
 }
 // CREATE USER 'HMC'@'%' IDENTIFIED BY 'HMC';

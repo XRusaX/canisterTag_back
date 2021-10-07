@@ -66,21 +66,20 @@ public class HmcReportController {
 			}
 			// http://127.0.0.1:8888
 			Hmc hmc = hmcAppHelper.getCreateHmc(em, report.hmcType, report.hmcSerialNumber);
+			Company company = hmc.company;
 
 			Operator operator = null;
 			Room room = null;
 
-			if (hmc.company != null) {
-				operator = getOperator(em, report.operatorId, report.operatorName, hmc.company);
-				room = getRoom(em, report.roomId, report.roomName, hmc.company);
+			if (company != null) {
+				operator = getOperator(em, report.operatorId, report.operatorName, company);
+				room = getRoom(em, report.roomId, report.roomName, company);
 			}
 
 			Report report2 = new Report(hmc, new Date(report.startTime), report.durationS, label, report.cleaningId,
-					report.consumptionML, report.remainML, hmc.company, operator, room, report.status);
+					report.consumptionML, report.remainML, company, operator, room, report.status);
 			em.persist(report2);
-			database.incrementTableVersion(Report.class);
-			database.incrementTableVersion(Hmc.class);
-			database.incrementTableVersion(Room.class);
+			database.incrementTableVersion(em, report2);
 
 			List<Report> reports = Database2.select(em, Report.class).whereEQ("rfidLabel", label).getResultList();
 			int sum_consumption = reports.stream().mapToInt(r -> r.consumtion_ml).sum();
@@ -111,12 +110,14 @@ public class HmcReportController {
 		operator = new Operator(name, company);
 		em.persist(operator);
 
-		database.incrementTableVersion(Operator.class);
+		database.incrementTableVersion(em, operator);
 
 		return operator;
 	}
 
 	private Room getRoom(EntityManager em, Long id, String name, Company company) {
+		assert (company != null);
+
 		if (id != null) {
 			Room room = em.find(Room.class, id);
 			if (room.company != company)
@@ -132,7 +133,7 @@ public class HmcReportController {
 		room = new Room(name, null, company);
 		em.persist(room);
 
-		database.incrementTableVersion(Room.class);
+		database.incrementTableVersion(em, room);
 
 		return room;
 	}
