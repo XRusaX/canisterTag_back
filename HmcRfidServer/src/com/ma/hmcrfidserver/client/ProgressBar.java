@@ -16,7 +16,7 @@ public class ProgressBar extends VerticalPanel {
 	final CssColor colorBlue = CssColor.make("blue");
 	int percentage = 47;
 	private Label percLabel = new Label();
-	//private NumberFormat percentFormat = NumberFormat.getFormat("#00");
+	// private NumberFormat percentFormat = NumberFormat.getFormat("#00");
 
 	public ProgressBar() {
 
