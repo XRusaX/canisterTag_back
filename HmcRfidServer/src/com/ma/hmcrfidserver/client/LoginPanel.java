@@ -24,9 +24,9 @@ import com.ma.common.shared.MD5;
 public class LoginPanel extends LoginPageBase {
 	private final Constants constants = GWT.create(Constants.class);
 
-	private final Label err = new Label();
-	private TextBox user = new TextBox();
-	private PasswordTextBox password = new PasswordTextBox();
+	private final Label errorMesasgeLabel = new Label();
+	private TextBox loginTextField = new TextBox();
+	private PasswordTextBox passwordTextField = new PasswordTextBox();
 
 	private HmcServiceAsync hmcService;
 
@@ -34,8 +34,8 @@ public class LoginPanel extends LoginPageBase {
 	protected void onErr(String text) {
 		GWT.log("LOGIN ERROR");
 //		err.setText(text);
-		user.addStyleName("myfirst");
-		password.addStyleName("myfirst");
+		loginTextField.addStyleName("myfirst");
+		passwordTextField.addStyleName("myfirst");
 	}
 
 	public LoginPanel(HmcServiceAsync hmcService) {
@@ -53,51 +53,66 @@ public class LoginPanel extends LoginPageBase {
 //		saveData.setStylePrimaryName("custom-checkbox");
 
 		if (getCookieUserName() != null && getCookiePassword() != null) {
-			user.setText(getCookieUserName());
-			password.setText(getCookiePassword());
+			loginTextField.setText(getCookieUserName());
+			passwordTextField.setText(getCookiePassword());
 		}
 
-		FlexTableX grid = new FlexTableX();
-		user.setStylePrimaryName("form-field");
-		password.setStylePrimaryName("form-field");
-		Label userNameLbl = new Label(constants.userName());
-		userNameLbl.setStyleName("status-label");
-		userNameLbl.addStyleName("simple");
-		grid.addRow(labelPanel);
-		grid.addRow(userNameLbl, user);
+		FlexTableX inputFieldsGrid = new FlexTableX();
+		VerticalPanel inputsContainer = new VerticalPanel();
+		HorizontalPanel loginPanel = new HorizontalPanel();
+		HorizontalPanel passwordPanel = new HorizontalPanel();
+		loginTextField.setStylePrimaryName("form-field");
+		passwordTextField.setStylePrimaryName("form-field");
+		Label loginLbl = new Label(constants.userName());
+		loginLbl.setStyleName("status-label");
+		loginLbl.addStyleName("simple");
+		loginPanel.add(loginLbl);
+		loginPanel.add(loginTextField);
+//		inputFieldsGrid.addRow(labelPanel);
+		inputFieldsGrid.addRow(loginLbl, loginTextField);
 		Label passwordLbl = new Label(constants.password());
 		passwordLbl.setStyleName("status-label");
 		passwordLbl.addStyleName("simple");
-		grid.addRow(passwordLbl, password);
-//		grid.setWidth("100%");
-		Button loginButton = new Button(constants.login(),
-				(ClickHandler) event -> login2(user.getText(), password.getText(), saveData.getValue()));
+		passwordPanel.add(passwordLbl);
+		passwordPanel.add(passwordTextField);
+		inputFieldsGrid.addRow(passwordLbl, passwordTextField);
+		inputFieldsGrid.setStyleName("grid");
+
+		inputsContainer.add(loginPanel);
+		inputsContainer.add(passwordPanel);
+		inputsContainer.setSpacing(10);
+		Button loginButton = new Button(constants.login(), (ClickHandler) event -> login2(loginTextField.getText(),
+				passwordTextField.getText(), saveData.getValue()));
 		loginButton.setStyleName("button-green");
-		
+
 		Button newUserButton = new Button("Новый пользователь", (ClickHandler) event -> newUser());
 		newUserButton.setStyleName("button-google");
 		newUserButton.getElement().getStyle().setBackgroundColor("khaki");
-		
-		HorizontalPanel hp = new HorizontalPanel();
-		
-		hp.getElement().getStyle().setMarginTop(50, Unit.PX);
-		hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		hp.setWidth("100%");
-		hp.setSpacing(10);
-		hp.add(loginButton);
-		hp.add(saveData);
-		hp.add(newUserButton);
+
+		HorizontalPanel buttonsPanel = new HorizontalPanel();
+
+//		buttonsPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
+		buttonsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		buttonsPanel.setWidth("100%");
+		buttonsPanel.setSpacing(10);
+		buttonsPanel.add(loginButton);
+		buttonsPanel.add(saveData);
+		buttonsPanel.add(newUserButton);
 
 		VerticalPanel verticalPanel = new VerticalPanel();
-		verticalPanel.add(err);
-		verticalPanel.add(grid);
-		verticalPanel.add(hp);
-
+//		verticalPanel.add(errorMesasgeLabel);
+//		verticalPanel.add(inputsContainer);
+		verticalPanel.add(labelPanel);
+		verticalPanel.add(inputFieldsGrid);
+		verticalPanel.add(buttonsPanel);
+		
 //		Button restorePasswordBtn = new Button(constants.forgotPassword(), (ClickHandler) event -> restorePassword());
 //		restorePasswordBtn.getElement().getStyle().setMarginTop(20, Unit.PX);
 //		verticalPanel.add(restorePasswordBtn);
 
-		verticalPanel.addStyleName("center");
+		verticalPanel.setStyleName("center");
+		verticalPanel.addStyleName("container");
+//		verticalPanel.addStyleName("grid");
 		verticalPanel.getElement().getStyle().setBackgroundColor("khaki");
 
 		initWidget(verticalPanel);
