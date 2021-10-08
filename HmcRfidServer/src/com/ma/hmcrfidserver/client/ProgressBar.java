@@ -42,7 +42,7 @@ public class ProgressBar extends VerticalPanel {
 		context.setFillStyle(colorWhite);
 		context.fillRect(0, 0, WIDTH, HEIGHT);
 		context.setFillStyle(colorGreen);
-		context.fillRect(0, HEIGHT, WIDTH, -(HEIGHT * 100 / percentage));
+		context.fillRect(0, HEIGHT, WIDTH, -(HEIGHT *percentage / 100));
 		context.closePath();
 		percLabel.setText(percentage + "%");
 	}
