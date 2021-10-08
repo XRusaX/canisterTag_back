@@ -83,7 +83,7 @@ public class HmcServiceImpl extends SpringRemoteServiceServlet implements HmcSer
 			}
 
 			try {
-				userService.addUser(adminName, adminPasswordHash, Arrays.asList(Permissions.PERMISSION_USER,
+				userService.addUser(adminName, adminPasswordHash, Arrays.asList(Permissions.PERMISSION_CUSTOMER,
 						UserData.PERMISSION_USERS, UserData.PERMISSION_SETTINGS), adminEmail, company.id);
 			} catch (Exception e) {
 				throw new IOException("Пользователь с таким именем уже существует");
