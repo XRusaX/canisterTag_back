@@ -90,7 +90,7 @@ public class MainPage extends AppMainPage {
 					.addW(new CompaniesPanel(eventBus, "Клиенты", CompanyType.CUSTOMER, Arrays.asList("name")), 20)
 					.addX(tabPanel2), "Клиенты");
 		}
-		if (Login.user.hasPermission(Permissions.PERMISSION_USER)) {
+		if (Login.user.hasPermission(Permissions.PERMISSION_CUSTOMER)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 
 			panel.addW(new CommonListPanelWrapper(new HmcFlowList(), Hmc.class, eventBus), 40);

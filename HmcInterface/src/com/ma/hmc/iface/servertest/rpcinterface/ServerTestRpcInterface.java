@@ -10,13 +10,11 @@ public interface ServerTestRpcInterface {
 
 	void clear() throws IOException;
 
-	void createCustomerCompany(String name) throws IOException;
+	void createCustomerCompany(String name, String user, String password) throws IOException;
 
 	void createHmc(HmcType hmcType, String serialNum, String companyName) throws IOException;
 
 	void createRoom(String roomName, String companyName) throws IOException;
-
-	void createQuota() throws IOException;
 
 	void createOperator(String operator, String companyName) throws IOException;
 

@@ -200,7 +200,7 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 		UserData user = authComponent.getUser();
 		connectionStatusModule.add(threadLocalRequest.getThreadLocalRequest().getRemoteHost(), session.getId(),
 				ConnectionType.WRITER, user == null ? null : user.name);
-		return user == null ? null : new User(user.hasPermission("PERMISSION_WRITE_RFID"));
+		return user == null ? null : new User(user.hasPermission(Permissions.PERMISSION_WRITE_RFID));
 	}
 
 }

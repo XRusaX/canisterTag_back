@@ -10,10 +10,8 @@ import com.ma.hmc.simulator.HmcSimulatorFrame.FillParams;
 
 public class WorldSim {
 	private List<CompanySim> companies = new ArrayList<>();
-	private ServerTestRpcInterface proxy;
 
 	public WorldSim(ServerTestRpcInterface proxy, ConnectionSettings connectionSettings, FillParams fillParams) {
-		this.proxy = proxy;
 		for (int i = 0; i < fillParams.companies; i++) {
 			CompanySim companySim = new CompanySim(proxy, connectionSettings, fillParams, i);
 			companies.add(companySim);
@@ -29,8 +27,6 @@ public class WorldSim {
 	}
 
 	public void createDB() throws IOException {
-		proxy.createQuota();
-
 		for (CompanySim companySim : companies) {
 			companySim.createDB();
 		}

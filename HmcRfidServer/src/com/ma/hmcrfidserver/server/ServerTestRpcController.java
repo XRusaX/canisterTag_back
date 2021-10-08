@@ -1,8 +1,7 @@
 package com.ma.hmcrfidserver.server;
 
 import java.io.IOException;
-
-import javax.persistence.EntityManager;
+import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ma.appcommon.Database2;
 import com.ma.appcommon.rpc.RpcController;
+import com.ma.appcommon.shared.auth.UserData;
+import com.ma.common.shared.MD5;
 import com.ma.common.shared.color.ColorX;
 import com.ma.hmc.iface.servertest.rpcinterface.ServerTestRpcInterface;
 import com.ma.hmc.iface.shared.HmcType;
@@ -18,6 +19,7 @@ import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Company.CompanyType;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.Operator;
+import com.ma.hmcdb.shared.Permissions;
 import com.ma.hmcdb.shared.Room;
 import com.ma.hmcdb.shared.rfid.Quota;
 
@@ -38,6 +40,24 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 		try {
 			database.execVoid(em -> {
 				em.createQuery("delete from Company").executeUpdate();
+				em.createQuery("delete from UserData").executeUpdate();
+
+				em.persist(new UserData("admin", MD5.calcMD5("admin" + "admin"),
+						Arrays.asList(UserData.PERMISSIONS_ALL), null, null));
+
+				Company company = new Company("testcompany", CompanyType.TEST, "addr", "contacts", 0);
+				em.persist(company);
+				em.persist(new UserData("t", MD5.calcMD5("t" + "t"), Arrays.asList(Permissions.PERMISSION_TEST), null,
+						company.id));
+
+				company = new Company("завод1", CompanyType.CANISTER, "addr", "contacts", 10);
+				em.persist(company);
+				em.persist(new UserData("u1", MD5.calcMD5("u1" + "p1"),
+						Arrays.asList(Permissions.PERMISSION_WRITE_RFID), null, company.id));
+
+				Agent agent = Database2.select(em, Agent.class).whereEQ("name", "Гриндез").getSingleResult();
+				Quota q = new Quota("u1", company, agent, 3000, 10000);
+				em.persist(q);
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -46,11 +66,15 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 	}
 
 	@Override
-	public void createCustomerCompany(String name) throws IOException {
+	public void createCustomerCompany(String name, String user, String password) throws IOException {
 		database.execVoid(em -> {
 			Company company = new Company(name, CompanyType.CUSTOMER, "addr", "contacts", 0);
 			em.persist(company);
-			updateUser(em, company);
+			if (user != null) {
+				UserData userData = new UserData(user, MD5.calcMD5(user + password),
+						Arrays.asList(UserData.PERMISSION_USERS, Permissions.PERMISSION_CUSTOMER), null, company.id);
+				em.persist(userData);
+			}
 		});
 	}
 
@@ -72,11 +96,12 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 			Room room = new Room(roomName, String.format("#%06X", ColorX.contrastColors[nextColor].value), company);
 			em.persist(room);
 
-//			for (int x = 0; x < 3; x++)
-//				for (int y = 0; y < 3; y++) {
-//					RoomCell roomCell = new RoomCell(company, null, room, x + nextColor * 4, y, null);
-//					em.persist(roomCell);
-//				}
+			// for (int x = 0; x < 3; x++)
+			// for (int y = 0; y < 3; y++) {
+			// RoomCell roomCell = new RoomCell(company, null, room, x +
+			// nextColor * 4, y, null);
+			// em.persist(roomCell);
+			// }
 
 			nextColor = (nextColor + 1) % ColorX.contrastColors.length;
 		});
@@ -90,32 +115,6 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 			Operator operator = new Operator(operatorName, company);
 			em.persist(operator);
 		});
-	}
-
-	@Override
-	public void createQuota() throws IOException {
-		database.execVoid(em -> {
-			{
-				Company company = new Company("testcompany", CompanyType.TEST, "addr", "contacts", 0);
-				em.persist(company);
-				updateUser(em, company);
-			}
-
-			Company company = new Company("завод1", CompanyType.CANISTER, "addr", "contacts", 10);
-			em.persist(company);
-			updateUser(em, company);
-
-			Agent agent = Database2.select(em, Agent.class).whereEQ("name", "Гриндез").getSingleResult();
-
-			Quota q = new Quota("u1", company, agent, 3000, 10000);
-			em.persist(q);
-		});
-	}
-
-	private static void updateUser(EntityManager em, Company company) {
-		System.out.println("updateUser " + company.id + " " + company.name);
-		em.createQuery("update UserData set company=" + company.id + " where companyName='" + company.name + "'")
-				.executeUpdate();
 	}
 
 }

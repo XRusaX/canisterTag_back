@@ -86,7 +86,7 @@ public class HmcSim {
 	}
 
 	public void createDB() throws IOException {
-		proxy.createHmc(HmcType.HMC_1, serialNum, company.name);
+		proxy.createHmc(HmcType.HMC_1, serialNum, company.descr.name);
 	}
 
 }

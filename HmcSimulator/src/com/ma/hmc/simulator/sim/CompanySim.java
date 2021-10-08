@@ -19,61 +19,50 @@ public class CompanySim {
 	private List<HmcSim> hmcs = new ArrayList<>();
 	private List<String> rooms = new ArrayList<>();
 	private List<String> operators = new ArrayList<>();
-	public final String name;
+	public final CompanyDescr descr;
 	private ServerTestRpcInterface proxy;
 
 	private List<CanisterSim> canisters = new LinkedList<>();
 	private ConnectionSettings connectionSettings;
 
-	String[] companies = {
-			"СмартМи Инжиниринг",
-			"E3 Investment",
-			"ПК Марион",
-			"Best Friend",
-			"Полимертехпром",
-			"“ИНГ ВАР” Инженерный консалтинг",
-			"ООО Севзап АКБ",
-			"ООО ТРИКОТАЖНЫЕ ТЕХНОЛОГИИ",
-			"ООО \"М.Т.Д\"",
-			"Криошоп",
-			"Агентство маркетинга и коммуникаций",
-			"Кафе Чеснок",
+	static class CompanyDescr {
+		String name;
+		String user;
+		String password;
+
+		public CompanyDescr(String name, String user, String password) {
+			this.name = name;
+			this.user = user;
+			this.password = password;
+		}
+	}
+
+	CompanyDescr[] companyDescrs = { //
+			new CompanyDescr("СмартМи Инжиниринг", "smi", "smi"), //
+			new CompanyDescr("E3 Investment", "e3", "e3"), //
+			new CompanyDescr("Best Friend", null, null), //
+			new CompanyDescr("Полимертехпром", null, null), //
+			new CompanyDescr("“ИНГ ВАР” Инженерный консалтинг", null, null), //
+			new CompanyDescr("ООО Севзап АКБ", null, null), new CompanyDescr("ООО ТРИКОТАЖНЫЕ ТЕХНОЛОГИИ", null, null), //
+			new CompanyDescr("ООО \"М.Т.Д\"", null, null), new CompanyDescr("Криошоп", null, null), //
+			new CompanyDescr("Агентство маркетинга и коммуникаций", null, null), //
+			new CompanyDescr("Кафе Чеснок", null, null),//
 	};
 
-	String[] rooms2 = {
-			"Конференц-зал",
-			"Директор",
-			"Приемная",
-			"Спортзал",
-			"Каб 101",
-			"Каб 102",
-			"Каб 103",
-			"Каб 104",
-			"Каб 105",
-			"Каб 106",
-			"Туалет",
-	};
-	
-	String[] operators2 = {
-			"Виктория Лоскунова",
-			"Сергей Воротников",
-			"Вадим Докумов",
-			"Дмитрий Алексеев",
-			"Данила Коробейников",
-			"Андрей Косых",
-			"Александр Ленивец",
-			"Денис Ерошин",
-			"Влад Горбатюк",
-			"Александр Фокин"
-	};
-	
-	
-	public CompanySim(ServerTestRpcInterface proxy, ConnectionSettings connectionSettings, FillParams fillParams, int num) {
+	String[] rooms2 = { "Конференц-зал", "Директор", "Приемная", "Спортзал", "Каб 101", "Каб 102", "Каб 103", "Каб 104",
+			"Каб 105", "Каб 106", "Туалет", };
+
+	String[] operators2 = { "Виктория Лоскунова", "Сергей Воротников", "Вадим Докумов", "Дмитрий Алексеев",
+			"Данила Коробейников", "Андрей Косых", "Александр Ленивец", "Денис Ерошин", "Влад Горбатюк",
+			"Александр Фокин" };
+
+	public CompanySim(ServerTestRpcInterface proxy, ConnectionSettings connectionSettings, FillParams fillParams,
+			int num) {
 		this.proxy = proxy;
 		this.connectionSettings = connectionSettings;
-		//this.name = "company" + num;
-		
-		this.name = companies[num];
+		// this.name = "company" + num;
+
+		this.descr = companyDescrs[num];
 
 		for (int j = 0; j < fillParams.rooms; j++) {
 			String roomName = rooms2[j];
@@ -86,11 +75,11 @@ public class CompanySim {
 		}
 
 		Random r = new Random(67723547);
-		
+
 		for (int j = 0; j < fillParams.hmcs; j++) {
 			int randomInt = r.nextInt();
-			String serialNum = String.format("%08X%02d",  randomInt, num) ;
-			//HmcT
+			String serialNum = String.format("%08X%02d", randomInt, num);
+			// HmcT
 			HmcSim hmcSim = new HmcSim(proxy, connectionSettings, this, serialNum);
 			hmcs.add(hmcSim);
 		}
@@ -106,13 +95,13 @@ public class CompanySim {
 	}
 
 	public void createDB() throws IOException {
-		proxy.createCustomerCompany(name);
+		proxy.createCustomerCompany(descr.name, descr.user, descr.password);
 		for (HmcSim hmcSim : hmcs)
 			hmcSim.createDB();
 		for (String room : rooms)
-			proxy.createRoom(room, name);
+			proxy.createRoom(room, descr.name);
 		for (String operator : operators)
-			proxy.createOperator(operator, name);
+			proxy.createOperator(operator, descr.name);
 	}
 
 	public String getRandomRoom() {
