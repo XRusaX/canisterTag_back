@@ -107,12 +107,31 @@ h1 {
 
 .center {
 	position: absolute;
+	box-sizing: border-box;
 	top: 50%;
 	left: 50%;
 	padding: 100px;
 	transform: translateX(-50%) translateY(-50%);
 	border-radius: 8px;
 }
+
+.container {
+	display: flex;
+	flex-direction: column;
+	width:700px;
+}
+
+.grid {
+	display: flex;
+	border-spacing: 10px;
+	flex-direction: column;
+	width: 100%;
+	height:150px;
+	align-items: center;
+	vertical-align: middle;
+}
+
+
 
 /* FORM FIELD */
 :root {
@@ -138,7 +157,8 @@ h1 {
 
 .form-field {
    	display: inline-table;
-    width: 100%;
+    /*width: 100%;*/
+    height: 25px;
     padding: 8px 16px;
     line-height: 25px;
     font-size: 14px;
@@ -210,7 +230,7 @@ h1 {
   box-sizing: border-box;
   color: #3c4043;
   cursor: pointer;
-  display: inline-flex;
+  /*display: inline-flex;*/
   fill: currentcolor;
   font-family: "Google Sans",Roboto,Arial,sans-serif;
   font-size: 14px;
@@ -278,7 +298,8 @@ h1 {
   box-sizing: border-box;
   color: #fff;
   cursor: pointer;
-  font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+  /*font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;*/
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
   font-size: 16px;
   font-weight: 400;
   outline: none;
@@ -293,7 +314,7 @@ h1 {
 }
 
 .button-green:hover {
-  box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+  box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
   transform: translateY(-2px);
   -moz-transform: translateY(-2px);
 }
@@ -305,10 +326,9 @@ h1 {
 
 .button-green:focus {
   box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
-	color:#13aa52; 
-	background-color: #fff;
 	outline: none;
 }
+
 
 .myfirst {
 	-webkit-animation: myfirst 2s infinite; /* Chrome, Safari, Opera */
