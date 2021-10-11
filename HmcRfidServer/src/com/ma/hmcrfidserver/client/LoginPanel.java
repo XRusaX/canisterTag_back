@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.SimpleCheckBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.ma.common.gwtapp.client.AlertAsyncCallback;
@@ -41,16 +42,17 @@ public class LoginPanel extends LoginPageBase {
 	public LoginPanel(HmcServiceAsync hmcService) {
 		this.hmcService = hmcService;
 		HorizontalPanel labelPanel = new HorizontalPanel();
-		Label label = new Label("МГЦ");
+		Label label = new Label("Платформа дезинфекции");
 		label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-		label.getElement().getStyle().setFontSize(4, Unit.EM);
+		label.getElement().getStyle().setFontSize(3, Unit.EM);
 		label.getElement().getStyle().setMarginBottom(50, Unit.PX);
 		labelPanel.add(label);
 
-		CheckBox saveData = new CheckBox(constants.savePassword());
-		saveData.getElement().setClassName("input");
-		saveData.getElement().getStyle().clearBorderStyle();
-//		saveData.setStylePrimaryName("custom-checkbox");
+		CheckBox saveData = new CheckBox("Запомнить меня");
+//		SimpleCheckBox saveData = new SimpleCheckBox();
+//		saveData.getElement().setClassName("input");
+//		saveData.getElement().getStyle().clearBorderStyle();
+//		saveData.setStylePrimaryName("mycheckbox");
 
 		if (getCookieUserName() != null && getCookiePassword() != null) {
 			loginTextField.setText(getCookieUserName());
@@ -105,7 +107,7 @@ public class LoginPanel extends LoginPageBase {
 		verticalPanel.add(labelPanel);
 		verticalPanel.add(inputFieldsGrid);
 		verticalPanel.add(buttonsPanel);
-		
+
 //		Button restorePasswordBtn = new Button(constants.forgotPassword(), (ClickHandler) event -> restorePassword());
 //		restorePasswordBtn.getElement().getStyle().setMarginTop(20, Unit.PX);
 //		verticalPanel.add(restorePasswordBtn);
