@@ -3,7 +3,6 @@ package com.ma.hmcrfidserver.client;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
@@ -12,15 +11,14 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.SimpleCheckBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.ma.appcommon.shared.auth.AuthUtils;
 import com.ma.common.gwtapp.client.AlertAsyncCallback;
 import com.ma.common.gwtapp.client.auth.Constants;
 import com.ma.common.gwtapp.client.auth.LoginPageBase;
 import com.ma.common.gwtapp.client.ui.FlexTableX;
 import com.ma.common.gwtapp.client.ui.dialog.OkCancelDialogBox;
-import com.ma.common.shared.MD5;
 
 public class LoginPanel extends LoginPageBase {
 	private final Constants constants = GWT.create(Constants.class);
@@ -34,7 +32,7 @@ public class LoginPanel extends LoginPageBase {
 	@Override
 	protected void onErr(String text) {
 		GWT.log("LOGIN ERROR");
-//		err.setText(text);
+		// err.setText(text);
 		loginTextField.addStyleName("myfirst");
 		passwordTextField.addStyleName("myfirst");
 	}
@@ -49,10 +47,10 @@ public class LoginPanel extends LoginPageBase {
 		labelPanel.add(label);
 
 		CheckBox saveData = new CheckBox("Запомнить меня");
-//		SimpleCheckBox saveData = new SimpleCheckBox();
-//		saveData.getElement().setClassName("input");
-//		saveData.getElement().getStyle().clearBorderStyle();
-//		saveData.setStylePrimaryName("mycheckbox");
+		// SimpleCheckBox saveData = new SimpleCheckBox();
+		// saveData.getElement().setClassName("input");
+		// saveData.getElement().getStyle().clearBorderStyle();
+		// saveData.setStylePrimaryName("mycheckbox");
 
 		if (getCookieUserName() != null && getCookiePassword() != null) {
 			loginTextField.setText(getCookieUserName());
@@ -70,7 +68,7 @@ public class LoginPanel extends LoginPageBase {
 		loginLbl.addStyleName("simple");
 		loginPanel.add(loginLbl);
 		loginPanel.add(loginTextField);
-//		inputFieldsGrid.addRow(labelPanel);
+		// inputFieldsGrid.addRow(labelPanel);
 		inputFieldsGrid.addRow(loginLbl, loginTextField);
 		Label passwordLbl = new Label(constants.password());
 		passwordLbl.setStyleName("status-label");
@@ -93,7 +91,7 @@ public class LoginPanel extends LoginPageBase {
 
 		HorizontalPanel buttonsPanel = new HorizontalPanel();
 
-//		buttonsPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
+		// buttonsPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
 		buttonsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		buttonsPanel.setWidth("100%");
 		buttonsPanel.setSpacing(10);
@@ -102,19 +100,20 @@ public class LoginPanel extends LoginPageBase {
 		buttonsPanel.add(newUserButton);
 
 		VerticalPanel verticalPanel = new VerticalPanel();
-//		verticalPanel.add(errorMesasgeLabel);
-//		verticalPanel.add(inputsContainer);
+		// verticalPanel.add(errorMesasgeLabel);
+		// verticalPanel.add(inputsContainer);
 		verticalPanel.add(labelPanel);
 		verticalPanel.add(inputFieldsGrid);
 		verticalPanel.add(buttonsPanel);
 
-//		Button restorePasswordBtn = new Button(constants.forgotPassword(), (ClickHandler) event -> restorePassword());
-//		restorePasswordBtn.getElement().getStyle().setMarginTop(20, Unit.PX);
-//		verticalPanel.add(restorePasswordBtn);
+		// Button restorePasswordBtn = new Button(constants.forgotPassword(),
+		// (ClickHandler) event -> restorePassword());
+		// restorePasswordBtn.getElement().getStyle().setMarginTop(20, Unit.PX);
+		// verticalPanel.add(restorePasswordBtn);
 
 		verticalPanel.setStyleName("center");
 		verticalPanel.addStyleName("container");
-//		verticalPanel.addStyleName("grid");
+		// verticalPanel.addStyleName("grid");
 		verticalPanel.getElement().getStyle().setBackgroundColor("khaki");
 
 		initWidget(verticalPanel);
@@ -141,7 +140,7 @@ public class LoginPanel extends LoginPageBase {
 					Window.alert("Ошибка при вводе нового пароля");
 					return false;
 				} else {
-					String hashNew = MD5.calcMD5(adminName.getText() + adminPassword.getText());
+					String hashNew = AuthUtils.getPwdHash(adminName.getText(), adminPassword.getText());
 					hmcService.addUserCompany(companyName.getText(), adminName.getText(), hashNew, userEmail.getText(),
 							new AlertAsyncCallback<>("", (v) -> {
 								Window.alert(

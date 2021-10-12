@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ma.appcommon.Database2;
 import com.ma.appcommon.rpc.RpcController;
+import com.ma.appcommon.shared.auth.AuthUtils;
 import com.ma.appcommon.shared.auth.UserData;
-import com.ma.common.shared.MD5;
 import com.ma.common.shared.color.ColorX;
 import com.ma.hmc.iface.servertest.rpcinterface.ServerTestRpcInterface;
 import com.ma.hmc.iface.shared.HmcType;
@@ -42,17 +42,17 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 				em.createQuery("delete from Company").executeUpdate();
 				em.createQuery("delete from UserData").executeUpdate();
 
-				em.persist(new UserData("admin", MD5.calcMD5("admin" + "admin"),
+				em.persist(new UserData("admin", AuthUtils.getPwdHash("admin", "admin"),
 						Arrays.asList(UserData.PERMISSIONS_ALL), null, null));
 
 				Company testCompany = new Company("testcompany", CompanyType.TEST, "addr", "contacts", 0);
 				em.persist(testCompany);
-				em.persist(new UserData("t", MD5.calcMD5("t" + "t"), Arrays.asList(Permissions.PERMISSION_TEST), null,
-						testCompany.id));
+				em.persist(new UserData("t", AuthUtils.getPwdHash("t", "t"), Arrays.asList(Permissions.PERMISSION_TEST),
+						null, testCompany.id));
 
 				Company canisterCompany = new Company("завод1", CompanyType.CANISTER, "addr", "contacts", 10);
 				em.persist(canisterCompany);
-				UserData user_u1 = new UserData("u1", MD5.calcMD5("u1" + "p1"),
+				UserData user_u1 = new UserData("u1", AuthUtils.getPwdHash("u1", "p1"),
 						Arrays.asList(Permissions.PERMISSION_WRITE_RFID), null, canisterCompany.id);
 				em.persist(user_u1);
 				Agent agent = Database2.select(em, Agent.class).whereEQ("name", "Гриндез").getSingleResult();
@@ -71,7 +71,7 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 			Company company = new Company(name, CompanyType.CUSTOMER, "addr", "contacts", 0);
 			em.persist(company);
 			if (user != null) {
-				UserData userData = new UserData(user, MD5.calcMD5(user + password),
+				UserData userData = new UserData(user, AuthUtils.getPwdHash(user, password),
 						Arrays.asList(UserData.PERMISSION_USERS, Permissions.PERMISSION_CUSTOMER), null, company.id);
 				em.persist(userData);
 			}
