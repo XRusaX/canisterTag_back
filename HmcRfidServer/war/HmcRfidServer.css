@@ -131,6 +131,52 @@ h1 {
 	vertical-align: middle;
 }
 
+.gwt-CellTable {
+	background-color: black;
+}
+
+.gwt-DialogBox{
+	border-radius: 12px;
+}
+
+.gwt-TabLayoutPanel{
+	margin-top: 4px;
+}
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs{
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab{
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	background-color: white !important;
+	/*padding: 10px;*/
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabInner{
+	margin-top: 4px;
+	margin-left: 6px;
+	margin-right: 6px;
+	/*font-size: 11pt;*/
+	color: var(--label-color);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabInner:hover{
+	color: black;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected{
+	color:  black !important;
+	background-color:#92C1F0  !important;
+}
+
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent{
+	/*border: none;*/
+	/*margin: 8px;*/
+	/*padding:8px;*/
+}
+
 
 
 /* FORM FIELD */
@@ -349,10 +395,12 @@ h1 {
 	    to {border-color: #c51244;}
 	 } 
 
-.custom-checkbox {
-	width: 40px;
-	height: 10px;
-	background: #555;
+.mycheckbox{
+	width: 25px;
+	height: 25px;
+	border-style: dotted 2px;
+	background-color: #555 !important;
+	color: red !important;
 	margin: 20px 80px;
 	position: relative;
 	border-radius: 100px;
