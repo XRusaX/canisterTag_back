@@ -45,18 +45,18 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 				em.persist(new UserData("admin", MD5.calcMD5("admin" + "admin"),
 						Arrays.asList(UserData.PERMISSIONS_ALL), null, null));
 
-				Company company = new Company("testcompany", CompanyType.TEST, "addr", "contacts", 0);
-				em.persist(company);
+				Company testCompany = new Company("testcompany", CompanyType.TEST, "addr", "contacts", 0);
+				em.persist(testCompany);
 				em.persist(new UserData("t", MD5.calcMD5("t" + "t"), Arrays.asList(Permissions.PERMISSION_TEST), null,
-						company.id));
+						testCompany.id));
 
-				company = new Company("завод1", CompanyType.CANISTER, "addr", "contacts", 10);
-				em.persist(company);
-				em.persist(new UserData("u1", MD5.calcMD5("u1" + "p1"),
-						Arrays.asList(Permissions.PERMISSION_WRITE_RFID), null, company.id));
-
+				Company canisterCompany = new Company("завод1", CompanyType.CANISTER, "addr", "contacts", 10);
+				em.persist(canisterCompany);
+				UserData user_u1 = new UserData("u1", MD5.calcMD5("u1" + "p1"),
+						Arrays.asList(Permissions.PERMISSION_WRITE_RFID), null, canisterCompany.id);
+				em.persist(user_u1);
 				Agent agent = Database2.select(em, Agent.class).whereEQ("name", "Гриндез").getSingleResult();
-				Quota q = new Quota("u1", company, agent, 3000, 10000);
+				Quota q = new Quota(user_u1.name, canisterCompany, agent, 3000, 10000);
 				em.persist(q);
 			});
 		} catch (Exception e) {

@@ -174,7 +174,7 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				}
 
 				list.add(data);
-				
+
 				database.incrementTableVersion(conn, rfidLabel);
 			}
 		});

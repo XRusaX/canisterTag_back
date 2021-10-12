@@ -10,6 +10,7 @@ import com.ma.commonui.shared.cd.CDObject;
 
 @RemoteServiceRelativePath("hmc")
 public interface HmcService extends RemoteService {
+
 	void saveRoomCells(List<CDObject> list, long companyId) throws Exception;
 
 	Map<String, String> getFirmwareList();

@@ -20,7 +20,8 @@ public class HmcSim {
 
 	private ServerTestRpcInterface proxy;
 
-	public HmcSim(ServerTestRpcInterface proxy, ConnectionSettings connectionSettings, CompanySim company, String serialNum) {
+	public HmcSim(ServerTestRpcInterface proxy, ConnectionSettings connectionSettings, CompanySim company,
+			String serialNum) {
 		this.proxy = proxy;
 		this.connectionSettings = connectionSettings;
 		this.company = company;
@@ -71,7 +72,7 @@ public class HmcSim {
 			}
 
 		};
-		timer.schedule(timerTask, 1_000, 10_000);
+		timer.schedule(timerTask, (long) (Math.random() * 10_000), 10_000);
 	}
 
 	public void stop() {
@@ -85,7 +86,7 @@ public class HmcSim {
 		HmcSimulatorFrame.report(connectionSettings.serverURL, report);
 	}
 
-	public void createDB() throws IOException {
+	public void createDB() throws Exception {
 		proxy.createHmc(HmcType.HMC_1, serialNum, company.descr.name);
 	}
 

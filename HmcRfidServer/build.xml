@@ -9,7 +9,6 @@
 		<basedir file="../common-java/CommonUI/src" />
 		<basedir file="../common-java/Common/src" />
 		<basedir file="../common-java/CommonMail/src" />
-		<basedir file="../common-java/CommonGWT/src" />
 		<basedir file="../common-java/Chart/src" />
 		<basedir file="../common-java/GwtApp/src" />
 		<basedir file="../common-java/AppCommon/src" />
@@ -20,18 +19,16 @@
 		<basedir file="../HmcAppCommon/src" />
 	</multirootfileset>
 
+	<multirootfileset id="libdirs">
+		<basedir file="../common-java/Libs/spring5.2.3" />
+		<basedir
+			file="../common-java/Libs/hibernate-release-5.5.0.Final/lib/required" />
+		<include name="**/*.jar" />
+	</multirootfileset>
+
+
 	<property name="gwtdir" value="../common-java/Libs/gwt-2.8.1" />
-
-	<path id="extclasspath">
-		<fileset
-			dir="../common-java/Libs/hibernate-release-5.5.0.Final/lib/required"
-			includes="**/*.jar" />
-		<fileset dir="../common-java/Libs/spring5.2.3"
-			includes="**/*.jar" />
-	</path>
-
-	<include file="../common-java/CommonGWT/gwtBuild.xml" />
-
+	<include file="../common-java/GwtApp/gwtBuild.xml" />
 	<target name="compile" depends="gwt.compile" />
 
 </project>

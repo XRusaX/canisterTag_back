@@ -1,6 +1,5 @@
 package com.ma.hmc.simulator.sim;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -94,7 +93,7 @@ public class CompanySim {
 		hmcs.forEach(h -> h.stop());
 	}
 
-	public void createDB() throws IOException {
+	public void createDB() throws Exception {
 		proxy.createCustomerCompany(descr.name, descr.user, descr.password);
 		for (HmcSim hmcSim : hmcs)
 			hmcSim.createDB();

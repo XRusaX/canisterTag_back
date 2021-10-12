@@ -1,6 +1,5 @@
 package com.ma.hmc.simulator.sim;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class WorldSim {
 		companies.forEach(h -> h.stop());
 	}
 
-	public void createDB() throws IOException {
+	public void createDB() throws Exception {
 		for (CompanySim companySim : companies) {
 			companySim.createDB();
 		}

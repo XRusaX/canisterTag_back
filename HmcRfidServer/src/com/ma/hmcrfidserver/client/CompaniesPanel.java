@@ -44,6 +44,12 @@ public class CompaniesPanel extends CommonListPanelWrapper {
 
 				super.prepareContextMenu(menu, set);
 			}
+
+			{
+				grid.setRowStyles((row, index) -> {
+					return "color-green";
+				});
+			}
 		}.showFields(showFields), Company.class, eventBus);
 		if (companyType != null)
 			filter.stringMap.put("companyType",
