@@ -46,14 +46,14 @@ public class CompaniesPanel extends CommonListPanelWrapper {
 			}
 
 			{
-				grid.setRowStyles((row, index) -> {
-					return "color-green";
-				});
+//				grid.setRowStyles((row, index) -> {
+//					return "color-green";
+//				});
+
 			}
 		}.showFields(showFields), Company.class, eventBus);
 		if (companyType != null)
-			filter.stringMap.put("companyType",
-					/* CompanyType.class.getName() + ":" + */ companyType.name());
+			filter.stringMap.put("companyType", /* CompanyType.class.getName() + ":" + */ companyType.name());
 	}
 
 }
