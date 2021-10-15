@@ -57,7 +57,34 @@ h1 {
 	padding: 20px 20px 20px 20px;
 	border-radius: 12px;
 	background-color: #e3ebed;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	/*box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);*/
+	box-shadow: 0 4px 4px 4px rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
+	display:block;
+}
+/*
+.rounded-panel:active {
+	background-color:#ccef4a;
+}
+
+.rounded-panel:focus {
+	background-color:#ccef4a;
+}
+
+
+.rounded-panel:target{
+	background-color:#ccef4a;
+}
+
+.rounded-panel:checked{
+	background-color:#ccef4a;
+}
+*/
+
+.rounded-panel:hover {
+  	box-shadow: 1px 8px 8px 8px rgb(60 64 67 / 30%), 1px 8px 8px 8px rgb(60 64 67 / 15%);
+  	transform: translate3d(2px,-8px,0px);
+  	-moz-transform: translate3d(2px,-8px,0px);
+	transition-duration: 0.5s;
 }
 
 .hmc-image {

@@ -3,6 +3,8 @@ package com.ma.hmcrfidserver.client;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -22,9 +24,7 @@ public class HmcTileWidget extends Composite implements ImageResources {
 		Label ph = new Label();
 		ph.setSize("120px", "1px");
 		sp.add(ph);
-
 		panel.setStyleName("rounded-panel");
-
 		String hmcType = t.get("hmcType");
 		Image hmcImg;
 		switch (hmcType) {
@@ -75,7 +75,20 @@ public class HmcTileWidget extends Composite implements ImageResources {
 		if (status != null) {
 			label.setText(t.getDisplay("status"));
 			if (label.getText() != null) {
-				label.addStyleName(status == HmcReportStatus.SUCSESS ? "success" : "warning");
+//				label.addStyleName(status == HmcReportStatus.SUCSESS ? "success" : "warning");
+
+				switch (status) {
+				case SUCSESS:
+					label.addStyleName("success");
+					break;
+				case INTERRUPTED:
+					label.addStyleName("warning");
+					break;
+				default:
+					label.addStyleName("danger");
+					break;
+				}
+
 			}
 		}
 		panel.add(label);
@@ -85,9 +98,9 @@ public class HmcTileWidget extends Composite implements ImageResources {
 		Integer remain = t.getInt("remainML");
 
 		if (canVol != null && remain != null)
-			disLevel.setProgress(remain * 100 / canVol);
+			disLevel.setProgress(remain * 100 / canVol, remain);
 		else
-			disLevel.setProgress(0);
+			disLevel.setProgress(0, 0);
 	}
 
 	@Override
