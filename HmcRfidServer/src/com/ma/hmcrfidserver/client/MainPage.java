@@ -4,9 +4,12 @@ import java.util.Arrays;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.AppConfig;
 import com.ma.appcommon.shared.AppState;
 import com.ma.appcommon.shared.auth.UserData;
@@ -48,12 +51,12 @@ public class MainPage extends AppMainPage {
 	public MainPage(AppConfig appConfig, AppState appState) {
 		super(appConfig.loginNeeded, false);
 		this.appState = appState;
-
 		settingsService.getSettingsValues(new AsyncCallback<SettingsValues>() {
 			@Override
 			public void onSuccess(SettingsValues result) {
 				settingsValues = result;
-				create();
+//				create();
+				create("flat-button");
 			}
 
 			@Override
@@ -91,24 +94,63 @@ public class MainPage extends AppMainPage {
 					.addX(tabPanel2), "Клиенты");
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_CUSTOMER)) {
-			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 
-			panel.addW(new CommonListPanelWrapper(new HmcFlowList(), Hmc.class, eventBus), 40);
-			// panel.addW(new CommonListPanelX(new CommonDataFlowList(),
-			// Hmc.class, eventBus), 40);
-			panel.add(new CommonListPanelWrapper(
+			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
 					new CommonListPanel("Отчеты", 2000).setEditable(Login.user.company == null), Report.class,
-					eventBus));
-			tabPanel2.add(panel, "МГЦ");
+					eventBus);
+
+			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
+			panel.addW(new Label(), 5);
+			
+			HmcFlowList testFlowList = new HmcFlowList() {
+				@Override
+				void showReports() {
+					if (Login.user.company != null)
+						tabPanel.selectTab(reportsTab.getParent());
+				}
+			};
+			
+			panel.addW(new CommonListPanelWrapper(new HmcFlowList() {
+				@Override
+				void showReports() {
+					if (Login.user.company != null) {
+						tabPanel.selectTab(reportsTab.getParent());
+//						testFlowList.setVisible(!testFlowList.isVisible());
+					}
+				}
+			}, Hmc.class, eventBus), 70);
+			
+//			panel.addW(new CommonListPanelWrapper(testFlowList, Hmc.class, eventBus), 25);
+
+			tabPanel2.add(panel, "Оборудование");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Room.class, eventBus), 30);
+			CommonListPanel roomList = new CommonListPanel(null, 2000, "watchList");
+			panel.addW(new CommonListPanelWrapper(roomList, Room.class, eventBus), 30);
 			panel.add(new MapPanel(eventBus));
-			tabPanel2.add(panel, "Объекты");
+			tabPanel2.add(panel, "Помещения");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Операторы");
+
+			panel = new DockLayoutPanelX(Unit.PCT);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			tabPanel2.add(panel, "Контроль дезинфекции");
+
+			panel = new DockLayoutPanelX(Unit.PCT);
+
+			panel.add(reportsTab);
+			tabPanel2.add(panel, "Отчёты об обработке");
+
+			panel = new DockLayoutPanelX(Unit.PCT);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			tabPanel2.add(panel, "Журнал операций");
+
+			panel = new DockLayoutPanelX(Unit.PCT);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			tabPanel2.add(panel, "Статистика");
+
 		}
 
 		eventBus = new PageEventBus();
