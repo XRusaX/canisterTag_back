@@ -13,11 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.ma.appcommon.Database2;
+import com.ma.appcommon.datasource.EM;
+import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.logger.MsgLoggerImpl;
 import com.ma.common.shared.Severity;
 import com.ma.hmc.iface.report.HmcReport;
-import com.ma.hmcapp.HmcAppHelper;
+import com.ma.hmcapp.datasource.HmcDataSource;
+import com.ma.hmcapp.datasource.OperatorDataSource;
+import com.ma.hmcapp.datasource.ReportDataSource;
+import com.ma.hmcapp.datasource.RfidLabelDataSource;
+import com.ma.hmcapp.datasource.RoomDataSource;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.Operator;
@@ -35,7 +40,19 @@ public class HmcReportController {
 	private MsgLoggerImpl msgLogger;
 
 	@Autowired
-	private HmcAppHelper hmcAppHelper;
+	private HmcDataSource hmcDataSource;
+
+	@Autowired
+	private ReportDataSource reportDataSource;
+
+	@Autowired
+	private OperatorDataSource operatorDataSource;
+
+	@Autowired
+	private RoomDataSource roomDataSource;
+
+	@Autowired
+	private RfidLabelDataSource rfidLabelDataSource;
 
 	@GetMapping("/lastreport")
 	private long getLastReport(String serialNumber) throws IOException {
@@ -43,7 +60,7 @@ public class HmcReportController {
 			return 0;
 
 		long result = database.exec(em -> {
-			Report report = hmcAppHelper.getLastReport(em, serialNumber);
+			Report report = reportDataSource.getLastReport(em, serialNumber);
 			if (report == null)
 				return 0l;
 			return report.time.getTime();
@@ -64,8 +81,8 @@ public class HmcReportController {
 				msgLogger.add(null, Severity.ERROR, "Метка канистры не найдена " + report.canisterId);
 				return "error";
 			}
-			// http://127.0.0.1:8888
-			Hmc hmc = hmcAppHelper.getCreateHmc(em, report.hmcType, report.hmcSerialNumber);
+
+			Hmc hmc = hmcDataSource.getCreateHmc(em, report.hmcType, report.hmcSerialNumber);
 			Company company = hmc.company;
 
 			Operator operator = null;
@@ -76,12 +93,12 @@ public class HmcReportController {
 				room = getRoom(em, report.roomId, report.roomName, company);
 			}
 
-			Report report2 = new Report(hmc, new Date(report.startTime), report.durationS, label, report.cleaningId,
+			Report report2 = new Report(hmc, new Date(report.time), report.durationS, label, report.cleaningId,
 					report.consumptionML, report.remainML, company, operator, room, report.status);
-			em.persist(report2);
-			database.incrementTableVersion(em, report2);
+			reportDataSource.store(em, report2);
 
-			List<Report> reports = Database2.select(em, Report.class).whereEQ("rfidLabel", label).getResultList();
+			List<Report> reports = reportDataSource.loadByRfidLabel(em, label);
+
 			int sum_consumption = reports.stream().mapToInt(r -> r.consumtion_ml).sum();
 			if (sum_consumption > label.canisterVolume)
 				msgLogger.add(null, Severity.ERROR, "Перерасход из канистры " + label.name);
@@ -92,54 +109,49 @@ public class HmcReportController {
 		return result;
 	}
 
-	private Operator getOperator(EntityManager em, Long id, String name, Company company) {
+	private Operator getOperator(EM em, Long id, String name, Company company) {
 		assert (company != null);
 
 		if (id != null) {
-			Operator operator = em.find(Operator.class, id);
+			Operator operator = operatorDataSource.load(em, id);
 			if (operator.company != company)
 				msgLogger.add(null, Severity.WARNING, "Компания оператора и владелец МГЦ не совпадают");
 			return operator;
 		}
 
-		Operator operator = Database2.select(em, Operator.class).whereEQ("name", name).whereEQ("company", company)
-				.getResultStream().findFirst().orElse(null);
+		Operator operator = operatorDataSource.loadByName(em, name, company);
+
 		if (operator != null)
 			return operator;
 
 		operator = new Operator(name, company);
-		em.persist(operator);
-
-		database.incrementTableVersion(em, operator);
+		operatorDataSource.store(em, operator);
 
 		return operator;
 	}
 
-	private Room getRoom(EntityManager em, Long id, String name, Company company) {
+	private Room getRoom(EM em, Long id, String name, Company company) {
 		assert (company != null);
 
 		if (id != null) {
-			Room room = em.find(Room.class, id);
+			Room room = roomDataSource.load(em, id);
 			if (room.company != company)
 				msgLogger.add(null, Severity.WARNING, "Владелец комнаты и владелец МГЦ не совпадают");
 			return room;
 		}
 
-		Room room = Database2.select(em, Room.class).whereEQ("name", name).whereEQ("company", company).getResultStream()
-				.findFirst().orElse(null);
+		Room room = roomDataSource.loadByName(em, name, company);
 		if (room != null)
 			return room;
 
 		room = new Room(name, null, company);
-		em.persist(room);
-
-		database.incrementTableVersion(em, room);
+		roomDataSource.store(em, room);
 
 		return room;
 	}
 
-	private RfidLabel getLabel(EntityManager em, Integer canisterId) {
-		List<RfidLabel> labels = Database2.select(em, RfidLabel.class).whereEQ("name", canisterId).getResultList();
+	private RfidLabel getLabel(EM em, Integer canisterId) {
+		List<RfidLabel> labels = rfidLabelDataSource.loadByName(em, canisterId);
 		if (labels.size() != 1) {
 			msgLogger.add(null, Severity.ERROR, "меток " + canisterId + " найдено " + labels.size() + " штук");
 			return null;

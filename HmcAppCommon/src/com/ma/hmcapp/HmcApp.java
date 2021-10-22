@@ -10,9 +10,7 @@ import com.ma.appcommon.AppImpl;
 @Component
 @WebServlet("/app")
 public class HmcApp extends AppImpl {
-
 	public HmcApp() {
 		super("HMC", true);
 	}
-
 }

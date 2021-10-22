@@ -13,8 +13,8 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ma.appcommon.Database2;
 import com.ma.appcommon.SettingsHolder;
+import com.ma.appcommon.db.Database2;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.rfid.Report;

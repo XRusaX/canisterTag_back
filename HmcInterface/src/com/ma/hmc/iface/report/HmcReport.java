@@ -11,7 +11,10 @@ public class HmcReport {
 	@UILabel(label = "SerialNumber")
 	public String hmcSerialNumber;
 
-	public long startTime;
+	public long time;
+	
+	@UILabel(label = "engineTimeMS")
+	public Integer engineTimeS;
 
 	@UILabel(label = "durationS")
 	public Integer durationS;

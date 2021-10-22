@@ -111,7 +111,8 @@ public class HmcSimulatorFrame extends JFrame {
 
 	private ServerTestRpcInterface getProxy() {
 		return HttpProxy.makeProxy(ServerTestRpcInterface.class,
-				connectionPanel.getData().serverURL + HmcRfidRpcInterface.api + ServerTestRpcInterface.servletPath, null);
+				connectionPanel.getData().serverURL + HmcRfidRpcInterface.api + ServerTestRpcInterface.servletPath,
+				null);
 	}
 
 	private void loadPrefs() {
@@ -171,7 +172,7 @@ public class HmcSimulatorFrame extends JFrame {
 	}
 
 	public static String report(String serverURL, HmcReport report) throws IOException {
-		report.startTime = new Date().getTime();
+		report.time = System.currentTimeMillis();
 		String requestJson = GsonUtils.requestJson(new URL(serverURL + HmcRfidRpcInterface.api + "/report"), report,
 				String.class, null);
 		return requestJson;
