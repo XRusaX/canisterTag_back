@@ -1,8 +1,6 @@
 package com.ma.hmcrfidserver.client;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
@@ -41,9 +39,7 @@ public class LoginPanel extends LoginPageBase {
 		this.hmcService = hmcService;
 		HorizontalPanel labelPanel = new HorizontalPanel();
 		Label label = new Label("Платформа дезинфекции");
-		label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-		label.getElement().getStyle().setFontSize(3, Unit.EM);
-		label.getElement().getStyle().setMarginBottom(50, Unit.PX);
+		label.setStyleName("login-label");
 		labelPanel.add(label);
 
 		CheckBox saveData = new CheckBox("Запомнить меня");
