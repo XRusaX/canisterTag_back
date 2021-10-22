@@ -4,8 +4,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import com.ma.appcommon.Database2;
-import com.ma.appcommon.Database2.DBSelect.Dir;
+import com.ma.appcommon.db.Database2;
+import com.ma.appcommon.db.Database2.DBSelect.Dir;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.rfid.Report;
 

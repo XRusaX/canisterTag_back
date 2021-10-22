@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ma.appcommon.AuthImpl;
-import com.ma.appcommon.Database2;
 import com.ma.appcommon.ThreadLocalRequest;
 import com.ma.appcommon.connection.ConnectionStatusModule;
+import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.logger.MsgLoggerImpl;
 import com.ma.appcommon.rpc.RpcController;
 import com.ma.appcommon.shared.auth.AuthUtils;
@@ -27,6 +27,10 @@ import com.ma.hmc.iface.rfid.rpcdata.User;
 import com.ma.hmc.iface.rfid.rpcinterface.HmcRfidRpcInterface;
 import com.ma.hmc.iface.rfid.ruslandata.RfidData;
 import com.ma.hmc.iface.rfid.ruslandata.RfidDataUtils;
+import com.ma.hmcapp.datasource.AgentDataSource;
+import com.ma.hmcapp.datasource.CompanyDataSource;
+import com.ma.hmcapp.datasource.QuotaDataSource;
+import com.ma.hmcapp.datasource.RfidLabelDataSource;
 import com.ma.hmcdb.shared.Agent;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Permissions;
@@ -55,6 +59,18 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 	@Autowired
 	private ConnectionStatusModule connectionStatusModule;
 
+	@Autowired
+	private CompanyDataSource companyDataSource;
+
+	@Autowired
+	private AgentDataSource agentDataSource;
+
+	@Autowired
+	private QuotaDataSource quotaDataSource;
+	
+	@Autowired
+	private RfidLabelDataSource rfidLabelDataSource;
+	
 	@Override
 	public void tagWriteDone(String uid) {
 		msgLogger.add(authComponent.getUserName(), Severity.INFO, "Метка " + uid + " записана");
@@ -83,26 +99,18 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 
 		database.execVoid(conn -> {
 
-			Company company = conn.find(Company.class, user.company);
+			Company company = companyDataSource.load(conn, user.company);
 
 			if (company.rfidBlockSize <= 0)
 				throw new RuntimeException("Размер блока меток <= 0");
 
-			Agent agent = conn.createQuery("select a from Agent a where a.name=:name", Agent.class)
-					.setParameter("name", agentName).getResultStream().findFirst().orElse(null);
-			// Agent agent = DBExt.selectFirst(conn, Agent.class, "where
-			// name=?", agentName);
+			Agent agent = agentDataSource.getByName(conn, agentName);
+
 			if (agent == null)
 				throw new RuntimeException("Вещество " + agentName + " не зарегистрировано с системе");
 
-			List<Quota> quotas = conn.createQuery(
-					"select q from Quota q where company_id=:company_id and agent_id=:agent_id and volume=:volume and remain>0",
-					Quota.class)//
-					.setParameter("company_id", user.company)//
-					.setParameter("agent_id", agent.id)//
-					.setParameter("volume", canisterVolume)//
-					.getResultList();
-
+			List<Quota> quotas = quotaDataSource.get(conn, company, agent, canisterVolume);
+			
 			quotas.sort((q1, q2) -> q1.time.compareTo(q2.time));
 
 			// List<Quota> quotas = DBExt.select(conn, Quota.class,
@@ -122,9 +130,7 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				int x = Math.min(company.rfidBlockSize - allowed, quota.remain);
 				allowed += x;
 				quota.remain -= x;
-				conn.persist(quota);
-				// DBExt.store(conn, quota);
-				database.incrementTableVersion(conn, quota);
+				quotaDataSource.store(conn, quota);
 				if (allowed == company.rfidBlockSize)
 					break;
 			}
@@ -152,9 +158,9 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 			for (int i = 0; i < company.rfidBlockSize; i++) {
 
 				RfidLabel rfidLabel = new RfidLabel(0, time, user.name, company, agent, canisterVolume);
-				conn.persist(rfidLabel);
+				rfidLabelDataSource.store(conn, rfidLabel);
 				rfidLabel.name = (int) rfidLabel.id;
-				conn.persist(rfidLabel);
+				rfidLabelDataSource.store(conn, rfidLabel);
 
 				int id = (int) rfidLabel.id;
 
@@ -174,8 +180,6 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				}
 
 				list.add(data);
-
-				database.incrementTableVersion(conn, rfidLabel);
 			}
 		});
 
