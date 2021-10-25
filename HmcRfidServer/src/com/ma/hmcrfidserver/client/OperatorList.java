@@ -7,8 +7,8 @@ public class OperatorList extends CommonListPanel {
 
 	static MyDataGridResources resource = GWT.create(MyDataGridResources.class);
 
-	public OperatorList(String title, Integer refreshPeriod, String styleName) {
-		super(title, refreshPeriod, styleName, resource);
+	public OperatorList(String title, Integer refreshPeriod) {
+		super(title, refreshPeriod, resource);
 	}
 
 }

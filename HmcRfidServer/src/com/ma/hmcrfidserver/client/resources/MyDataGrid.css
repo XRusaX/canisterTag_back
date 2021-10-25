@@ -60,8 +60,9 @@
 }
 
 .dataGridHeader {
-    font-size: 18px;
-    padding: 10px 10px;
+    font-size: 1.2rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     color: white;
     overflow: hidden;
     font-family: "OpenSans-Regular";
@@ -105,8 +106,8 @@
 
 .dataGridEvenRow div {
     color: textColor;
-    font-size: 15px;
-    line-height: 18px;
+    font-size: 1rem;
+    line-height: 1.2rem;
     font-family: "OpenSans-Regular";
     word-spacing: 0px;
     text-decoration: none solid rgb(85, 85, 85);
@@ -124,6 +125,11 @@
     margin: 5px;
 }
 
+.dataGridEvenRow button:hover {
+    box-shadow: 0px 0px 4px headerBackgroundColor;
+    transform: scale(1.15);
+}
+
 .dataGridEvenRowCell {
     /* border: selectionBorderWidth solid #ffffff; */
     border: none;
@@ -137,8 +143,8 @@
 
 .dataGridOddRow div {
     color: textColor;
-    font-size: 15px;
-    line-height: 18px;
+    font-size: 1rem;
+    line-height: 1.2rem;
     font-family: "OpenSans-Regular";
     word-spacing: 0px;
     text-decoration: none solid rgb(85, 85, 85);
@@ -154,6 +160,11 @@
     width: 25px;
     cursor: pointer;
     margin: 5px;
+}
+
+.dataGridOddRow button:hover {
+    box-shadow: 0px 0px 4px headerBackgroundColor;
+    transform: scale(1.15);
 }
 
 .dataGridOddRowCell {
@@ -182,7 +193,7 @@
 }
 
 .dataGridSelectedRow {
-    background: #f26622;
+    background: #fc9967;
     color: white;
     /*height: auto;*/
     overflow: auto;
