@@ -1,5 +1,7 @@
 package com.ma.hmcdb.shared;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,6 +27,12 @@ public class Operator {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
+
+	@UILabel(label = "Removed")
+	public Boolean removed;
+
+	public Date modifTime;
+	public Date storeTime;
 
 	public Operator() {
 	}

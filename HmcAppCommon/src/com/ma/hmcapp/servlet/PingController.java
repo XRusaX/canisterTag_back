@@ -1,7 +1,7 @@
 package com.ma.hmcapp.servlet;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,6 @@ import com.ma.hmcapp.datasource.OperatorDataSource;
 import com.ma.hmcapp.datasource.RoomDataSource;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.Operator;
-import com.ma.hmcdb.shared.Room;
 
 @RestController
 public class PingController {
@@ -33,9 +32,6 @@ public class PingController {
 
 	@Autowired
 	private Database2 database;
-
-	@Autowired
-	private MsgLoggerImpl msgLogger;
 
 	@Autowired
 	private HmcDataSource hmcDataSource;
@@ -78,18 +74,16 @@ public class PingController {
 
 					Hmc hmc = hmcDataSource.getBySerNum(em, ping.hmcSerialNumber);
 					if (hmc.company != null) {
-						List<Operator> operators = operatorDataSource.getModified(em, hmc.company, ping.lastSync);
+						List<Operator> changed = new ArrayList<>();
 						if (ping.operators != null)
-							operatorDataSource.updateOperators(em, ping.operators, hmc.company);
-//						List<Room> rooms = roomDataSource.getModified(em, hmc.company, new Date(ping.lastSync));
-//						response.operators = operators.stream().map(o -> new com.ma.hmc.iface.ping.Operator(o.id,
-//								o.name, o.removed, o.lastModified.getTime())).collect(Collectors.toList());
-//						response.rooms = operators.stream().map(
-//								r -> new com.ma.hmc.iface.ping.Room(r.id, r.name, r.removed, r.lastModified.getTime()))
-//								.collect(Collectors.toList());
+							changed = operatorDataSource.updateOperators(em, ping.operators, hmc.company);
+						List<Operator> changedByOthers = operatorDataSource.getModified(em, hmc.company, ping.lastSync);
+						changedByOthers.removeAll(changed);
+						response.operators = changedByOthers.stream().map(
+								o -> new com.ma.hmc.iface.ping.Operator(o.id, o.name, o.removed, o.modifTime.getTime()))
+								.collect(Collectors.toList());
 						response.lastSync = System.currentTimeMillis();
 					}
-
 					return new Gson().toJson(response);
 				});
 				return result;

@@ -53,7 +53,7 @@ public class CompaniesPanel extends CommonListPanelWrapper {
 			}
 		}.showFields(showFields), Company.class, eventBus);
 		if (companyType != null)
-			filter.stringMap.put("companyType", /* CompanyType.class.getName() + ":" + */ companyType.name());
+			filter.addEQ("companyType", /* CompanyType.class.getName() + ":" + */ companyType.name());
 	}
 
 }

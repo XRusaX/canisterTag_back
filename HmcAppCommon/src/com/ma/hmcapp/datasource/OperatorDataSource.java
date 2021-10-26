@@ -1,6 +1,7 @@
 package com.ma.hmcapp.datasource;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import com.ma.appcommon.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.logger.MsgLoggerImpl;
+import com.ma.appcommon.shared.Filter;
+import com.ma.common.shared.Pair;
 import com.ma.common.shared.Severity;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Operator;
@@ -41,59 +44,76 @@ public class OperatorDataSource extends DataSourceImpl<Operator> {
 				.getResultStream().findFirst().orElse(null);
 	}
 
-//	@Override
-//	protected synchronized void onBeforeStore(EM em, Operator obj) {
-//		if (obj.lastModified == null)
-//			obj.lastModified = new Date();
-//	}
+	@Override
+	protected synchronized void onBeforeStore(EM em, Operator obj) {
+		obj.storeTime = new Date();
+	}
 
-	public synchronized boolean updateOperators(EM em, List<com.ma.hmc.iface.ping.Operator> operators,
+	@Override
+	public void delete(EM em, Collection<Long> list) {
+		list.forEach(id -> {
+			Operator op = load(em, id);
+			op.removed = true;
+			store(em, op);
+		});
+	}
+
+	@Override
+	public Pair<String, List<Operator>> loadRange(EM em, Filter filter, int[] range) {
+		filter.addNEQ("removed", "true");
+		return super.loadRange(em, filter, range);
+	}
+
+	@Override
+	public int getCount(EM em, Filter filter) {
+		filter.addNEQ("removed", "true");
+		return super.getCount(em, filter);
+	}
+
+	public synchronized List<Operator> updateOperators(EM em, List<com.ma.hmc.iface.ping.Operator> operators,
 			Company company) {
-		boolean changed = false;
-		for (com.ma.hmc.iface.ping.Operator o : operators)
-			changed |= updateOperator(em, o, company);
+		List<Operator> changed = new ArrayList<>();
+		operators.forEach(o -> updateOperator(em, o, company, changed));
 		return changed;
 	}
 
-	private boolean updateOperator(EM em, com.ma.hmc.iface.ping.Operator o, Company company) {
+	private void updateOperator(EM em, com.ma.hmc.iface.ping.Operator o, Company company, List<Operator> changed) {
 
 		Operator operator = null;
+
 		if (o.id != null) {
 			operator = load(em, o.id);
 			if (operator == null) {
-				return true;
+				return;
 			} else if (operator.company != company) {
 				msgLogger.add(null, Severity.WARNING, "Компания оператора и владелец МГЦ не совпадают");
-				return true;
-			} else if (o.removed) {
-//				operator.removed = true;
-//				store(em, operator);
-				delete(em, Arrays.asList(o.id));
-				return true;
+				return;
 			}
 		} else {
 			operator = loadByName(em, o.name, company);
 		}
 
-		if (operator != null) {
-//			if (operator.lastModified.getTime() < o.lastModified) {
-//				operator.name = o.name;
-//				store(em, operator);
-//				return true;
-//			}
-		} else {
+		if (operator == null) {
 			operator = new Operator(o.name, company);
-			store(em, operator);
+			operator.modifTime = new Date(0);
 		}
-		return false;
+
+		if (operator.modifTime.getTime() < o.modifTime) {
+			operator.removed = o.removed;
+			operator.name = o.name;
+			operator.modifTime = new Date(o.modifTime);
+			store(em, operator);
+
+			if (o.id != null)
+				changed.add(operator);
+		}
 	}
 
 	public List<Operator> getModified(EM em, Company company, long lastSync) {
 		List<Operator> list = em.em
-				.createQuery("select * from Operator where company=:company and lastModified>:lastSync", Operator.class)
-				.setParameter("company", company).setParameter("lastSync", lastSync).getResultList();
-		// TODO Auto-generated method stub
-		return null;
+				.createQuery("select * from Operator where company=:company and storeTime > :lastSync", Operator.class)
+				.setParameter("company", company).setParameter("lastSync", new Date(lastSync)).getResultList();
+		return list;
 	}
 
 }
