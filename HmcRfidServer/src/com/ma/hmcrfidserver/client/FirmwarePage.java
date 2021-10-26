@@ -1,13 +1,24 @@
 package com.ma.hmcrfidserver.client;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.SuggestOracle;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.SuggestOracle.Callback;
+import com.google.gwt.user.client.ui.SuggestOracle.Request;
 import com.ma.common.gwtapp.client.AlertAsyncCallback;
 import com.ma.common.gwtapp.client.ui.Gap;
 import com.ma.common.gwtapp.client.ui.UploadForm;
@@ -25,26 +36,53 @@ public class FirmwarePage extends Composite {
 			updateList();
 		}
 	};
-	private ListBox listBox = new ListBox();
+
+	private SuggestBox sb = new SuggestBox(new SuggestOracle() {
+		@Override
+		public void requestSuggestions(Request request, Callback callback) {
+			List<Suggestion> suggestions = new ArrayList<>();
+			types.forEach(t -> suggestions.add(new Suggestion() {
+
+				@Override
+				public String getReplacementString() {
+					return t;
+				}
+
+				@Override
+				public String getDisplayString() {
+					return t;
+				}
+			}));
+
+			callback.onSuggestionsReady(request, new Response(suggestions));
+		}
+	});
+
 	private PropertiesPanel propertiesPanel = new PropertiesPanel("---");
 
+	private List<String> types;
+
 	public FirmwarePage() {
-		Arrays.stream(HmcType.values()).forEach(l -> listBox.addItem(l.name(), l.name()));
-		listBox.addChangeHandler(event -> setAction());
-		setAction();
+
+		sb.addValueChangeHandler(new ValueChangeHandler<String>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				uploadForm.setAction(getUrl(sb.getText()));
+			}
+		});
+
 		updateList();
 		initWidget(new VertPanel().setSp(8).add(propertiesPanel, new HTML("<b>Загрузка прошивки</b>"),
-				new HorPanel(new Label("Тип устройства"), new Gap(10, 1)).add1(listBox), uploadForm));
-	}
-
-	private void setAction() {
-		String line = listBox.getSelectedValue();
-		uploadForm.setAction(getUrl(line));
+				new HorPanel(new Label("Тип устройства"), new Gap(10, 1)).add1(sb), uploadForm));
 	}
 
 	private void updateList() {
-		propertiesPanel.removeAllRows();
 
+		hmcService.getFirmwareList(new AlertAsyncCallback<>(list -> {
+			types = list.keySet().stream().collect(Collectors.toList());
+		}));
+
+		propertiesPanel.removeAllRows();
 		hmcService.getFirmwareList(new AlertAsyncCallback<>(map -> {
 			map.forEach((line, value) -> {
 				propertiesPanel.add(line, new Anchor(value, getUrl(line)));

@@ -1,5 +1,7 @@
 package com.ma.hmcapp.datasource;
 
+import java.util.Date;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +34,9 @@ public class RoomDataSource extends DataSourceImpl<Room> {
 				.findFirst().orElse(null);
 	}
 
+	@Override
+	protected void onBeforeStore(EM em, Room obj) {
+		if (obj.lastModified == null)
+			obj.lastModified = new Date();
+	}
 }

@@ -52,7 +52,7 @@ public class HmcDataSource extends DataSourceImpl<Hmc> {
 	}
 
 	public Hmc getCreateHmc(EM em, HmcType hmcType, String hmcSerialNumber) {
-		Hmc hmc = getHmc(em, hmcSerialNumber);
+		Hmc hmc = getBySerNum(em, hmcSerialNumber);
 		if (hmc != null)
 			return hmc;
 
@@ -65,7 +65,7 @@ public class HmcDataSource extends DataSourceImpl<Hmc> {
 		return hmc;
 	}
 
-	public Hmc getHmc(EM em, String hmcSerialNumber) {
+	public Hmc getBySerNum(EM em, String hmcSerialNumber) {
 		Hmc hmc = Database2.select(em.em, Hmc.class).whereEQ("serialNumber", hmcSerialNumber).getResultStream().findFirst()
 				.orElse(null);
 		return hmc;

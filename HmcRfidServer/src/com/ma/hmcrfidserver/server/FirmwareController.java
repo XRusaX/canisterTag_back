@@ -1,6 +1,7 @@
 package com.ma.hmcrfidserver.server;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -55,7 +56,7 @@ public class FirmwareController {
 		if (!authComponent.getUser().hasPermission(UserData.PERMISSION_SETTINGS))
 			return "failure";
 
-		File dir = new File(getOutputDir(), line);
+		File dir = new File(getFirmwareDir(), line);
 		dir.mkdirs();
 		FileUtils.cleanDirectory(dir);
 
@@ -76,7 +77,7 @@ public class FirmwareController {
 	@ResponseBody
 	@GetMapping(value = "/firmware/version")
 	public String handleVersion(@RequestParam("line") String line) throws IOException {
-		File dir = new File(getOutputDir(), line);
+		File dir = new File(getFirmwareDir(), line);
 		String[] files = dir.list();
 		return files[0];
 	}
@@ -86,7 +87,7 @@ public class FirmwareController {
 	public ResponseEntity<InputStreamResource> handleFileDownload(@RequestParam("line") String line)
 			throws IOException {
 
-		File dir = new File(getOutputDir(), line);
+		File dir = new File(getFirmwareDir(), line);
 		String[] files = dir.list();
 
 		File file = new File(dir, files[0]);
@@ -102,18 +103,27 @@ public class FirmwareController {
 				.body(resource);
 	}
 
-	protected File getOutputDir() {
+	private File getFirmwareDir() {
 		return new File(workingDir.getWorkingDir(), "firmware");
 	}
 
 	public Map<String, String> getFirmwareList() {
+
+		File[] dirs = getFirmwareDir().listFiles((FileFilter) pathname -> pathname.isDirectory());
+
 		Map<String, String> res = new LinkedHashMap<>();
-		for (HmcType line : HmcType.values()) {
-			File dir = new File(getOutputDir(), line.name());
+		for (File dir : dirs) {
 			String[] files = dir.list();
 			if (files != null && files.length > 0)
-				res.put(line.name(), files[0]);
+				res.put(dir.getName(), files[0]);
 		}
+
+		// for (HmcType line : HmcType.values()) {
+		// File dir = new File(getFirmwareDir(), line.name());
+		// String[] files = dir.list();
+		// if (files != null && files.length > 0)
+		// res.put(line.name(), files[0]);
+		// }
 		return res;
 	}
 }

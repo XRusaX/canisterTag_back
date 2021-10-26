@@ -2,11 +2,13 @@ package com.ma.hmcrfidserver.server;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
 import com.ma.appcommon.UserService;
 import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.rpc.RpcController;
@@ -71,9 +73,11 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 				e.printStackTrace();
 			}
 		});
+		
+		AtomicLong id = new AtomicLong();
+		
 		database.execVoid(em -> {
 			try {
-
 				userService.addUser("admin", AuthUtils.getPwdHash("admin", "admin"),
 						Arrays.asList(UserData.PERMISSIONS_ALL), null, null);
 
@@ -84,8 +88,9 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 
 				Company canisterCompany = new Company("завод1", CompanyType.CANISTER, "addr", "contacts", 10);
 				companyDataSource.store(em, canisterCompany);
-//				canisterCompany = companyDataSource.load(em, canisterCompanyID);
-				
+				// canisterCompany = companyDataSource.load(em,
+				// canisterCompanyID);
+
 				UserData user_u1 = userService.addUser("u1", AuthUtils.getPwdHash("u1", "p1"),
 						Arrays.asList(Permissions.PERMISSION_WRITE_RFID), null, canisterCompany.id);
 
@@ -93,6 +98,7 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 
 				Quota q = new Quota(user_u1.name, canisterCompany, agent, 3000, 10000);
 				quotaDataSource.store(em, q);
+				id.set(q.id);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -119,7 +125,7 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 	@Override
 	public void createHmc(HmcType hmcType, String serialNum, String companyName) throws IOException {
 		database.execVoid(em -> {
-			Company company = companyDataSource.getByName(em, companyName);
+			Company company = companyName == null ? null : companyDataSource.getByName(em, companyName);
 			Hmc hmc = new Hmc(hmcType, serialNum, company);
 			hmcDataSource.store(em, hmc);
 		});

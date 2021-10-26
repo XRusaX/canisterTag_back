@@ -35,7 +35,7 @@ public class ReportDataSource extends DataSourceImpl<Report> {
 	}
 
 	public Report getLastReport(EM em, String serNum) {
-		Hmc hmc = hmcDataSource.getHmc(em, serNum);
+		Hmc hmc = hmcDataSource.getBySerNum(em, serNum);
 		if (hmc == null)
 			return null;
 		Report report = getLastReport(em, hmc);
