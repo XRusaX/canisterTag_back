@@ -5,11 +5,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
@@ -34,18 +38,19 @@ public class FirmwarePage extends Composite {
 		@Override
 		public void requestSuggestions(Request request, Callback callback) {
 			List<Suggestion> suggestions = new ArrayList<>();
-			types.forEach(t -> suggestions.add(new Suggestion() {
+			if (types != null)
+				types.forEach(t -> suggestions.add(new Suggestion() {
 
-				@Override
-				public String getReplacementString() {
-					return t;
-				}
+					@Override
+					public String getReplacementString() {
+						return t;
+					}
 
-				@Override
-				public String getDisplayString() {
-					return t;
-				}
-			}));
+					@Override
+					public String getDisplayString() {
+						return t;
+					}
+				}));
 
 			callback.onSuggestionsReady(request, new Response(suggestions));
 		}
@@ -71,17 +76,22 @@ public class FirmwarePage extends Composite {
 
 	private void updateList() {
 
-		hmcService.getFirmwareList(new AlertAsyncCallback<>(list -> {
-			types = list.keySet().stream().collect(Collectors.toList());
-		}));
-
 		propertiesPanel.removeAllRows();
 		hmcService.getFirmwareList(new AlertAsyncCallback<>(map -> {
 			map.forEach((line, value) -> {
-				propertiesPanel.add(line, new Anchor(value, getUrl(line)));
-			});
-		}));
+				HorPanel horPanel = new HorPanel(new Anchor(value, getUrl(line)));
+				horPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+				horPanel.add1(new Button("x", (ClickHandler) event -> {
+					if (Window.confirm("Удалить прошивку?"))
+						hmcService.removeFirmware(line, new AlertAsyncCallback<>(v -> updateList()));
+				}));
+				horPanel.setWidth("15em");
 
+				propertiesPanel.add(line, horPanel);
+			});
+
+			types = map.keySet().stream().collect(Collectors.toList());
+		}));
 	}
 
 	private static String getUrl(String line) {

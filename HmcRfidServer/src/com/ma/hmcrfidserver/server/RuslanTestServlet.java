@@ -1,10 +1,11 @@
-package com.ma.hmcapp.servlet;
+package com.ma.hmcrfidserver.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.ma.appcommon.SpringServlet;
 
-//@WebServlet("/hmcrfidserver/test")
+@WebServlet("/test")
 @SuppressWarnings("serial")
 public class RuslanTestServlet extends SpringServlet {
 

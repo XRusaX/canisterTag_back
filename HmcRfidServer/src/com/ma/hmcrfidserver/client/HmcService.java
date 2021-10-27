@@ -8,7 +8,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.ma.commonui.shared.cd.CDObject;
 
-@RemoteServiceRelativePath("hmc")
+@RemoteServiceRelativePath("gwt/hmc")
 public interface HmcService extends RemoteService {
 
 	void saveRoomCells(List<CDObject> list, long companyId) throws Exception;
@@ -17,5 +17,7 @@ public interface HmcService extends RemoteService {
 
 	void addUserCompany(String newCompanyName, String adminName, String adminPasswordHash, String adminEmail)
 			throws IOException;
+
+	void removeFirmware(String type);
 
 }

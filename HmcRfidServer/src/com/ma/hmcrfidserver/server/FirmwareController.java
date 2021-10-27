@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ma.appcommon.AuthComponent;
-import com.ma.appcommon.MsgLogger;
 import com.ma.appcommon.ThreadLocalRequest;
 import com.ma.appcommon.WorkingDir;
+import com.ma.appcommon.logger.MsgLoggerImpl;
 import com.ma.appcommon.shared.auth.UserData;
 import com.ma.common.shared.Severity;
 
@@ -36,7 +36,7 @@ import com.ma.common.shared.Severity;
 public class FirmwareController {
 
 	@Autowired
-	private MsgLogger msgLogger;
+	private MsgLoggerImpl msgLogger;
 
 	@Autowired
 	private WorkingDir workingDir;
@@ -124,5 +124,9 @@ public class FirmwareController {
 		// res.put(line.name(), files[0]);
 		// }
 		return res;
+	}
+
+	public void removeFirmware(String type) throws IOException {
+		FileUtils.deleteDirectory(new File(getFirmwareDir(), type));
 	}
 }

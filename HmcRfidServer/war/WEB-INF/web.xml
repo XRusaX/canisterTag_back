@@ -9,57 +9,32 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
+	<!-- ========================================================================================== -->
 	<servlet>
-		<servlet-name>appService</servlet-name>
-		<servlet-class>com.ma.common.gwtapp.server.AppServiceImpl</servlet-class>
+		<servlet-name>app</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value></param-value>
+		</init-param>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>appService</servlet-name>
-		<url-pattern>/hmcrfidserver/application</url-pattern>
-	</servlet-mapping>
 
-	<servlet>
-		<servlet-name>loginService</servlet-name>
-		<servlet-class>com.ma.common.gwtapp.server.LoginServiceImpl</servlet-class>
-	</servlet>
 	<servlet-mapping>
-		<servlet-name>loginService</servlet-name>
-		<url-pattern>/hmcrfidserver/login</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>commomdataService</servlet-name>
-		<servlet-class>com.ma.common.gwtapp.server.CommonDataServiceImpl2</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>commomdataService</servlet-name>
-		<url-pattern>/hmcrfidserver/commonData</url-pattern>
+		<servlet-name>app</servlet-name>
+		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
 
 
+	<!-- ========================================================================================== -->
 	<servlet>
-		<servlet-name>RuslanTest</servlet-name>
-		<servlet-class>com.ma.hmcapp.servlet.RuslanTestServlet</servlet-class>
+		<servlet-name>springGwtRemoteServiceServlet</servlet-name>
+		<servlet-class>com.ma.common.gwtapp.server.SpringGwtRemoteServiceServlet</servlet-class>
 	</servlet>
+
 	<servlet-mapping>
-		<servlet-name>RuslanTest</servlet-name>
-		<url-pattern>/test</url-pattern>
+		<servlet-name>springGwtRemoteServiceServlet</servlet-name>
+		<url-pattern>/hmcrfidserver/gwt/*</url-pattern>
 	</servlet-mapping>
-
-	<servlet>
-        <servlet-name>app</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value></param-value>
-        </init-param>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>app</servlet-name>
-        <url-pattern>/api/*</url-pattern>
-    </servlet-mapping>
-    
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
