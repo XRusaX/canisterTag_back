@@ -85,7 +85,7 @@ public class FirmwarePage extends Composite {
 					if (Window.confirm("Удалить прошивку?"))
 						hmcService.removeFirmware(line, new AlertAsyncCallback<>(v -> updateList()));
 				}));
-				horPanel.setWidth("15em");
+				horPanel.setWidth("20em");
 
 				propertiesPanel.add(line, horPanel);
 			});

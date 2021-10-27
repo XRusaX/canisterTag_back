@@ -1,4 +1,4 @@
-package com.ma.hmcrfidserver.server;
+package com.ma.hmcapp.servlet;
 
 import java.io.IOException;
 import java.util.Arrays;

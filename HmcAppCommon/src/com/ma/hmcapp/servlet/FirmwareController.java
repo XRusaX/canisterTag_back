@@ -1,4 +1,4 @@
-package com.ma.hmcrfidserver.server;
+package com.ma.hmcapp.servlet;
 
 import java.io.File;
 import java.io.FileFilter;

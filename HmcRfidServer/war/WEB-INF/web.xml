@@ -33,7 +33,7 @@
 
 	<servlet-mapping>
 		<servlet-name>springGwtRemoteServiceServlet</servlet-name>
-		<url-pattern>/hmcrfidserver/gwt/*</url-pattern>
+		<url-pattern>/hmcrfidserver/gwtservice/*</url-pattern>
 	</servlet-mapping>
 
 	<!-- Default page to serve -->
