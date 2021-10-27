@@ -6,7 +6,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 

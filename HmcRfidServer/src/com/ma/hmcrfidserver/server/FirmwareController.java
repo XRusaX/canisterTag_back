@@ -25,13 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ma.appcommon.AuthImpl;
+import com.ma.appcommon.AuthComponent;
 import com.ma.appcommon.MsgLogger;
 import com.ma.appcommon.ThreadLocalRequest;
 import com.ma.appcommon.WorkingDir;
 import com.ma.appcommon.shared.auth.UserData;
 import com.ma.common.shared.Severity;
-import com.ma.hmc.iface.shared.HmcType;
 
 @RestController
 public class FirmwareController {
@@ -43,7 +42,7 @@ public class FirmwareController {
 	private WorkingDir workingDir;
 
 	@Autowired
-	private AuthImpl authComponent;
+	private AuthComponent authComponent;
 
 	@Autowired
 	private ThreadLocalRequest threadLocalRequest;

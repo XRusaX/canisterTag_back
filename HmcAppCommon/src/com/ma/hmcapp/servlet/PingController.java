@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.ma.appcommon.db.Database2;
-import com.ma.appcommon.logger.MsgLoggerImpl;
 import com.ma.hmc.iface.ping.HmcPing;
 import com.ma.hmc.iface.ping.HmcPingResponse;
 import com.ma.hmcapp.datasource.HmcDataSource;
@@ -24,7 +23,7 @@ import com.ma.hmcapp.datasource.OperatorDataSource;
 import com.ma.hmcapp.datasource.RoomDataSource;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.Operator;
-
+	
 @RestController
 public class PingController {
 

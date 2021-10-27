@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 import com.ma.appcommon.UserService;
 import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.rpc.RpcController;

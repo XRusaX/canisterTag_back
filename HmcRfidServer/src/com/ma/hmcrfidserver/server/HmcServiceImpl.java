@@ -11,8 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ma.appcommon.CommonDataImpl;
 import com.ma.appcommon.UserService;
+import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.shared.auth.UserData;
 import com.ma.common.gwtapp.server.SpringRemoteServiceServlet;
@@ -45,7 +45,7 @@ public class HmcServiceImpl extends SpringRemoteServiceServlet implements HmcSer
 	private CompanyDataSource companyDataSource;
 
 	@Autowired
-	private CommonDataImpl commonDataImpl;
+	private CommonData commonDataImpl;
 
 	@Override
 	public void saveRoomCells(List<CDObject> list, long companyId) throws Exception {

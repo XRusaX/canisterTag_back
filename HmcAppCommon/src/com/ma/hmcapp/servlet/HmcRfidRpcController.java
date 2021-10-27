@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ma.appcommon.AuthImpl;
-import com.ma.appcommon.ThreadLocalRequest;
+import com.ma.appcommon.AuthComponent;
 import com.ma.appcommon.connection.ConnectionStatusModule;
 import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.logger.MsgLoggerImpl;
@@ -42,16 +41,13 @@ import com.ma.hmcdb.shared.rfid.RfidLabel;
 public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInterface {
 
 	@Autowired
-	private ThreadLocalRequest threadLocalRequest;
-
-	@Autowired
 	private Sig sig;
 
 	@Autowired
 	private Database2 database;
 
 	@Autowired
-	private AuthImpl authComponent;
+	private AuthComponent authComponent;
 
 	@Autowired
 	private MsgLoggerImpl msgLogger;

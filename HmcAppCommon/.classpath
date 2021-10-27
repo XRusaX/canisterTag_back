@@ -13,7 +13,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/AppCommon"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/AppCommonApi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/HmcDatabase"/>
 	<classpathentry kind="lib" path="/Libs/gwt-2.8.2/gwt-user.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>

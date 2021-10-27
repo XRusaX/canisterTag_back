@@ -21,7 +21,7 @@ import com.ma.common.gwtapp.client.ui.dialog.OkCancelDialogBox;
 public class LoginPanel extends LoginPageBase {
 	private final Constants constants = GWT.create(Constants.class);
 
-	private final Label errorMesasgeLabel = new Label();
+	//private final Label errorMesasgeLabel = new Label();
 	private TextBox loginTextField = new TextBox();
 	private PasswordTextBox passwordTextField = new PasswordTextBox();
 

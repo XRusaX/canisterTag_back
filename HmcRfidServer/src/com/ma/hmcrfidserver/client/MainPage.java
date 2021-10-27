@@ -4,12 +4,9 @@ import java.util.Arrays;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.AppConfig;
 import com.ma.appcommon.shared.AppState;
 import com.ma.appcommon.shared.auth.UserData;
@@ -102,13 +99,13 @@ public class MainPage extends AppMainPage {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new Label(), 5);
 			
-			HmcFlowList testFlowList = new HmcFlowList() {
-				@Override
-				void showReports() {
-					if (Login.user.company != null)
-						tabPanel.selectTab(reportsTab.getParent());
-				}
-			};
+//			HmcFlowList testFlowList = new HmcFlowList() {
+//				@Override
+//				void showReports() {
+//					if (Login.user.company != null)
+//						tabPanel.selectTab(reportsTab.getParent());
+//				}
+//			};
 			
 			panel.addW(new CommonListPanelWrapper(new HmcFlowList() {
 				@Override
