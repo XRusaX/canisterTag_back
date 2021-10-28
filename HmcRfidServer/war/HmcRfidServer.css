@@ -483,10 +483,6 @@ h1 {
     /*margin-top: -5rem;*/
 }
 
-.watchList {
-    text-transform: uppercase;
-}
-
 .button {
     display: inline-block;
     border-radius: 4px;
