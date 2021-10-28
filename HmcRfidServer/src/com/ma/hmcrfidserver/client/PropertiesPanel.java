@@ -8,57 +8,104 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.Filter;
+import com.ma.common.gwtapp.client.AlertAsyncCallback;
+import com.ma.common.gwtapp.client.commondata.CommonDataService;
+import com.ma.common.gwtapp.client.commondata.CommonDataServiceAsync;
 import com.ma.common.gwtapp.client.commondata.SelChangeEvent;
 import com.ma.common.gwtapp.client.commonui.GwtUIBuilder;
+import com.ma.common.gwtapp.client.ui.panel.HorPanel;
 import com.ma.common.shared.eventbus.EventBus;
 import com.ma.commonui.shared.cd.CDClass;
 import com.ma.commonui.shared.cd.CDObject;
 import com.ma.commonui.shared.cd.ObjectEditor;
 import com.ma.hmcdb.shared.Hmc;
 
-public class PropertiesPanel extends VerticalPanel {
+public class PropertiesPanel extends VerticalPanel{
 	private CDClass cdClass;
 	public final Filter filter = new Filter();
 	private Widget propPanel;
+	private boolean editable;
+	private final CommonDataServiceAsync service = GWT.create(CommonDataService.class);
 
 	public PropertiesPanel(EventBus eventBus) {
+		FontAwesomeBundle.INSTANCE.fontAwesome().ensureInjected();
 		eventBus.registerListener(SelChangeEvent.class, sce -> {
-//			CDObject refId = sce.selectedSet.size() == 1 ? sce.selectedSet.iterator().next() : null;
-//			cdClass.fields.forEach((n, v) -> {
-//			 GWT.log("field " + n);
 			clear();
 			if (sce.clazz.getName().equals(Hmc.class.getName()) && sce.selectedSet.size() == 1) {
-//					if (refId != null) {
 				GWT.log("hmc selected");
-//				setWidget(refreshPanel());
 				cdClass = sce.cdClass;
 				ObjectEditor objectEditor = new ObjectEditor(new GwtUIBuilder()) {
 					@Override
 					protected void getLookup(String className, Consumer<List<CDObject>> asyncCallback) {
 					}
-				}.create(cdClass);
+				}.create(cdClass, !editable);
 				objectEditor.toUI(sce.selectedSet.iterator().next());
 				propPanel = (Widget) objectEditor.asPlatfomWidget();
 				propPanel.getElement().getStyle().setMargin(20, Unit.PX);
 				propPanel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 				VerticalPanel container = new VerticalPanel();
-//				Button editButton = new Button("edit");
-				DivButtonWithText editButton = new DivButtonWithText("");
-				editButton.addClickHandler(new ClickHandler() {
+
+				Button editModeBtn = new Button();
+				editModeBtn.setTitle("Редактировать");
+				editModeBtn.addClickHandler(new ClickHandler() {
 
 					@Override
 					public void onClick(ClickEvent event) {
-						Window.alert("HELLO");
+						editable = !editable;
+						objectEditor.setRO(!editable);
 					}
+
 				});
-				editButton.setStyleName("button");
+
+				Button okBtn = new Button("OK");
+				okBtn.addClickHandler(new ClickHandler() {
+
+					@Override
+					public void onClick(ClickEvent event) {
+						service.store(cdClass.name, objectEditor.fromUI(), new AlertAsyncCallback<>(v -> {
+						}));
+						objectEditor.setRO(true);
+					}
+
+				});
+
+				Button cancelBtn = new Button("ОТМЕНА");
+				cancelBtn.addClickHandler(new ClickHandler() {
+
+					@Override
+					public void onClick(ClickEvent event) {
+
+					}
+
+				});
+
+				HorPanel editButtonContainerPanel = new HorPanel();
+				editButtonContainerPanel.setSp(2);
+				editButtonContainerPanel.setWidth("100%");
+				editButtonContainerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+				editModeBtn.setStyleName("button-edit");
+				editButtonContainerPanel.add(editModeBtn);
+
+				HorPanel okCancelContainerPanel = new HorPanel();
+				okCancelContainerPanel.setWidth("100%");
+				okCancelContainerPanel.setSpacing(0);
+				okCancelContainerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+				okBtn.setStyleName("button-ok");
+				cancelBtn.setStyleName("button-cancel");
+				okCancelContainerPanel.add(cancelBtn);
+				okCancelContainerPanel.add(okBtn);
+				okBtn.setWidth("85px");
+
+				container.add(editButtonContainerPanel);
 				container.add(propPanel);
-				container.add(editButton);
-				container.setCellHorizontalAlignment(editButton, ALIGN_RIGHT);
+				container.add(okCancelContainerPanel);
+//				container.add(editButton);
+
 				container.setStyleName("prop-panel");
 //				setWidget(container);
 				add(container);
