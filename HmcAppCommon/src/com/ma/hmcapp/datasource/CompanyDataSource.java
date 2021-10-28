@@ -5,8 +5,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ma.appcommon.CommonDataImpl;
-import com.ma.appcommon.DataSourceImpl;
+import com.ma.appcommon.datasource.CommonData;
+import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
 import com.ma.hmcdb.shared.Company;
@@ -18,7 +18,7 @@ public class CompanyDataSource extends DataSourceImpl<Company> {
 	private Database2 database;
 
 	@Autowired
-	private CommonDataImpl commonDataImpl;
+	private CommonData commonDataImpl;
 
 	@PostConstruct
 	private void init() {

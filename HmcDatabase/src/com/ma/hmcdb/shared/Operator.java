@@ -28,7 +28,11 @@ public class Operator {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
-	public Date lastModified;
+	@UILabel(label = "Removed")
+	public Boolean removed;
+
+	public Date modifTime;
+	public Date storeTime;
 
 	public Operator() {
 	}

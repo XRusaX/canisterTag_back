@@ -255,7 +255,7 @@ public class MapPanel extends ResizeComposite {
 
 				if (companyId != null) {
 					Filter filter = new Filter();
-					filter.stringMap.put("company", "" + companyId);
+					filter.addEQ("company", "" + companyId);
 
 					service.loadRange(Room.class.getName(), filter, null, new AlertAsyncCallback<>(list -> {
 						rooms = new HashMap<>();

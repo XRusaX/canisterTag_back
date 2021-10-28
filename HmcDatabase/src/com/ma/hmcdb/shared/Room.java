@@ -1,5 +1,7 @@
 package com.ma.hmcdb.shared;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,6 +30,8 @@ public class Room {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
+
+	public Date lastModified;
 
 	public Room() {
 	}

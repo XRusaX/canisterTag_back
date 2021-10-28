@@ -1,7 +1,5 @@
 package com.ma.hmcrfidserver.client;
 
-import java.text.DecimalFormat;
-
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;

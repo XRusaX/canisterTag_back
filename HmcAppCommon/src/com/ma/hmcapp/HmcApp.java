@@ -1,15 +1,11 @@
 package com.ma.hmcapp;
 
-import javax.servlet.annotation.WebServlet;
-
 import org.springframework.stereotype.Component;
 
-import com.ma.appcommon.AppImpl;
+import com.ma.appcommon.App;
 
-@SuppressWarnings("serial")
 @Component
-@WebServlet("/app")
-public class HmcApp extends AppImpl {
+public class HmcApp extends App {
 	public HmcApp() {
 		super("HMC", true);
 	}

@@ -6,28 +6,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.servlet.annotation.WebServlet;
-
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.ma.appcommon.CommonDataImpl;
 import com.ma.appcommon.UserService;
+import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.shared.auth.UserData;
-import com.ma.common.gwtapp.server.SpringRemoteServiceServlet;
 import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmcapp.datasource.CompanyDataSource;
 import com.ma.hmcapp.datasource.RoomCellDataSource;
+import com.ma.hmcapp.servlet.FirmwareController;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Company.CompanyType;
 import com.ma.hmcdb.shared.Permissions;
 import com.ma.hmcdb.shared.RoomCell;
 import com.ma.hmcrfidserver.client.HmcService;
 
-@SuppressWarnings("serial")
-@WebServlet("/hmcrfidserver/hmc")
-public class HmcServiceImpl extends SpringRemoteServiceServlet implements HmcService {
+@Service("hmc")
+public class HmcServiceImpl implements HmcService {
 
 	@Autowired
 	private UserService userService;
@@ -45,7 +43,7 @@ public class HmcServiceImpl extends SpringRemoteServiceServlet implements HmcSer
 	private CompanyDataSource companyDataSource;
 
 	@Autowired
-	private CommonDataImpl commonDataImpl;
+	private CommonData commonDataImpl;
 
 	@Override
 	public void saveRoomCells(List<CDObject> list, long companyId) throws Exception {
@@ -87,5 +85,14 @@ public class HmcServiceImpl extends SpringRemoteServiceServlet implements HmcSer
 				throw new RuntimeException("Пользователь с таким именем уже существует");
 			}
 		});
+	}
+
+	@Override
+	public void removeFirmware(String type) {
+		try {
+			firmwareController.removeFirmware(type);
+		} catch (IOException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 }
