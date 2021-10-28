@@ -106,7 +106,6 @@ public class MainPage extends AppMainPage {
 
 			PropertiesPanel myTestPanel = new PropertiesPanel(eventBus);
 
-			panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(new HmcFlowList() {
 				@Override
 				void showReports() {
