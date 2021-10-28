@@ -9,18 +9,18 @@ public interface MyDataGridResources extends DataGrid.Resources {
 	};
 	
 	@MimeType("application/font-sfnt") // use appropriate mime type depending on font file format
-	@Source("/resources/OpenSans-Regular.ttf")
+	@Source("/resources/fonts/OpenSans-Regular.ttf")
 	DataResource openSansRegularTtf(); 
 	
 	@MimeType("application/font-sfnt") // use appropriate mime type depending on font file format
-	@Source("/resources/Montserrat-Regular.ttf")
+	@Source("/resources/fonts/Montserrat-Regular.ttf")
 	DataResource montserratRegularTtf(); 
 
 	@MimeType("application/font-sfnt") // use appropriate mime type depending on font file format
-	@Source("/resources/Roboto-Regular.ttf")
+	@Source("/resources/fonts/Roboto-Regular.ttf")
 	DataResource robotoRegularTtf(); 
 	
 	@Override
-	@Source({ "/resources/MyDataGrid.css" })
+	@Source({ "/resources/css/MyDataGrid.css" })
 	DataGridStyle dataGridStyle();
 };
