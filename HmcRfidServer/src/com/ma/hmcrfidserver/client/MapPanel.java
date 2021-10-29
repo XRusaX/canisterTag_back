@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -30,6 +29,7 @@ import com.ma.common.gwtapp.client.ui.canvas.CanvasAdapter;
 import com.ma.common.gwtapp.client.ui.panel.HorPanel;
 import com.ma.common.gwtapp.client.ui.panel.LayoutHeaderPanel;
 import com.ma.common.shared.canvas.PaintTarget;
+import com.ma.common.shared.canvas.XY;
 import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Room;
@@ -52,11 +52,13 @@ public class MapPanel extends ResizeComposite {
 	}
 
 	public P getPos(CDObject t) {
-		return new P(t.getInt("x"), t.getInt("y"));
-	}
+		Integer x = t.getInt("x");
+		Integer y = t.getInt("y");
 
-	public boolean isWall(CDObject t) {
-		return t.getLong("room") == null;
+		if (x == null || y == null)
+			return null;
+
+		return new P(x, y);
 	}
 
 	private Timer checkTimer = new Timer() {
@@ -90,13 +92,13 @@ public class MapPanel extends ResizeComposite {
 	private GEditor<CDObject> gEditor = new GEditor<CDObject>(CELL_SIZE, data) {
 
 		protected String getColor(CDObject t) {
-			Long roomId = t.getLong("room");
-			if (roomId != null) {
-				if (editMode && rooms != null && rooms.get(roomId) != null)
-					return rooms.get(roomId).get("color");
-				else
-					return "yellow";
-			}
+			// Long roomId = t.getLong("room");
+			// if (roomId != null) {
+			// if (editMode && rooms != null && rooms.get(roomId) != null)
+			// return rooms.get(roomId).get("color");
+			// else
+			// return "yellow";
+			// }
 
 			String wt = t.get("wallType");
 			if (wt != null) {
@@ -117,28 +119,84 @@ public class MapPanel extends ResizeComposite {
 			return editMode;
 		}
 
-		protected boolean isSelected(CDObject t) {
-			Long roomId = t.getLong("room");
-			return roomId != null && MapPanel.this.room != null && Objects.equals(MapPanel.this.room.getId(), roomId);
-		}
-
 		@Override
 		protected void drawCell(PaintTarget paintTarget, P pos, CDObject cell) {
 			paintTarget.setColor(getColor(cell));
 			paintTarget.fillRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+		}
 
-			if (isSelected(cell)) {
-				paintTarget.setColor("black");
-				paintTarget.drawRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-			}
+		@Override
+		public void draw(PaintTarget paintTarget) {
+			if (rooms != null) {
+				Set<P> textPositions = new HashSet<>();
+				
+				rooms.values().forEach(r -> {
+					P textPos = getTextPos(r);
+					if (textPos == null)
+						return;
 
-			if (errRooms.contains(cell.getLong("room"))) {
-				paintTarget.setColor("black");
-				paintTarget.drawRect(pos.x * CELL_SIZE + 4, pos.y * CELL_SIZE + 4, CELL_SIZE - 8, CELL_SIZE - 8);
+					while(textPositions.contains(textPos))
+						textPos = new P(textPos.x, textPos.y+1);
+					
+					textPositions.add(textPos);
+					
+					
+					paintTarget.setColor(errRooms.contains(r.getId()) ? "red" : "black");
+
+					if (room != null && Objects.equals(room.getId(), r.getId()))
+						paintTarget.setFontSize(CELL_SIZE * 3 / 2);
+					else
+						paintTarget.setFontSize(CELL_SIZE);
+
+					String roomName = r.get("name");
+					XY stringBounds = paintTarget.getStringBounds(roomName);
+					paintTarget.drawString(roomName, textPos.x * CELL_SIZE - stringBounds.x / 2,
+							textPos.y * CELL_SIZE - stringBounds.y / 2);
+				});
 			}
+			super.draw(paintTarget);
 		}
 
 	};
+
+	private P getTextPos(CDObject room) {
+		Integer x = room.getInt("x");
+		Integer y = room.getInt("y");
+
+		if (x == null || y == null)
+			return null;
+
+		P cellPos = new P(x, y);
+
+		P massCenter2 = getMassCenter(cellPos);
+		if (massCenter2 != null)
+			cellPos = new P(massCenter2.x, massCenter2.y + 1);
+
+		return cellPos;
+	}
+
+	private Set<P> getArea(P p) {
+		Map<P, CDObject> map = new HashMap<>();
+		data.forEach((p1, cell) -> map.put(p1, cell));
+		Rect bounds = data.getBounds();
+		Rect bounds1 = new Rect(bounds.x0 + 1, bounds.y0 + 1, bounds.x1 - 1, bounds.y1 - 1);
+
+		Set<P> setToFill = Utils.findFilledArea(p, bounds, p1 -> {
+			CDObject cell = map.get(p1);
+			return cell == null;
+		});
+
+		if (!setToFill.isEmpty() && setToFill.stream().allMatch(p1 -> bounds1.inside(p1)))
+			return setToFill;
+		return null;
+	}
+
+	private P getMassCenter(P p) {
+		Set<P> area = getArea(p);
+		if (area == null)
+			return null;
+		return P.massCenter(area);
+	}
 
 	private ToggleButton editButton = new ToggleButton("Редактировать", new ClickHandler() {
 		@Override
@@ -166,19 +224,19 @@ public class MapPanel extends ResizeComposite {
 
 	private Button wallButton = new Button("Стена", (ClickHandler) event -> {
 		data.markUndo();
-		gEditor.getSel().foreach(p -> data.replace(p, newCell(p, null, null)));
+		gEditor.getSel().foreach(p -> data.replace(p, newCell(p, null)));
 		gEditor.invalidate();
 	});
 
 	private Button doorButton = new Button("Дверь", (ClickHandler) event -> {
 		data.markUndo();
-		gEditor.getSel().foreach(p -> data.replace(p, newCell(p, null, WallType.DOOR)));
+		gEditor.getSel().foreach(p -> data.replace(p, newCell(p, WallType.DOOR)));
 		gEditor.invalidate();
 	});
 
 	private Button windowButton = new Button("Окно", (ClickHandler) event -> {
 		data.markUndo();
-		gEditor.getSel().foreach(p -> data.replace(p, newCell(p, null, WallType.WINDOW)));
+		gEditor.getSel().foreach(p -> data.replace(p, newCell(p, WallType.WINDOW)));
 		gEditor.invalidate();
 	});
 
@@ -203,27 +261,17 @@ public class MapPanel extends ResizeComposite {
 			protected void prepareContextMenu(ContextMenu menu, int x, int y, Runnable onPrepared) {
 				menu.addItem("<<", () -> gEditor.undo());
 				menu.addItem(">>", () -> gEditor.redo());
+				P cellPos = gEditor.getCellPos(x, y);
+				Set<P> area = getArea(cellPos);
 
-				Map<P, CDObject> map = new HashMap<>();
-				data.forEach((p, t) -> map.put(p, t));
-
-				Rect bounds = data.getBounds();
-				Set<P> setToFill = Utils.findFilledArea(gEditor.getCellPos(x, y), bounds, p -> {
-					CDObject object = map.get(p);
-					return object == null || object.getLong("room") != null;
-				});
-
-				Rect bounds1 = new Rect(bounds.x0 + 1, bounds.y0 + 1, bounds.x1 - 1, bounds.y1 - 1);
-
-				if (!setToFill.isEmpty() && setToFill.stream().allMatch(p -> bounds1.inside(p))) {
+				if (area != null && !area.isEmpty()) {
 					menu.addSeparator();
 					rooms.values().forEach(room -> {
 						menu.addItem(room.get("name"), () -> {
-							data.markUndo();
-							setToFill.forEach(pos -> {
-								data.replace(pos, newCell(pos, room.getId(), null));
-							});
-							gEditor.invalidate();
+							room.set("x", cellPos.x);
+							room.set("y", cellPos.y);
+							service.store(Room.class.getName(), room,
+									new AlertAsyncCallback<>(v -> gEditor.invalidate()));
 						});
 					});
 				}
@@ -282,50 +330,36 @@ public class MapPanel extends ResizeComposite {
 	private void checkFill() {
 		errRooms.clear();
 
-		Set<Long> rooms = new HashSet<>();
-		Set<P> outerArea = new HashSet<>();
-		Set<P> allCells = new HashSet<>();
+		if (rooms != null) {
 
-		Rect bounds = data.getBounds();
-		Rect bounds1 = new Rect(bounds.x0 + 1, bounds.y0 + 1, bounds.x1 - 1, bounds.y1 - 1);
-		bounds.foreach(p -> {
-			if (allCells.contains(p))
-				return;
+			Map<P, Long> map = new HashMap<>();
 
-			Set<P> set = Utils.findFilledArea(p, bounds, p1 -> {
-				CDObject object = data._get(p1);
-				return object == null || object.getLong("room") != null;
+			rooms.values().forEach(r -> {
+				P pos = getPos(r);
+				if (pos == null)
+					return;
+
+				P massCenter = getMassCenter(pos);
+				Long id = r.getId();
+				if (massCenter == null)
+					errRooms.add(id);
+				else {
+					if (map.containsKey(massCenter)) {
+						errRooms.add(id);
+						errRooms.add(map.get(massCenter));
+					} else {
+						map.put(massCenter, id);
+					}
+				}
 			});
-
-			if (set.stream().anyMatch(p1 -> !bounds1.inside(p1))) {
-				set.forEach(p1 -> {
-					CDObject object = data._get(p1);
-					if (object != null && object.getLong("room") != null)
-						errRooms.add(object.getLong("room"));
-				});
-				outerArea.addAll(set);
-			} else if (!set.isEmpty()) {
-				Set<Long> roomsInArea = set.stream().map(p1 -> data._get(p1))
-						.map(o -> o == null ? null : o.getLong("room")).collect(Collectors.toSet());
-				if (roomsInArea.size() != 1)
-					roomsInArea.stream().filter(r -> r != null).forEach(r -> errRooms.add(r));
-				roomsInArea.stream().filter(r -> r != null).forEach(r -> {
-					if (rooms.contains(r))
-						errRooms.add(r);
-					rooms.add(r);
-				});
-			}
-
-			allCells.addAll(set);
-		});
+		}
 
 		gEditor.invalidate();
 	}
 
-	private CDObject newCell(P pos, Long room, WallType wallType) {
+	private CDObject newCell(P pos, WallType wallType) {
 		CDObject cell = new CDObject();
 		cell.set("company", companyId);
-		cell.set("room", room);
 		cell.set("x", pos.x);
 		cell.set("y", pos.y);
 		cell.set("wallType", wallType == null ? null : wallType.name());

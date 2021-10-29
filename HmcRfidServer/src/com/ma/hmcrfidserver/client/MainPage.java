@@ -122,7 +122,7 @@ public class MainPage extends AppMainPage {
 			tabPanel2.add(panel, "Оборудование");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			CommonListPanel roomList = new CommonListPanel(null, 2000, "watchList");
+			CommonListPanel roomList = new CommonListPanel(null, 2000);
 			panel.addW(new CommonListPanelWrapper(roomList, Room.class, eventBus), 30);
 			panel.add(new MapPanel(eventBus));
 			tabPanel2.add(panel, "Помещения");

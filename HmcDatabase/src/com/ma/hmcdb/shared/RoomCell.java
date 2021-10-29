@@ -26,10 +26,6 @@ public class RoomCell {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public RoomLayer layer;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Room room;
-
 	public int x;
 	public int y;
 
@@ -43,10 +39,9 @@ public class RoomCell {
 	public RoomCell() {
 	}
 
-	public RoomCell(Company company, RoomLayer layer, Room room, int x, int y, WallType wallType) {
+	public RoomCell(Company company, RoomLayer layer, int x, int y, WallType wallType) {
 		this.company = company;
 		this.layer = layer;
-		this.room = room;
 		this.x = x;
 		this.y = y;
 		this.wallType = wallType;

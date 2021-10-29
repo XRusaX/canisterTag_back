@@ -23,22 +23,23 @@ public class Room {
 	@UILabel(label = "Название", sortable = true)
 	public String name;
 
-	//@UILabel(label = "Color", sortable = true)
-	public String color;
-
 	@UILabel(label = "Организация", sortable = true, nullable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
+
+	@UILabel(label = "X")
+	public Integer x;
+	@UILabel(label = "Y")
+	public Integer y;
 
 	public Date lastModified;
 
 	public Room() {
 	}
 
-	public Room(String name, String color, Company company) {
+	public Room(String name, Company company) {
 		this.name = name;
-		this.color = color;
 		this.company = company;
 	}
 

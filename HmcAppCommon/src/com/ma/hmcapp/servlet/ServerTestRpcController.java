@@ -13,7 +13,6 @@ import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.rpc.RpcController;
 import com.ma.appcommon.shared.auth.AuthUtils;
 import com.ma.appcommon.shared.auth.UserData;
-import com.ma.common.shared.color.ColorX;
 import com.ma.hmc.iface.servertest.rpcinterface.ServerTestRpcInterface;
 import com.ma.hmc.iface.shared.HmcType;
 import com.ma.hmcapp.datasource.AgentDataSource;
@@ -59,8 +58,6 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 	@Autowired
 	private AgentDataSource agentDataSource;
 
-	private int nextColor;
-
 	@Override
 	public void clear() throws IOException {
 		database.execVoid(em -> {
@@ -72,9 +69,9 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 				e.printStackTrace();
 			}
 		});
-		
+
 		AtomicLong id = new AtomicLong();
-		
+
 		database.execVoid(em -> {
 			try {
 				userService.addUser("admin", AuthUtils.getPwdHash("admin", "admin"),
@@ -134,9 +131,8 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 	public void createRoom(String roomName, String companyName) throws IOException {
 		database.execVoid(em -> {
 			Company company = companyDataSource.getByName(em, companyName);
-			Room room = new Room(roomName, String.format("#%06X", ColorX.contrastColors[nextColor].value), company);
+			Room room = new Room(roomName, company);
 			roomDataSource.store(em, room);
-			nextColor = (nextColor + 1) % ColorX.contrastColors.length;
 		});
 	}
 
