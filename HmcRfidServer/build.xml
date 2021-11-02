@@ -12,7 +12,6 @@
 		<basedir file="../common-java/Chart/src" />
 		<basedir file="../common-java/GwtApp/src" />
 		<basedir file="../common-java/AppCommon/src" />
-		<basedir file="../common-java/AppCommonApi/src" />
 
 		<basedir file="../HmcInterface/src" />
 		<basedir file="../HmcDatabase/src" />

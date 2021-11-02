@@ -42,6 +42,8 @@ public class Company {
 	@UILabel(label = "Размер блока меток", sortable = true)
 	public Integer rfidBlockSize;
 
+//	public byte[] plan;
+	
 	public Company() {
 	}
 

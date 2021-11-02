@@ -14,7 +14,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.mail.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mysql-connector-java-5.1.49.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/AppCommon"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
@@ -23,8 +22,8 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/Libs/validation-api-2.0.1.Final.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/HmcAppCommon"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/HmcDatabase"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/HmcInterface"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CommonUI"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AppCommon"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

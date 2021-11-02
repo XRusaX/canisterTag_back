@@ -19,12 +19,11 @@ import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.ma.appcommon.shared.Filter;
 import com.ma.common.gwtapp.client.AlertAsyncCallback;
+import com.ma.common.gwtapp.client.GwtUtils;
 import com.ma.common.gwtapp.client.commondata.CommonDataService;
 import com.ma.common.gwtapp.client.commondata.CommonDataServiceAsync;
-import com.ma.common.gwtapp.client.commondata.ContextMenuHandlerX;
 import com.ma.common.gwtapp.client.commondata.PageEventBus;
 import com.ma.common.gwtapp.client.commondata.SelChangeEvent;
-import com.ma.common.gwtapp.client.ui.ContextMenu;
 import com.ma.common.gwtapp.client.ui.canvas.CanvasAdapter;
 import com.ma.common.gwtapp.client.ui.panel.HorPanel;
 import com.ma.common.gwtapp.client.ui.panel.LayoutHeaderPanel;
@@ -256,30 +255,27 @@ public class MapPanel extends ResizeComposite {
 
 		CanvasAdapter canvasAdapter = new CanvasAdapter(gEditor);
 
-		new ContextMenuHandlerX(canvasAdapter) {
-			@Override
-			protected void prepareContextMenu(ContextMenu menu, int x, int y, Runnable onPrepared) {
-				menu.addItem("<<", () -> gEditor.undo());
-				menu.addItem(">>", () -> gEditor.redo());
-				P cellPos = gEditor.getCellPos(x, y);
-				Set<P> area = getArea(cellPos);
+		GwtUtils.addContextMenu(canvasAdapter, (menu, x, y, onPrepared) -> {
+			menu.addItem("<<", () -> gEditor.undo());
+			menu.addItem(">>", () -> gEditor.redo());
+			P cellPos = gEditor.getCellPos(x, y);
+			Set<P> area = getArea(cellPos);
 
-				if (area != null && !area.isEmpty()) {
-					menu.addSeparator();
-					rooms.values().forEach(room -> {
-						menu.addItem(room.get("name"), () -> {
-							room.set("x", cellPos.x);
-							room.set("y", cellPos.y);
-							service.store(Room.class.getName(), room,
-									new AlertAsyncCallback<>(v -> gEditor.invalidate()));
-						});
+			if (area != null && !area.isEmpty()) {
+				menu.addSeparator();
+				rooms.values().forEach(room -> {
+					menu.addItem(room.get("name"), () -> {
+						room.set("x", cellPos.x);
+						room.set("y", cellPos.y);
+						service.store(Room.class.getName(), room,
+								new AlertAsyncCallback<>(v -> gEditor.invalidate()));
 					});
-				}
-
-				onPrepared.run();
+				});
 			}
-		};
 
+			onPrepared.run();
+		});
+		
 		initWidget(new LayoutHeaderPanel(new HorPanel(editButton, wallButton, doorButton, windowButton, clearButton)
 				.alignHor(HasAlignment.ALIGN_RIGHT).add(undoButton, redoButton), canvasAdapter));
 

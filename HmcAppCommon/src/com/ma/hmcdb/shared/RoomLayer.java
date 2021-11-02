@@ -1,6 +1,7 @@
 package com.ma.hmcdb.shared;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +26,16 @@ public class RoomLayer {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
+	@Column(length = 10000000)
+	public byte[] image2;
+
 	public RoomLayer() {
+	}
+
+	public RoomLayer(String name, Company company, byte[] image) {
+		this.name = name;
+		this.company = company;
+		this.image2 = image;
 	}
 
 }

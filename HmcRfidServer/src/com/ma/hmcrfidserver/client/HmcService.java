@@ -19,5 +19,4 @@ public interface HmcService extends RemoteService {
 			throws IOException;
 
 	void removeFirmware(String type);
-
 }

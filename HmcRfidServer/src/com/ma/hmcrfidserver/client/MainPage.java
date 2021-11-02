@@ -124,7 +124,7 @@ public class MainPage extends AppMainPage {
 			panel = new DockLayoutPanelX(Unit.PCT);
 			CommonListPanel roomList = new CommonListPanel(null, 2000);
 			panel.addW(new CommonListPanelWrapper(roomList, Room.class, eventBus), 30);
-			panel.add(new MapPanel(eventBus));
+			panel.add(new LayerPanel(eventBus));
 			tabPanel2.add(panel, "Помещения");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
