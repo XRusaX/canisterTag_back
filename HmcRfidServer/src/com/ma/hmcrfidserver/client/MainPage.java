@@ -2,11 +2,12 @@ package com.ma.hmcrfidserver.client;
 
 import java.util.Arrays;
 
+import javax.mail.Quota;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.ma.appcommon.shared.AppConfig;
 import com.ma.appcommon.shared.AppState;
@@ -26,16 +27,15 @@ import com.ma.common.gwtapp.client.connections.ConnectionsPage;
 import com.ma.common.gwtapp.client.logger.LoggerPanel;
 import com.ma.common.gwtapp.client.ui.panel.DockLayoutPanelX;
 import com.ma.common.gwtapp.client.ui.toolbar.StatusBar;
+import com.ma.hmc.iface.boardtest.rpcdata.TestReport;
+import com.ma.hmc.iface.ping.Operator;
+import com.ma.hmc.iface.ping.Room;
 import com.ma.hmcdb.shared.Agent;
 import com.ma.hmcdb.shared.Company.CompanyType;
 import com.ma.hmcdb.shared.Hmc;
-import com.ma.hmcdb.shared.Operator;
 import com.ma.hmcdb.shared.Permissions;
-import com.ma.hmcdb.shared.Room;
-import com.ma.hmcdb.shared.rfid.Quota;
 import com.ma.hmcdb.shared.rfid.Report;
 import com.ma.hmcdb.shared.rfid.RfidLabel;
-import com.ma.hmcdb.shared.test.TestReport;
 
 public class MainPage extends AppMainPage {
 	// private final CommonDataServiceAsync commonDataService =

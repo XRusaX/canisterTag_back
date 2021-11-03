@@ -1,5 +1,7 @@
 package com.ma.hmcrfidserver.client.geditor;
 
+import java.util.Collection;
+
 public class P {
 	public final int x;
 	public final int y;
@@ -22,5 +24,16 @@ public class P {
 			return false;
 		P other = (P) obj;
 		return x == other.x && y == other.y;
+	}
+
+	public static P massCenter(Collection<P> list) {
+		int x = (int) list.stream().mapToInt(p -> p.x).average().orElse(0);
+		int y = (int) list.stream().mapToInt(p -> p.y).average().orElse(0);
+		return new P(x, y);
+	}
+
+	@Override
+	public String toString() {
+		return "[" + x + "," + y + "]";
 	}
 }
