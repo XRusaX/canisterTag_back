@@ -36,7 +36,7 @@ import com.ma.hmcdb.shared.rfid.Report;
 import com.ma.hmcdb.shared.rfid.RfidLabel;
 import com.ma.hmcdb.shared.test.TestReport;
 
-public class MainPage extends AppMainPage {
+public class MainPage  extends AppMainPage {
 	// private final CommonDataServiceAsync commonDataService =
 	// GWT.create(CommonDataService.class);
 	private final AppServiceAsync settingsService = GWT.create(AppService.class);

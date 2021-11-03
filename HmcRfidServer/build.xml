@@ -14,7 +14,6 @@
 		<basedir file="../common-java/AppCommon/src" />
 
 		<basedir file="../HmcInterface/src" />
-		<basedir file="../HmcDatabase/src" />
 		<basedir file="../HmcAppCommon/src" />
 	</multirootfileset>
 
