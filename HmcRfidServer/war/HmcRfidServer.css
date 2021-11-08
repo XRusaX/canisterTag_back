@@ -582,6 +582,10 @@ h1 {
     padding: 5px;
 }
 
+.button-ok:active {
+    transform: scale(0.9);
+}
+
 .button-cancel {
     border-radius: 4px;
     background-color: transparent;
