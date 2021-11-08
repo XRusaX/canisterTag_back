@@ -70,7 +70,7 @@ public class FirmwareController {
 			resp.sendError(HttpServletResponse.SC_FORBIDDEN);
 		}
 
-		return "Success";
+		return "";
 	}
 
 	@ResponseBody

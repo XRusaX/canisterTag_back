@@ -32,9 +32,20 @@ public class FirmwarePage extends Composite {
 		public void onComplete(SubmitCompleteEvent event) {
 			updateList();
 		}
+
+		@Override
+		protected boolean prepareSubmit() {
+			String line = suggestBox.getText();
+			if (line == null || line.isEmpty()) {
+				Window.alert("Версия платы не указана");
+				return false;
+			}
+			setAction(getUrl(line));
+			return true;
+		}
 	};
 
-	private SuggestBox sb = new SuggestBox(new SuggestOracle() {
+	private SuggestBox suggestBox = new SuggestBox(new SuggestOracle() {
 		@Override
 		public void requestSuggestions(Request request, Callback callback) {
 			List<Suggestion> suggestions = new ArrayList<>();
@@ -62,16 +73,15 @@ public class FirmwarePage extends Composite {
 
 	public FirmwarePage() {
 
-		sb.addValueChangeHandler(new ValueChangeHandler<String>() {
+		suggestBox.addValueChangeHandler(new ValueChangeHandler<String>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
-				uploadForm.setAction(getUrl(sb.getText()));
 			}
 		});
 
 		updateList();
 		initWidget(new VertPanel().setSp(8).add(propertiesPanel, new HTML("<b>Загрузка прошивки</b>"),
-				new HorPanel(new Label("Версия платы"), new Gap(10, 1)).add1(sb), uploadForm));
+				new HorPanel(new Label("Версия платы"), new Gap(10, 1)).add1(suggestBox), uploadForm));
 	}
 
 	private void updateList() {
