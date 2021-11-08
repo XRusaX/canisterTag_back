@@ -2,8 +2,6 @@ package com.ma.hmcrfidserver.client;
 
 import java.util.Arrays;
 
-import javax.mail.Quota;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -27,15 +25,16 @@ import com.ma.common.gwtapp.client.connections.ConnectionsPage;
 import com.ma.common.gwtapp.client.logger.LoggerPanel;
 import com.ma.common.gwtapp.client.ui.panel.DockLayoutPanelX;
 import com.ma.common.gwtapp.client.ui.toolbar.StatusBar;
-import com.ma.hmc.iface.boardtest.rpcdata.TestReport;
-import com.ma.hmc.iface.ping.Operator;
-import com.ma.hmc.iface.ping.Room;
 import com.ma.hmcdb.shared.Agent;
 import com.ma.hmcdb.shared.Company.CompanyType;
 import com.ma.hmcdb.shared.Hmc;
+import com.ma.hmcdb.shared.Operator;
 import com.ma.hmcdb.shared.Permissions;
+import com.ma.hmcdb.shared.Room;
+import com.ma.hmcdb.shared.rfid.Quota;
 import com.ma.hmcdb.shared.rfid.Report;
 import com.ma.hmcdb.shared.rfid.RfidLabel;
+import com.ma.hmcdb.shared.test.TestReport;
 
 public class MainPage  extends AppMainPage {
 	// private final CommonDataServiceAsync commonDataService =
@@ -93,13 +92,13 @@ public class MainPage  extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_CUSTOMER)) {
 
-//			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
-//					new CommonListPanel("Отчеты", 2000).setEditable(Login.user.company == null), Report.class,
-//					eventBus);
-
 			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
-					new OperatorList(null, 2000).setEditable(Login.user.company == null), Report.class,
+					new CommonListPanel("Отчеты", 2000).setEditable(Login.user.company == null), Report.class,
 					eventBus);
+
+//			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
+//					new OperatorList(null, 2000).setEditable(Login.user.company == null), Report.class,
+//					eventBus);
 			
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new Label(), 5);
@@ -126,12 +125,13 @@ public class MainPage  extends AppMainPage {
 			tabPanel2.add(panel, "Помещения");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			OperatorList operatorList = new OperatorList(null, 2000);
-			panel.addW(new Label(), 25);
-			panel.addN(new Label(), 10);
-			panel.addS(new Label(), 10);
-			panel.addE(new Label(), 25);
-			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus));
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+//			OperatorList operatorList = new OperatorList(null, 2000);
+//			panel.addW(new Label(), 25);
+//			panel.addN(new Label(), 10);
+//			panel.addS(new Label(), 10);
+//			panel.addE(new Label(), 25);
+//			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus));
 			tabPanel2.add(panel, "Операторы");
 			
 			panel = new DockLayoutPanelX(Unit.PCT);
