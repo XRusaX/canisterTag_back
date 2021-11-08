@@ -74,8 +74,8 @@ h1 {
     border-radius: 12px;
     background-color: var(--prop-panel-background);
     box-shadow: 0 2px 2px 2px rgb(60 64 67 / 30%), 0 4px 6px 3px rgb(60 64 67 / 15%);
-    display: flex;
-    flex-direction: column;
+    /* display: flex; */
+    /* flex-direction: column; */
     position: relative;
 }
 
@@ -560,8 +560,8 @@ h1 {
     font-family: 'Font Awesome 5 Free';
     font-size: large;
     content: '\f044';
-    text-align: center;
-    align-content: center;
+    /* text-align: center; */
+    /* align-content: center; */
 }
 
 
@@ -571,10 +571,9 @@ h1 {
 } */
 
 .button-ok {
-    /* display: inline-block; */
     border-radius: 4px;
     background-color: var(--ok-cancel-button);
-    border: 1px solid var(--ok-cancel-button);
+    border: none;
     color: var(--prop-panel-background);
     font-size: 1rem;
     transition: all 0.3s;
@@ -584,7 +583,6 @@ h1 {
 }
 
 .button-cancel {
-    /* display: inline-block; */
     border-radius: 4px;
     background-color: transparent;
     border: none;
@@ -599,6 +597,38 @@ h1 {
 
 .button-cancel:hover {
     background-color: #D2686844;
+}
+
+.okCancelPanel {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+
+.okCancelPanel button {
+    margin-left: 15px;
+}
+
+.enum-field {
+    /* display: inline-table; */
+    /* height: 25px; */
+    /* width: 150px; */
+    /* padding: 8px 16px; */
+    /* line-height: 25px; */
+    /* font-size: 14px; */
+    /* font-weight: 500; */
+    font-family: inherit;
+    border-radius: 6px;
+    border: 1px solid var(--input-border);
+    background: var(--input-background);
+    transition: all 0s ease 0s;
+}
+
+.enum-field:focus {
+    outline: none;
+    color: var(--input-focused-color);
+    border-color: var(--ok-cancel-button);
+    box-shadow: 0px 0px 5px var(--ok-cancel-button);
 }
 
 
