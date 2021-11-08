@@ -6,7 +6,7 @@ import com.google.gwt.resources.client.ImageResource;
 
 public interface ImageResources extends ClientBundle {
 
-	ImageResources IMAGE_RESOURCES = (ImageResources) GWT.create(ImageResources.class);
+	public static final ImageResources IMAGE_RESOURCES = (ImageResources) GWT.create(ImageResources.class);
 
 	@Source("resources/HMC_1.png")
 	ImageResource hmc1();
