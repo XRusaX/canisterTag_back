@@ -10,6 +10,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.Filter;
@@ -45,6 +47,7 @@ public class PropertiesPanel extends VerticalPanel{
 					}
 				}.create(cdClass, !editable);
 				objectEditor.toUI(sce.selectedSet.iterator().next());
+				objectEditor.setStyle("enum-field");
 				propPanel = (Widget) objectEditor.asPlatfomWidget();
 				propPanel.getElement().getStyle().setMargin(20, Unit.PX);
 				propPanel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
@@ -79,7 +82,7 @@ public class PropertiesPanel extends VerticalPanel{
 
 					@Override
 					public void onClick(ClickEvent event) {
-
+						clear();
 					}
 
 				});
@@ -91,14 +94,16 @@ public class PropertiesPanel extends VerticalPanel{
 				editModeBtn.setStyleName("button-edit");
 				editButtonContainerPanel.add(editModeBtn);
 
-				HorPanel okCancelContainerPanel = new HorPanel();
+//				HorPanel okCancelContainerPanel = new HorPanel();
+				Panel okCancelContainerPanel = new HorizontalPanel();
 				okCancelContainerPanel.setWidth("100%");
-				okCancelContainerPanel.setSpacing(0);
-				okCancelContainerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+//				okCancelContainerPanel.setSpacing(0);
+//				okCancelContainerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 				okBtn.setStyleName("button-ok");
 				cancelBtn.setStyleName("button-cancel");
 				okCancelContainerPanel.add(cancelBtn);
 				okCancelContainerPanel.add(okBtn);
+				okCancelContainerPanel.setStyleName("okCancelPanel");
 				okBtn.setWidth("85px");
 
 				container.add(editButtonContainerPanel);
