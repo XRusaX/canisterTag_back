@@ -14,6 +14,7 @@ import com.ma.common.gwtapp.client.auth.UserDialog;
 import com.ma.common.gwtapp.client.commondata.CommonListPanel;
 import com.ma.common.gwtapp.client.commondata.CommonListPanelWrapper;
 import com.ma.common.gwtapp.client.ui.ContextMenu;
+import com.ma.common.gwtapp.client.ui.dialog.UploadDialog;
 import com.ma.common.shared.eventbus.EventBus;
 import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmcdb.shared.Company;
@@ -35,7 +36,7 @@ public class CompaniesPanel extends CommonListPanelWrapper {
 									List<String> permissions) {
 								String hashNew = AuthUtils.getPwdHash(user, passwordNew);
 								String hashCur = AuthUtils.getPwdHash(Login.user.name, passwordOld);
-								loginService.addUser(user, hashNew, hashCur, permissions, email, company.getLong("id"),
+								loginService.addUser(user, hashNew, hashCur, permissions, email, company.getId(),
 										new AlertAsyncCallback<Void>(null));
 							}
 						}.center();
@@ -46,14 +47,15 @@ public class CompaniesPanel extends CommonListPanelWrapper {
 			}
 
 			{
-//				grid.setRowStyles((row, index) -> {
-//					return "color-green";
-//				});
+				// grid.setRowStyles((row, index) -> {
+				// return "color-green";
+				// });
 
 			}
 		}.showFields(showFields), Company.class, eventBus);
 		if (companyType != null)
-			filter.addEQ("companyType", /* CompanyType.class.getName() + ":" + */ companyType.name());
+			filter.addEQ("companyType",
+					/* CompanyType.class.getName() + ":" + */ companyType.name());
 	}
 
 }

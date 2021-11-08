@@ -37,7 +37,7 @@ import com.ma.hmcdb.shared.Permissions;
 import com.ma.hmcdb.shared.rfid.Report;
 import com.ma.hmcdb.shared.rfid.RfidLabel;
 
-public class MainPage extends AppMainPage {
+public class MainPage  extends AppMainPage {
 	// private final CommonDataServiceAsync commonDataService =
 	// GWT.create(CommonDataService.class);
 	private final AppServiceAsync settingsService = GWT.create(AppService.class);
@@ -122,7 +122,7 @@ public class MainPage extends AppMainPage {
 			panel = new DockLayoutPanelX(Unit.PCT);
 			CommonListPanel roomList = new CommonListPanel(null, 2000);
 			panel.addW(new CommonListPanelWrapper(roomList, Room.class, eventBus), 30);
-			panel.add(new MapPanel(eventBus));
+			panel.add(new LayerPanel(eventBus));
 			tabPanel2.add(panel, "Помещения");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
