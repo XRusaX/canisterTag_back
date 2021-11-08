@@ -8,12 +8,14 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.ma.appcommon.shared.DataRange;
 import com.ma.appcommon.shared.Filter;
 import com.ma.common.gwtapp.client.AlertAsyncCallback;
 import com.ma.common.gwtapp.client.commondata.CommonDataService;
@@ -27,7 +29,7 @@ import com.ma.commonui.shared.cd.CDObject;
 import com.ma.commonui.shared.cd.ObjectEditor;
 import com.ma.hmcdb.shared.Hmc;
 
-public class PropertiesPanel extends VerticalPanel{
+public class PropertiesPanel extends VerticalPanel {
 	private CDClass cdClass;
 	public final Filter filter = new Filter();
 	private Widget propPanel;
@@ -44,6 +46,8 @@ public class PropertiesPanel extends VerticalPanel{
 				ObjectEditor objectEditor = new ObjectEditor(new GwtUIBuilder()) {
 					@Override
 					protected void getLookup(String className, Consumer<List<CDObject>> asyncCallback) {
+						service.loadRange(className, new Filter(), null, new AlertAsyncCallback<DataRange<CDObject>>(
+								result -> asyncCallback.accept(result.range)));
 					}
 				}.create(cdClass, !editable);
 				objectEditor.toUI(sce.selectedSet.iterator().next());
