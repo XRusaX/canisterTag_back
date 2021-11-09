@@ -1,5 +1,7 @@
 package com.ma.hmcrfidserver.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.ui.Widget;
 import com.ma.common.gwtapp.client.commondata.CommonDataFlowList;
 import com.ma.common.gwtapp.client.ui.ContextMenu;
@@ -18,13 +20,28 @@ public abstract class HmcFlowList extends CommonDataFlowList {
 
 	@Override
 	protected void prepareContextMenu(ContextMenu menu, CDObject t, Runnable onPrepared) {
-		super.prepareContextMenu(menu, t, onPrepared);
+
+		if (t == null)
+			menu.addItem("Создать", () -> newItem());
+
 		if (t != null) {
+			menu.addItem("Удалить", () -> {
+				ArrayList<CDObject> list = new ArrayList<>();
+				list.add(t);
+				deleteItems(list);
+			});
+		}
+		if (t != null)
 			menu.addItem("Показать отчеты", () -> {
 				showReports();
 			});
-		}
+		
+		onPrepared.run();
+	}
 
+	@Override
+	protected void onDoubleClick(CDObject t) {
+		return;
 	}
 
 	abstract void showReports();

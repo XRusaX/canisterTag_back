@@ -2,7 +2,6 @@ package com.ma.hmcrfidserver.client;
 
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -14,7 +13,8 @@ import com.ma.common.gwtapp.client.ui.panel.VertPanel;
 import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmc.iface.report.shared.HmcReportStatus;
 
-public class HmcTileWidget extends Composite implements ImageResources {
+public class HmcTileWidget extends Composite{
+	
 	public HmcTileWidget(CDObject t) {
 		VerticalPanel panel = new VerticalPanel();
 		HorizontalPanel topHorPanel = new HorizontalPanel();
@@ -32,23 +32,23 @@ public class HmcTileWidget extends Composite implements ImageResources {
 		Image hmcImg;
 		switch (hmcType) {
 		case "HMC_1":
-			hmcImg = new Image(IMAGE_RESOURCES.hmc1());
+			hmcImg = new Image(ImageResources.IMAGE_RESOURCES.hmc1());
 			tileName.setText("МГЦ 1");
 			break;
 		case "HMC_2":
-			hmcImg = new Image(IMAGE_RESOURCES.hmc2());
+			hmcImg = new Image(ImageResources.IMAGE_RESOURCES.hmc2());
 			tileName.setText("МГЦ 2");
 			break;
 		case "HMC_3":
-			hmcImg = new Image(IMAGE_RESOURCES.hmc3());
+			hmcImg = new Image(ImageResources.IMAGE_RESOURCES.hmc3());
 			tileName.setText("МГЦ 3");
 			break;
 		case "HMC_4":
-			hmcImg = new Image(IMAGE_RESOURCES.notFound());
+			hmcImg = new Image(ImageResources.IMAGE_RESOURCES.notFound());
 			tileName.setText("МГЦ 4");
 			break;
 		default:
-			hmcImg = new Image(IMAGE_RESOURCES.noType());
+			hmcImg = new Image(ImageResources.IMAGE_RESOURCES.noType());
 			break;
 		}
 
@@ -111,33 +111,4 @@ public class HmcTileWidget extends Composite implements ImageResources {
 			disLevel.setProgress(0, 0);
 	}
 
-	@Override
-	public ImageResource hmc1() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ImageResource hmc2() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ImageResource hmc3() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ImageResource noType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ImageResource notFound() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

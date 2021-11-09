@@ -5,21 +5,21 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
 public interface ImageResources extends ClientBundle {
-	
-	ImageResources IMAGE_RESOURCES = (ImageResources) GWT.create(ImageResources.class);
 
-	@Source("/images/HMC_1.png")
+	public static final ImageResources IMAGE_RESOURCES = (ImageResources) GWT.create(ImageResources.class);
+
+	@Source("resources/HMC_1.png")
 	ImageResource hmc1();
 
-	@Source("/images/HMC_2.png")
+	@Source("resources/HMC_2.png")
 	ImageResource hmc2();
 
-	@Source("/images/HMC_3.png")
+	@Source("resources/HMC_3.png")
 	ImageResource hmc3();
 
-	@Source("/images/no_type.png")
+	@Source("resources/no_type.png")
 	ImageResource noType();
 
-	@Source("/images/not_found.png")
+	@Source("resources/not_found.png")
 	ImageResource notFound();
 }

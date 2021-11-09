@@ -2,7 +2,7 @@
 <!-- When updating your version of GWT, you should also update this DTD reference, 
 	so that your app can take advantage of the latest GWT module capabilities. -->
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.8.1//EN"
-  "http://gwtproject.org/doctype/2.8.1/gwt-module.dtd">
+  "http://www.gwtproject.org/doctype/2.8.1/gwt-module.dtd">
 <module rename-to='hmcrfidserver'>
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
@@ -23,7 +23,7 @@
 	<inherits name='com.ma.appcommon.AppCommon' />
 	<inherits name='com.ma.hmc.iface.HmcInterface' />
 	<inherits name='com.ma.hmcdb.HmcDatabase' />
-
+	<inherits name="com.google.gwt.resources.Resources" />
 
 	<!-- Specify the app entry point class. -->
 	<entry-point

@@ -96,28 +96,25 @@ public class MainPage  extends AppMainPage {
 					new CommonListPanel("Отчеты", 2000).setEditable(Login.user.company == null), Report.class,
 					eventBus);
 
+//			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
+//					new OperatorList(null, 2000).setEditable(Login.user.company == null), Report.class,
+//					eventBus);
+			
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new Label(), 5);
-			
-//			HmcFlowList testFlowList = new HmcFlowList() {
-//				@Override
-//				void showReports() {
-//					if (Login.user.company != null)
-//						tabPanel.selectTab(reportsTab.getParent());
-//				}
-//			};
-			
+
+			PropertiesPanel myTestPanel = new PropertiesPanel(eventBus);
+
 			panel.addW(new CommonListPanelWrapper(new HmcFlowList() {
 				@Override
 				void showReports() {
 					if (Login.user.company != null) {
 						tabPanel.selectTab(reportsTab.getParent());
-//						testFlowList.setVisible(!testFlowList.isVisible());
 					}
 				}
 			}, Hmc.class, eventBus), 70);
-			
-//			panel.addW(new CommonListPanelWrapper(testFlowList, Hmc.class, eventBus), 25);
+
+			panel.addW(myTestPanel, 25);
 
 			tabPanel2.add(panel, "Оборудование");
 
@@ -129,8 +126,14 @@ public class MainPage  extends AppMainPage {
 
 			panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+//			OperatorList operatorList = new OperatorList(null, 2000);
+//			panel.addW(new Label(), 25);
+//			panel.addN(new Label(), 10);
+//			panel.addS(new Label(), 10);
+//			panel.addE(new Label(), 25);
+//			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus));
 			tabPanel2.add(panel, "Операторы");
-
+			
 			panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Контроль дезинфекции");
