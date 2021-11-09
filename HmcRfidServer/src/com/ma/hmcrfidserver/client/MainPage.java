@@ -125,13 +125,13 @@ public class MainPage  extends AppMainPage {
 			tabPanel2.add(panel, "Помещения");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
-//			OperatorList operatorList = new OperatorList(null, 2000);
-//			panel.addW(new Label(), 25);
-//			panel.addN(new Label(), 10);
-//			panel.addS(new Label(), 10);
-//			panel.addE(new Label(), 25);
-//			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus));
+//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			OperatorList operatorList = new OperatorList(null, 2000);
+			panel.addW(new Label(), 25);
+			panel.addN(new Label(), 10);
+			panel.addS(new Label(), 10);
+			panel.addE(new Label(), 25);
+			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus));
 			tabPanel2.add(panel, "Операторы");
 			
 			panel = new DockLayoutPanelX(Unit.PCT);
