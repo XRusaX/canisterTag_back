@@ -8,7 +8,6 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -20,6 +19,7 @@ import com.ma.appcommon.shared.Filter;
 import com.ma.common.gwtapp.client.AlertAsyncCallback;
 import com.ma.common.gwtapp.client.commondata.CommonDataService;
 import com.ma.common.gwtapp.client.commondata.CommonDataServiceAsync;
+import com.ma.common.gwtapp.client.commondata.DataChangeEvent;
 import com.ma.common.gwtapp.client.commondata.SelChangeEvent;
 import com.ma.common.gwtapp.client.commonui.GwtUIBuilder;
 import com.ma.common.gwtapp.client.ui.panel.HorPanel;
@@ -75,6 +75,7 @@ public class PropertiesPanel extends VerticalPanel {
 					@Override
 					public void onClick(ClickEvent event) {
 						service.store(cdClass.name, objectEditor.fromUI(), new AlertAsyncCallback<>(v -> {
+							eventBus.post(new DataChangeEvent(sce.clazz));
 						}));
 						objectEditor.setRO(true);
 					}
