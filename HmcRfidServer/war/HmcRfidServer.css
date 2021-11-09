@@ -559,7 +559,8 @@ h1 {
 .button-edit::before {
     font-family: 'Font Awesome 5 Free';
     font-size: large;
-    content: '\f044';
+    content: '\f304';
+    font-weight: bold;
     /* text-align: center; */
     /* align-content: center; */
 }
