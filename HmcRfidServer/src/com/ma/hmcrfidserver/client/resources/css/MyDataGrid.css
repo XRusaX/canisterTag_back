@@ -60,9 +60,11 @@
 }
 
 .dataGridHeader {
+    height: 45px;
+    /* min-height: 45px; */
     font-size: 1.2rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    /* padding-top: 0.5rem; */
+    /* padding-bottom: 0.5rem; */
     color: white;
     overflow: hidden;
     font-family: "OpenSans-Regular";
@@ -112,6 +114,11 @@
     word-spacing: 0px;
     text-decoration: none solid rgb(85, 85, 85);
 }
+
+
+/* .dataGridEvenRow::before {
+    content: url(http://placehold.it/40x40);
+} */
 
 .dataGridEvenRow button {
     border-radius: 4px;
@@ -193,10 +200,15 @@
 }
 
 .dataGridSelectedRow {
-    background: #fc9967;
+    /* background: #fc9967; */
+    background-color: #ff906b;
     color: white;
     /*height: auto;*/
     overflow: auto;
+}
+
+.dataGridSelectedRow div {
+    color: white;
 }
 
 .dataGridSelectedRowCell {
