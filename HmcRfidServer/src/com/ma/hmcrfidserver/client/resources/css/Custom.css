@@ -1,26 +1,30 @@
 .custom-button {
     /* display: inline-block; */
     border-radius: 50%;
-    background-color: rgb(148, 89, 140);
-    border: 1px solid rgb(148, 89, 140);
+    background-color: teal;
+    border: 1px solid teal;
     /* font-size: 1rem; */
     transition: all 0.3s;
     cursor: pointer;
     height: 52px;
     width: 52px;
-    box-shadow: 0px 0px 8px rgba(0, 0, 0, .4);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, .4);
     color: #FFFFFF;
-    margin: 10px;
-    padding: auto;
+    margin: 5px;
+    /* padding: 1em; */
     transition: all 0.2s;
+    font-family: 'Font Awesome 5 Free';
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
-.custom-button::before {
+
+/* .custom-button::before {
     font-family: 'Font Awesome 5 Free';
     font-size: large;
     content: '\f067';
     font-weight: bold;
-}
+} */
 
 .custom-button:active {
     transform: scale(0.9);

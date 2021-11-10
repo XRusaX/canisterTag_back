@@ -6,10 +6,12 @@ import com.ma.common.gwtapp.client.commondata.CommonListPanel;
 public class OperatorList extends CommonListPanel {
 
 	static MyDataGridResources resource = GWT.create(MyDataGridResources.class);
+	static MyContextMenuResources menuResource = GWT.create(MyContextMenuResources.class);
+
 	public OperatorList(String title, Integer refreshPeriod) {
 		super(title, refreshPeriod, resource);
 		resource.customization().ensureInjected();
-		setButtonStyle("custom-button", true);
+		setButtonStyle("custom-button", true, "\uF067");
 	}
 
 }
