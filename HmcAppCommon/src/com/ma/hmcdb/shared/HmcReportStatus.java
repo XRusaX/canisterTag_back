@@ -1,4 +1,4 @@
-package com.ma.hmc.iface.report.shared;
+package com.ma.hmcdb.shared;
 
 import com.ma.commonui.shared.annotations.UILabel;
 

@@ -33,7 +33,8 @@ public class OperatorsSyncController {
 	private OperatorDataSource operatorDataSource;
 
 	@PostMapping(value = "/operatorsync")
-	private synchronized String sync(@RequestBody String opsync, @RequestParam("serNum") String hmcSerialNumber) throws IOException {
+	private synchronized String sync(@RequestBody String opsync, @RequestParam("serNum") String hmcSerialNumber)
+			throws IOException {
 
 		OpSync opSync = new Gson().fromJson(opsync, OpSync.class);
 
@@ -52,8 +53,8 @@ public class OperatorsSyncController {
 							.map(o -> new Operator(o.id, o.name, hmc.company, o.removed, new Date(o.modifTime), null))
 							.collect(Collectors.toList()), new Date(opSync.lastSync));
 
-					response.operators = toClient.stream().map(
-							o -> new com.ma.hmc.iface.opsync.Operator(o.id, o.name, o.removed, o.modifTime.getTime()))
+					response.operators = toClient.stream()
+							.map(o -> new OpSync.Operator(o.id, o.name, o.removed, o.modifTime.getTime()))
 							.collect(Collectors.toList());
 					response.lastSync = System.currentTimeMillis();
 				}

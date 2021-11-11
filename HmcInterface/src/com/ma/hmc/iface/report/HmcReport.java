@@ -1,14 +1,13 @@
 package com.ma.hmc.iface.report;
 
 import com.ma.commonui.shared.annotations.UILabel;
-import com.ma.hmc.iface.report.shared.HmcReportStatus;
 
 public class HmcReport {
 	@UILabel(label = "SerialNumber")
 	public String hmcSerialNumber;
 
 	public long time;
-	
+
 	@UILabel(label = "engineTimeMS")
 	public Integer engineTimeS;
 
@@ -37,8 +36,12 @@ public class HmcReport {
 
 	public Long roomId;
 
+	/*
+	 * значения этого поля должны быть из списка значений HmcReportStatus
+	 */
+
 	@UILabel(label = "status")
-	public HmcReportStatus status;
+	public String status;
 
 	public HmcReport() {
 	}
@@ -51,7 +54,7 @@ public class HmcReport {
 			Integer remainML, String roomName, String operatorName) {
 		HmcReport report = new HmcReport(serialNum);
 
-		report.status = HmcReportStatus.SUCSESS;
+		report.status = "SUCSESS";
 		report.durationS = 10;
 		report.canisterId = canisterId;
 		report.consumptionML = spent;

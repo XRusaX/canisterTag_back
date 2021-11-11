@@ -14,7 +14,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.ma.commonui.shared.annotations.UILabel;
-import com.ma.hmc.iface.report.shared.HmcReportStatus;
 import com.ma.hmc.iface.shared.HmcType;
 
 @Entity
