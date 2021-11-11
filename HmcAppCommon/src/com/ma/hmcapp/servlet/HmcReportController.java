@@ -80,7 +80,7 @@ public class HmcReportController {
 				return "error";
 			}
 
-			Hmc hmc = hmcDataSource.getCreateHmc(em, report.hmcType, report.hmcSerialNumber);
+			Hmc hmc = hmcDataSource.getBySerNum(em, report.hmcSerialNumber);
 			Company company = hmc.company;
 
 			Operator operator = null;

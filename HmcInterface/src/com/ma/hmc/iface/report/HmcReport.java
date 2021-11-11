@@ -2,12 +2,8 @@ package com.ma.hmc.iface.report;
 
 import com.ma.commonui.shared.annotations.UILabel;
 import com.ma.hmc.iface.report.shared.HmcReportStatus;
-import com.ma.hmc.iface.shared.HmcType;
 
 public class HmcReport {
-	@UILabel(label = "hmcType")
-	public HmcType hmcType;
-
 	@UILabel(label = "SerialNumber")
 	public String hmcSerialNumber;
 

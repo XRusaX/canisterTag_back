@@ -1,4 +1,4 @@
-package com.ma.hmc.iface.ping;
+package com.ma.hmc.iface.opsync;
 
 public class Room {
 	public Long id;
