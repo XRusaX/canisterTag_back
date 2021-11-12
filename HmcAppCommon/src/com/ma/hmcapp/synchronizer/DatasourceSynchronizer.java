@@ -14,6 +14,10 @@ import com.ma.appcommon.datasource.DataSource;
 import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.shared.Filter;
 import com.ma.hmcdb.shared.Company;
+import com.ma.hmcdb.shared.synchronizer.CompanyField;
+import com.ma.hmcdb.shared.synchronizer.ModifTime;
+import com.ma.hmcdb.shared.synchronizer.Name;
+import com.ma.hmcdb.shared.synchronizer.StoreTime;
 
 public class DatasourceSynchronizer<T> extends Synchronizer<T> {
 

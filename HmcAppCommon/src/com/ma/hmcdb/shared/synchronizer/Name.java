@@ -1,4 +1,4 @@
-package com.ma.hmcapp.synchronizer;
+package com.ma.hmcdb.shared.synchronizer;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

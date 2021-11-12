@@ -13,10 +13,10 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.ma.commonui.shared.annotations.UILabel;
-import com.ma.hmcapp.synchronizer.CompanyField;
-import com.ma.hmcapp.synchronizer.ModifTime;
-import com.ma.hmcapp.synchronizer.Name;
-import com.ma.hmcapp.synchronizer.StoreTime;
+import com.ma.hmcdb.shared.synchronizer.CompanyField;
+import com.ma.hmcdb.shared.synchronizer.ModifTime;
+import com.ma.hmcdb.shared.synchronizer.Name;
+import com.ma.hmcdb.shared.synchronizer.StoreTime;
 
 @Entity
 public class Operator {
