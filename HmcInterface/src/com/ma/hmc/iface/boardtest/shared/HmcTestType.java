@@ -6,30 +6,30 @@ import com.ma.commonui.shared.annotations.UILabel;
 public enum HmcTestType {
 	@UILabel(label = "Часы")
 	RTC(), //
-//	@UILabel(label = "Термодатчик")
+	@UILabel(label = "Термодатчик")
 	THERMO(), //
-//	@UILabel(label = "Моточасы")
+	@UILabel(label = "Моточасы")
 	WORK_TIME(), //
-//	@UILabel(label = "Компрессор")
+	@UILabel(label = "Компрессор")
 	RELAY(), //
-//	@UILabel(label = "Wi-fi")
+	@UILabel(label = "Wi-fi")
 	WIFI(), //
-//	@UILabel(label = "Вентиляторы")
+	@UILabel(label = "Вентиляторы")
 	FAN(), //
-//	@UILabel(label = "Датчик уровня жидкости")
+	@UILabel(label = "Датчик уровня жидкости")
 	CAP_SENSOR(), //
-//	@UILabel(label = "Светодиод")
+	@UILabel(label = "Светодиод")
 	LED(), //
-//	@UILabel(label = "Звук")
+	@UILabel(label = "Звук")
 	BUZZ(), //
-//	@UILabel(label = "Кнопки")
+	@UILabel(label = "Кнопки")
 	DEMUX(), //
-//	@UILabel(label = "Чтение меток")
+	@UILabel(label = "Чтение меток")
 	READER(), //
-//	@UILabel(label = "Планшет")
+	@UILabel(label = "Планшет")
 	TABLET(), //
-//	@UILabel(label = "Память")
+	@UILabel(label = "Память")
 	FLASH(), //
-//	@UILabel(label = "Режим работы")
+	@UILabel(label = "Режим работы")
 	MODE(),;
 }
