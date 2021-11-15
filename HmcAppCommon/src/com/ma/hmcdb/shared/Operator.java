@@ -20,9 +20,12 @@ public class Operator {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
+	@UILabel(label = "", sortable = false, isImage = true, widthEM = 10)
+	public String avatar;
+	
 	@UILabel(label = "Имя", sortable = true)
 	public String name;
-
+	
 	@UILabel(label = "Организация", sortable = true, nullable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
