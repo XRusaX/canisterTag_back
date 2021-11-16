@@ -32,7 +32,35 @@
     -ms-transform: scale(0.9);
 }
 
+.uploadTestBtn {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
 
-/* .custom-button:focus {
+.uploadTestBtn img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.uploadTestBtn span {
+    color: red;
+}
+
+.uploadTestBtn img:hover {
+    opacity: 0.6;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
+}
+
+.uploadTestBtn:active {
     transform: scale(0.9);
-} */
+    transition: all 0.2s;
+    -webkit-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+}
+
+.horPanel {
+    background-color: antiquewhite;
+    align-items: center;
+}
