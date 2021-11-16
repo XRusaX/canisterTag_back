@@ -22,4 +22,7 @@ public interface ImageResources extends ClientBundle {
 
 	@Source("resources/not_found.png")
 	ImageResource notFound();
+	
+	@Source("resources/avatar_placeholder.png")
+	ImageResource avatarPlaceholder();
 }
