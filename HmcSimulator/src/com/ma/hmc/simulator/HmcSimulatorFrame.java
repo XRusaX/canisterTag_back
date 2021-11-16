@@ -35,7 +35,7 @@ public class HmcSimulatorFrame extends JFrame {
 
 	private SwingObjectEditorPanel<ConnectionSettings> connectionPanel = new SwingObjectEditorPanel<>(
 			ConnectionSettings.class);
-	private SwingObjectEditorPanel<HmcReport> reportPanel = new SwingObjectEditorPanel<>(HmcReport.class);
+	private SwingObjectEditorPanel<HmcReport> reportPanel = new SwingObjectEditorPanel<>(HmcReport.class, true);
 	private SwingObjectEditorPanel<FillParams> fillParamsPanel = new SwingObjectEditorPanel<>(FillParams.class);
 
 	private JLabel status = new JLabel(" ");

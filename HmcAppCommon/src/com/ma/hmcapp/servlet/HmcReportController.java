@@ -23,6 +23,7 @@ import com.ma.hmcapp.datasource.RfidLabelDataSource;
 import com.ma.hmcapp.datasource.RoomDataSource;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Hmc;
+import com.ma.hmcdb.shared.HmcReportStatus;
 import com.ma.hmcdb.shared.Operator;
 import com.ma.hmcdb.shared.Room;
 import com.ma.hmcdb.shared.rfid.Report;
@@ -80,7 +81,7 @@ public class HmcReportController {
 				return "error";
 			}
 
-			Hmc hmc = hmcDataSource.getCreateHmc(em, report.hmcType, report.hmcSerialNumber);
+			Hmc hmc = hmcDataSource.getBySerNum(em, report.hmcSerialNumber);
 			Company company = hmc.company;
 
 			Operator operator = null;
@@ -92,7 +93,8 @@ public class HmcReportController {
 			}
 
 			Report report2 = new Report(hmc, new Date(report.time), report.durationS, label, report.cleaningId,
-					report.consumptionML, report.remainML, company, operator, room, report.status);
+					report.consumptionML, report.remainML, company, operator, room,
+					HmcReportStatus.valueOf(report.status));
 			reportDataSource.store(em, report2);
 
 			List<Report> reports = reportDataSource.loadByRfidLabel(em, label);
@@ -142,7 +144,7 @@ public class HmcReportController {
 		if (room != null)
 			return room;
 
-		room = new Room(name, company);
+		room = new Room(name, null, company);
 		roomDataSource.store(em, room);
 
 		return room;

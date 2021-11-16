@@ -18,9 +18,9 @@ public interface MyContextMenuResources extends CellList.Resources{
 //		@Source("/resources/fonts/Roboto-Regular.ttf")
 //		DataResource robotoRegularTtf(); 
 //		
-		@Override
-		@Source({ "/resources/css/Menu.css" })
-		MenuStyle cellListStyle();
+//		@Override
+//		@Source({ "/resources/css/Menu.css" })
+//		MenuStyle cellListStyle();
 //		
 //		@Source("/resources/css/Custom.css")
 //	    @CssResource.NotStrict

@@ -1,9 +1,5 @@
 package com.ma.hmcrfidserver.client;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -22,16 +18,16 @@ import com.ma.common.gwtapp.client.commondata.SelChangeEvent;
 import com.ma.common.gwtapp.client.ui.dialog.UploadDialog;
 import com.ma.common.gwtapp.client.ui.panel.VertPanel;
 import com.ma.commonui.shared.cd.CDObject;
-import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Room;
+import com.ma.hmcdb.shared.RoomLayer;
 
 public class LayerPanel extends ResizeComposite {
 	private final CommonDataServiceAsync service = GWT.create(CommonDataService.class);
 	private final HmcServiceAsync hmcService = GWT.create(HmcService.class);
 
-	private Map<Long, CDObject> rooms;
+	// private Map<Long, CDObject> rooms;
 	private CDObject room;
-	private Long companyId;
+	private CDObject layer;
 	private Image im = new Image();
 	private LayoutPanel lp = new LayoutPanel();
 
@@ -39,63 +35,48 @@ public class LayerPanel extends ResizeComposite {
 
 		eventBus.registerListener(SelChangeEvent.class, se -> {
 
-			Long cId = companyId;
-
 			if (se.clazz == Room.class) {
 				room = se.selectedSet.size() == 1 ? se.selectedSet.iterator().next() : null;
-				if (room != null) {
-					cId = room.getLong("company");
-				}
-				// gEditor.invalidate();
 			}
-			if (se.clazz == Company.class) {
-				cId = se.selectedSet.size() == 1 ? se.selectedSet.iterator().next().getId() : null;
-			}
-
-			if (!Objects.equals(cId, companyId)) {
-				companyId = cId;
-
-				if (companyId != null) {
-					Filter filter = new Filter();
-					filter.addEQ("company", "" + companyId);
-
-					service.loadRange(Room.class.getName(), filter, null, new AlertAsyncCallback<>(list -> {
-						rooms = new HashMap<>();
-						list.range.stream().forEach(r -> rooms.put(r.getId(), r));
-						updateImage();
-					}));
-
-				} else {
-					// data.clear();
-					// rooms = null;
-					// gEditor.invalidate();
-				}
-
+			if (se.clazz == RoomLayer.class) {
+				layer = se.selectedSet.size() == 1 ? se.selectedSet.iterator().next() : null;
+				updateImage();
 			}
 		});
 
 		GwtUtils.addContextMenu(this, (menu, x, y, onPrepared) -> {
-			if (companyId != null) {
+			if (layer != null) {
 				menu.addItem("Загрузить план", () -> {
-					new UploadDialog("Загрузить план", "api/uploadlayer?id=" + companyId, (e) -> updateImage())
-							.center();
+					new UploadDialog("Загрузить план", "api/images", (e) -> {
+
+						if (!e.getResults().isEmpty()) {
+							layer.set("imageUrl", e.getResults());
+							service.store(RoomLayer.class.getName(), layer, new AlertAsyncCallback<>(v -> {
+								version++;
+								updateImage();
+							}));
+						}
+
+					}).center();
 				});
 
 				menu.addSeparator();
 
-				rooms.values().forEach(room -> {
-					menu.addItem(room.get("name"), () -> {
-						room.set("x", x);
-						room.set("y", y);
-						service.store(Room.class.getName(), room, new AlertAsyncCallback<>(v -> {
-							updateImage();
+				service.loadRange(Room.class.getName(), new Filter().addEQ("layer", "" + layer.getId()), null,
+						new AlertAsyncCallback<>(list -> {
+							list.range.stream().forEach(room -> {
+								menu.addItem(room.get("name"), () -> {
+									room.set("x", x);
+									room.set("y", y);
+									service.store(Room.class.getName(), room, new AlertAsyncCallback<>(v -> {
+										updateImage();
+									}));
+								});
+							});
+							onPrepared.run();
 						}));
-					});
-				});
-
 			}
 
-			onPrepared.run();
 		});
 
 		updateImage();
@@ -106,36 +87,38 @@ public class LayerPanel extends ResizeComposite {
 	private int version;
 
 	private void updateImage() {
+
 		lp.clear();
 		lp.add(im);
 
-		if (rooms != null) {
-			rooms.values().forEach(room -> {
-				Integer x = room.getInt("x");
-				Integer y = room.getInt("y");
-				if (x != null && y != null) {
-					int w = 100;
-					int h = 22 * 2;
-
-					Widget roomWidget = createRoomWidget(room);
-					roomWidget.setWidth(w + "px");
-					roomWidget.setHeight(h + "px");
-
-					lp.add(roomWidget);
-					lp.setWidgetTopHeight(roomWidget, y - h / 2, Unit.PX, h, Unit.PX);
-					lp.setWidgetLeftWidth(roomWidget, x - w / 2, Unit.PX, w, Unit.PX);
-
-				}
-			});
-		}
-
-		if (companyId != null)
-			im.setUrl("api/uploadlayer?id=" + companyId + "&v" + version++);
+		if (layer != null)
+			im.setUrl(layer.get("imageUrl") + "&v" + version);
 		else
 			im.setUrl("");
 
 		im.setSize("1000px", "500px");
 
+		if (layer != null)
+			service.loadRange(Room.class.getName(), new Filter().addEQ("layer", "" + layer.getId()), null,
+					new AlertAsyncCallback<>(list -> list.range.forEach(room -> addRoom(room))));
+	}
+
+	private void addRoom(CDObject room) {
+		Integer x = room.getInt("x");
+		Integer y = room.getInt("y");
+		if (x != null && y != null) {
+			int w = 100;
+			int h = 22 * 2;
+
+			Widget roomWidget = createRoomWidget(room);
+			roomWidget.setWidth(w + "px");
+			roomWidget.setHeight(h + "px");
+
+			lp.add(roomWidget);
+			lp.setWidgetTopHeight(roomWidget, y - h / 2, Unit.PX, h, Unit.PX);
+			lp.setWidgetLeftWidth(roomWidget, x - w / 2, Unit.PX, w, Unit.PX);
+
+		}
 	}
 
 	private Widget createRoomWidget(CDObject room) {

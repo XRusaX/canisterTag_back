@@ -131,7 +131,7 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 	public void createRoom(String roomName, String companyName) throws IOException {
 		database.execVoid(em -> {
 			Company company = companyDataSource.getByName(em, companyName);
-			Room room = new Room(roomName, company);
+			Room room = new Room(roomName, null, company);
 			roomDataSource.store(em, room);
 		});
 	}

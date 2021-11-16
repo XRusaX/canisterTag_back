@@ -16,7 +16,6 @@
 		<class>com.ma.hmcdb.shared.Operator</class>
 		<class>com.ma.hmcdb.shared.Room</class>
 		<class>com.ma.hmcdb.shared.RoomLayer</class>
-		<class>com.ma.hmcdb.shared.RoomCell</class>
 		<class>com.ma.hmcdb.shared.rfid.Quota</class>
 		<class>com.ma.hmcdb.shared.rfid.Report</class>
 		<class>com.ma.hmcdb.shared.rfid.RfidLabel</class>

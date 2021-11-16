@@ -32,14 +32,19 @@ public class Room {
 	public Integer x;
 	@UILabel(label = "Y")
 	public Integer y;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	public RoomLayer layer;
 
 	public Date lastModified;
 
 	public Room() {
 	}
 
-	public Room(String name, Company company) {
+	public Room(String name, RoomLayer layer, Company company) {
 		this.name = name;
+		this.layer = layer;
 		this.company = company;
 	}
 
