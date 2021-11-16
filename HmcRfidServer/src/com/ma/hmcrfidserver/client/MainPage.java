@@ -3,11 +3,11 @@ package com.ma.hmcrfidserver.client;
 import java.util.Arrays;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PushButton;
@@ -30,6 +30,7 @@ import com.ma.common.gwtapp.client.commondata.PageEventBus;
 import com.ma.common.gwtapp.client.connections.ConnectionsPage;
 import com.ma.common.gwtapp.client.logger.LoggerPanel;
 import com.ma.common.gwtapp.client.ui.panel.DockLayoutPanelX;
+import com.ma.common.gwtapp.client.ui.panel.HorPanel;
 import com.ma.common.gwtapp.client.ui.toolbar.StatusBar;
 import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmcdb.shared.Agent;
@@ -142,20 +143,29 @@ public class MainPage extends AppMainPage {
 			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
 				@Override
 				protected Widget getAdditionals(CDObject operator) {
-					Image upImage = new Image(operator.get("avatar"));
-					upImage.setPixelSize(100, 100);
-					PushButton uploadImageButton = new PushButton(upImage,
-							(ClickHandler) event -> new ImportDialog("Выберите файл шаблона",
-									"api/myController?id=" + operator.getId()) {
+					Image img = new Image(operator.get("avatar") == null
+							? new Image(ImageResources.IMAGE_RESOURCES.avatarPlaceholder()).getUrl()
+							: operator.get("avatar"));
+
+					PushButton uploadImageButton = new PushButton(img,
+							(ClickHandler) event -> new ImportDialog("Выберите файл", "api/images") {
 								@Override
 								protected void onComplete(SubmitCompleteEvent event) {
 									String results = event.getResults();
-									if (!results.isEmpty())
+									if (!results.isEmpty()) {
 										operator.set("avatar", results);
+										img.setUrl(operator.get("avatar"));
+									}
 								}
 							}.center());
-					uploadImageButton.setPixelSize(100, 100);
-					return uploadImageButton;
+
+					uploadImageButton.setStyleName("uploadTestBtn");
+					uploadImageButton.setTitle("Загрузить изображение");
+					HorPanel horPanel = new HorPanel(uploadImageButton);
+					horPanel.setWidth("100%");
+					horPanel.setCellHorizontalAlignment(uploadImageButton, HasHorizontalAlignment.ALIGN_CENTER);
+					return horPanel;
+
 				}
 			});
 			tabPanel2.add(panel, "Операторы");
@@ -170,11 +180,11 @@ public class MainPage extends AppMainPage {
 			tabPanel2.add(panel, "Отчёты об обработке");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Журнал операций");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Статистика");
 
 		}
