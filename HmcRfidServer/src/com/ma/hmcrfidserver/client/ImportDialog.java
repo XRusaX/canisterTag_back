@@ -17,15 +17,12 @@ public class ImportDialog extends DialogBoxExt {
 		formPanel.setMethod(FormPanel.METHOD_POST);
 		formPanel.addSubmitCompleteHandler(event -> {
 			hide();
-			
+
 			onComplete(event);
-/*			if (!event.getResults().isEmpty())
-				Window.alert(event.getResults());
-			else
-				Window.alert("Файл загружен");*/
 		});
 		FileUpload fileUpload = new FileUpload();
-		fileUpload.setName("settings");
+		fileUpload.setName("fileChooser");
+		fileUpload.getElement().setAttribute("accept", ".png");
 		formPanel.setWidget(fileUpload);
 
 		setContent(formPanel);
@@ -42,5 +39,6 @@ public class ImportDialog extends DialogBoxExt {
 		addButton("Cancel", null, "6em");
 	}
 
-	protected void onComplete(SubmitCompleteEvent event) {};
+	protected void onComplete(SubmitCompleteEvent event) {
+	};
 }
