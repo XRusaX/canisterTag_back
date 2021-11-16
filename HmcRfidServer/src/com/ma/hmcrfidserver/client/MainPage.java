@@ -4,9 +4,15 @@ import java.util.Arrays;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.AppConfig;
 import com.ma.appcommon.shared.AppState;
 import com.ma.appcommon.shared.auth.UserData;
@@ -24,7 +30,9 @@ import com.ma.common.gwtapp.client.commondata.PageEventBus;
 import com.ma.common.gwtapp.client.connections.ConnectionsPage;
 import com.ma.common.gwtapp.client.logger.LoggerPanel;
 import com.ma.common.gwtapp.client.ui.panel.DockLayoutPanelX;
+import com.ma.common.gwtapp.client.ui.panel.HorPanel;
 import com.ma.common.gwtapp.client.ui.toolbar.StatusBar;
+import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmcdb.shared.Agent;
 import com.ma.hmcdb.shared.Company.CompanyType;
 import com.ma.hmcdb.shared.Hmc;
@@ -37,7 +45,7 @@ import com.ma.hmcdb.shared.rfid.Report;
 import com.ma.hmcdb.shared.rfid.RfidLabel;
 import com.ma.hmcdb.shared.test.TestReport;
 
-public class MainPage  extends AppMainPage {
+public class MainPage extends AppMainPage {
 	// private final CommonDataServiceAsync commonDataService =
 	// GWT.create(CommonDataService.class);
 	private final AppServiceAsync settingsService = GWT.create(AppService.class);
@@ -100,7 +108,7 @@ public class MainPage  extends AppMainPage {
 //			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
 //					new OperatorList(null, 2000).setEditable(Login.user.company == null), Report.class,
 //					eventBus);
-			
+
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new Label(), 5);
 
@@ -126,15 +134,42 @@ public class MainPage  extends AppMainPage {
 			tabPanel2.add(panel, "Помещения");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
-//			OperatorList operatorList = new OperatorList(null, 2000);
-//			panel.addW(new Label(), 25);
-//			panel.addN(new Label(), 10);
-//			panel.addS(new Label(), 10);
-//			panel.addE(new Label(), 25);
-//			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus));
+//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			OperatorList operatorList = new OperatorList(null, 2000);
+			panel.addW(new Label(), 30);
+			panel.addN(new Label(), 10);
+			panel.addS(new Label(), 10);
+			panel.addE(new Label(), 30);
+			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
+				@Override
+				protected Widget getAdditionals(CDObject operator) {
+					Image img = new Image(operator.get("avatar") == null
+							? new Image(ImageResources.IMAGE_RESOURCES.avatarPlaceholder()).getUrl()
+							: operator.get("avatar"));
+
+					PushButton uploadImageButton = new PushButton(img,
+							(ClickHandler) event -> new ImportDialog("Выберите файл", "api/images") {
+								@Override
+								protected void onComplete(SubmitCompleteEvent event) {
+									String results = event.getResults();
+									if (!results.isEmpty()) {
+										operator.set("avatar", results);
+										img.setUrl(operator.get("avatar"));
+									}
+								}
+							}.center());
+
+					uploadImageButton.setStyleName("uploadTestBtn");
+					uploadImageButton.setTitle("Загрузить изображение");
+					HorPanel horPanel = new HorPanel(uploadImageButton);
+					horPanel.setWidth("100%");
+					horPanel.setCellHorizontalAlignment(uploadImageButton, HasHorizontalAlignment.ALIGN_CENTER);
+					return horPanel;
+
+				}
+			});
 			tabPanel2.add(panel, "Операторы");
-			
+
 			panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Контроль дезинфекции");
@@ -145,11 +180,11 @@ public class MainPage  extends AppMainPage {
 			tabPanel2.add(panel, "Отчёты об обработке");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Журнал операций");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Статистика");
 
 		}

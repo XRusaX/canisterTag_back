@@ -13,7 +13,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.ma.commonui.shared.annotations.UILabel;
-import com.ma.hmcdb.shared.synchronizer.CompanyField;
 import com.ma.hmcdb.shared.synchronizer.ModifTime;
 import com.ma.hmcdb.shared.synchronizer.Name;
 import com.ma.hmcdb.shared.synchronizer.StoreTime;
@@ -24,11 +23,13 @@ public class Operator {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
+	@UILabel(label = "", sortable = false, isImage = true, widthEM = 10)
+	public String avatar;
+	
 	@Name
 	@UILabel(label = "Имя", sortable = true)
 	public String name;
-
-	@CompanyField
+	
 	@UILabel(label = "Организация", sortable = true, nullable = true)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)

@@ -44,7 +44,15 @@
 
 .dataGridWidget {}
 
-.dataGridFirstColumn {}
+.dataGridFirstColumn {
+    /* max-width: 150px; */
+    align-content: center;
+}
+
+.dataGridFirstColumn div {
+    /* max-width: 150px; */
+    align-content: center;
+}
 
 .dataGridLastColumn {}
 
@@ -60,9 +68,11 @@
 }
 
 .dataGridHeader {
+    height: 45px;
+    /* min-height: 45px; */
     font-size: 1.2rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    /* padding-top: 0.5rem; */
+    /* padding-bottom: 0.5rem; */
     color: white;
     overflow: hidden;
     font-family: "OpenSans-Regular";
@@ -78,6 +88,7 @@
 
 .dataGridFirstColumnHeader {
     border-top-left-radius: 12px;
+    /* max-width: 150px; */
 }
 
 .dataGridLastColumnFooter {}
@@ -113,6 +124,11 @@
     text-decoration: none solid rgb(85, 85, 85);
 }
 
+
+/* .dataGridEvenRow::before {
+    content: url(http://placehold.it/40x40);
+} */
+
 .dataGridEvenRow button {
     border-radius: 4px;
     border: none;
@@ -139,6 +155,24 @@
     background: #f3f7fb;
     height: 50px;
     text-align: center;
+}
+
+.dataGridOddRow img {
+    border-radius: 50%;
+    border: none;
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.dataGridEvenRow img {
+    border-radius: 50%;
+    border: none;
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+    margin: 5px;
 }
 
 .dataGridOddRow div {
@@ -193,10 +227,15 @@
 }
 
 .dataGridSelectedRow {
-    background: #fc9967;
+    /* background: #fc9967; */
+    background-color: #ff906b;
     color: white;
     /*height: auto;*/
     overflow: auto;
+}
+
+.dataGridSelectedRow div {
+    color: white;
 }
 
 .dataGridSelectedRowCell {
