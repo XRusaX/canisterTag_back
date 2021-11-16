@@ -11,7 +11,7 @@ public class OperatorList extends CommonListPanel {
 	public OperatorList(String title, Integer refreshPeriod) {
 		super(title, refreshPeriod, resource);
 		resource.customization().ensureInjected();
-		setButtonStyle("custom-button", true, "\uF067");
+		setAddButtonStyle("custom-button", true, "\uF067");
 	}
 
 }
