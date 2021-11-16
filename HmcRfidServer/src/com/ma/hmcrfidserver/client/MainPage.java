@@ -31,6 +31,7 @@ import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.Operator;
 import com.ma.hmcdb.shared.Permissions;
 import com.ma.hmcdb.shared.Room;
+import com.ma.hmcdb.shared.RoomLayer;
 import com.ma.hmcdb.shared.rfid.Quota;
 import com.ma.hmcdb.shared.rfid.Report;
 import com.ma.hmcdb.shared.rfid.RfidLabel;
@@ -119,8 +120,8 @@ public class MainPage  extends AppMainPage {
 			tabPanel2.add(panel, "Оборудование");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			CommonListPanel roomList = new CommonListPanel(null, 2000);
-			panel.addW(new CommonListPanelWrapper(roomList, Room.class, eventBus), 30);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), RoomLayer.class, eventBus), 30);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Room.class, eventBus), 30);
 			panel.add(new LayerPanel(eventBus));
 			tabPanel2.add(panel, "Помещения");
 

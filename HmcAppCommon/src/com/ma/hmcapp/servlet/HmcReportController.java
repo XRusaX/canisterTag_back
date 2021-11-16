@@ -144,7 +144,7 @@ public class HmcReportController {
 		if (room != null)
 			return room;
 
-		room = new Room(name, company);
+		room = new Room(name, null, company);
 		roomDataSource.store(em, room);
 
 		return room;
