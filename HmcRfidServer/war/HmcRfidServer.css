@@ -605,6 +605,7 @@ h1 {
 }
 
 .okCancelPanel {
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     justify-content: right;
@@ -617,16 +618,30 @@ h1 {
 .enum-field {
     /* display: inline-table; */
     /* height: 25px; */
-    /* width: 150px; */
-    /* padding: 8px 16px; */
-    /* line-height: 25px; */
-    /* font-size: 14px; */
-    /* font-weight: 500; */
-    font-family: inherit;
+    /* width: 150px;
+    padding: 8px 16px;
+    margin-top: 20px; */
+    /* line-height: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit; */
     border-radius: 6px;
     border: 1px solid var(--input-border);
     background: var(--input-background);
     transition: all 0s ease 0s;
+    font-family: "OpenSans-Regular";
+}
+
+.enum-field:disabled {
+    opacity: 0.8;
+}
+
+.enum-field div {
+    line-height: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    font-family: "OpenSans-Regular";
 }
 
 .enum-field:focus {

@@ -60,6 +60,10 @@
     -ms-transform: scale(0.9);
 }
 
+.uploadTestBtn:disabled {
+    opacity: 0.1;
+}
+
 .horPanel {
     background-color: antiquewhite;
     align-items: center;

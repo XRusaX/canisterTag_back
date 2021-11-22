@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -112,7 +113,7 @@ public class MainPage extends AppMainPage {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new Label(), 5);
 
-			PropertiesPanel myTestPanel = new PropertiesPanel(eventBus);
+			PropertiesPanel myTestPanel = new PropertiesPanel(eventBus, Hmc.class.getName());
 
 			panel.addW(new CommonListPanelWrapper(new HmcFlowList() {
 				@Override
@@ -123,10 +124,9 @@ public class MainPage extends AppMainPage {
 				}
 			}, Hmc.class, eventBus), 70);
 
-			panel.addW(myTestPanel, 25);
+			panel.addE(myTestPanel, 25);
 
 			tabPanel2.add(panel, "Оборудование");
-
 			panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), RoomLayer.class, eventBus), 30);
 			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Room.class, eventBus), 30);
@@ -136,19 +136,18 @@ public class MainPage extends AppMainPage {
 			panel = new DockLayoutPanelX(Unit.PCT);
 //			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			OperatorList operatorList = new OperatorList(null, 2000);
-			panel.addW(new Label(), 30);
-			panel.addN(new Label(), 10);
-			panel.addS(new Label(), 10);
-			panel.addE(new Label(), 30);
-			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
+			panel.addW(new Label(), 35);
+			PropertiesPanel operatorPropPanel = new PropertiesPanel(eventBus, Operator.class.getName()) {
 				@Override
-				protected Widget getAdditionals(CDObject operator) {
+				protected Panel getAdditionals(CDObject operator) {
+
 					Image img = new Image(operator.get("avatar") == null
 							? new Image(ImageResources.IMAGE_RESOURCES.avatarPlaceholder()).getUrl()
 							: operator.get("avatar"));
 
-					PushButton uploadImageButton = new PushButton(img,
-							(ClickHandler) event -> new ImportDialog("Выберите файл", "api/images") {
+					PushButton uploadImageButton = new PushButton(img, (ClickHandler) event -> {
+						if (!isReadOnlyMode())
+							new ImportDialog("Выберите файл", "api/images") {
 								@Override
 								protected void onComplete(SubmitCompleteEvent event) {
 									String results = event.getResults();
@@ -157,21 +156,30 @@ public class MainPage extends AppMainPage {
 										img.setUrl(operator.get("avatar"));
 									}
 								}
-							}.center());
-
+							}.center();
+					});
 					uploadImageButton.setStyleName("uploadTestBtn");
 					uploadImageButton.setTitle("Загрузить изображение");
 					HorPanel horPanel = new HorPanel(uploadImageButton);
 					horPanel.setWidth("100%");
 					horPanel.setCellHorizontalAlignment(uploadImageButton, HasHorizontalAlignment.ALIGN_CENTER);
 					return horPanel;
-
+				}
+			};
+			panel.addE(operatorPropPanel, 35);
+			panel.addN(new Label(), 10);
+			panel.addS(new Label(), 10);
+			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
+				@Override
+				public void edit(CDObject item) {
+					return;
 				}
 			});
+
 			tabPanel2.add(panel, "Операторы");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Контроль дезинфекции");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
