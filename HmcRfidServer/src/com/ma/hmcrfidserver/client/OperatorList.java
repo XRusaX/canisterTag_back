@@ -1,6 +1,5 @@
 package com.ma.hmcrfidserver.client;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
@@ -14,7 +13,7 @@ public class OperatorList extends CommonListPanel {
 	static MyContextMenuResources menuResource = GWT.create(MyContextMenuResources.class);
 
 	public OperatorList(String title, Integer refreshPeriod) {
-		super(title, refreshPeriod, resource);
+		super(title, resource);
 		resource.customization().ensureInjected();
 		setAddButtonStyle("custom-button", true, "\uF067");
 	}

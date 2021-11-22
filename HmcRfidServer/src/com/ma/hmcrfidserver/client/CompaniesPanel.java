@@ -24,7 +24,7 @@ public class CompaniesPanel extends CommonListPanelWrapper {
 	private static final LoginServiceAsync loginService = GWT.create(LoginService.class);
 
 	public CompaniesPanel(EventBus eventBus, String name, CompanyType companyType, List<String> showFields) {
-		super(new CommonListPanel(name, 2000) {
+		super(new CommonListPanel(name) {
 			@Override
 			protected void prepareContextMenu(ContextMenu menu, Set<CDObject> set) {
 				if (set.size() == 1 && Login.user.hasPermission(UserData.PERMISSION_USERS)) {

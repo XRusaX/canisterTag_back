@@ -103,7 +103,7 @@ public class MainPage extends AppMainPage {
 		if (Login.user.hasPermission(Permissions.PERMISSION_CUSTOMER)) {
 
 			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
-					new CommonListPanel("Отчеты", 2000).setEditable(Login.user.company == null), Report.class,
+					new CommonListPanel("Отчеты").setEditable(Login.user.company == null), Report.class,
 					eventBus);
 
 //			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
@@ -128,8 +128,8 @@ public class MainPage extends AppMainPage {
 
 			tabPanel2.add(panel, "Оборудование");
 			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), RoomLayer.class, eventBus), 30);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Room.class, eventBus), 30);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), RoomLayer.class, eventBus), 30);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Room.class, eventBus), 30);
 			panel.add(new LayerPanel(eventBus));
 			tabPanel2.add(panel, "Помещения");
 
@@ -208,9 +208,9 @@ public class MainPage extends AppMainPage {
 		if (Login.user.hasPermission(Permissions.PERMISSION_WRITE_RFID)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(
-					new CommonListPanel("Квоты", 2000).setEditable(Login.user.company == null), Quota.class, eventBus),
+					new CommonListPanel("Квоты").setEditable(Login.user.company == null), Quota.class, eventBus),
 					50);
-			panel.add(new CommonListPanelWrapper(new CommonListPanel("Метки", 2000).setEditable(false), RfidLabel.class,
+			panel.add(new CommonListPanelWrapper(new CommonListPanel("Метки").setEditable(false), RfidLabel.class,
 					eventBus));
 			tabPanel2.add(panel, "Метки");
 		}
@@ -225,7 +225,7 @@ public class MainPage extends AppMainPage {
 		if (Login.user.hasPermission(Permissions.PERMISSION_TEST)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.add(
-					new CommonListPanelWrapper(new CommonListPanel(null, 2000).setEditable(Login.user.company == null),
+					new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
 							TestReport.class, eventBus));
 			tabPanel2.add(panel, "Тесты");
 		}
@@ -233,7 +233,7 @@ public class MainPage extends AppMainPage {
 		eventBus = new PageEventBus();
 		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
 				.addX(new CommonListPanelWrapper(
-						new CommonListPanel(null, 2000).setEditable(Login.user.company == null), Agent.class,
+						new CommonListPanel(null).setEditable(Login.user.company == null), Agent.class,
 						eventBus)),
 				"Средства");
 
