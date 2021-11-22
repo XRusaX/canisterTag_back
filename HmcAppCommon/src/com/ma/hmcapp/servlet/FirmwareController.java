@@ -53,7 +53,7 @@ public class FirmwareController {
 			throws IOException {
 		threadLocalRequest.setRequest(req);
 		if (!authComponent.getUser().hasPermission(UserData.PERMISSION_SETTINGS))
-			return "failure";
+			return "";
 
 		File dir = new File(getFirmwareDir(), line);
 		dir.mkdirs();

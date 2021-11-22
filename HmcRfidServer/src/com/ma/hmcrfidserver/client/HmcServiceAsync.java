@@ -7,8 +7,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.ma.commonui.shared.cd.CDObject;
 
 public interface HmcServiceAsync {
-	void saveRoomCells(List<CDObject> list, long companyId, AsyncCallback<Void> callback);
-
 	void getFirmwareList(AsyncCallback<Map<String, String>> callback);
 	void removeFirmware(String type, AsyncCallback<Void> callback);
 

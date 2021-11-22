@@ -21,11 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ma.appcommon.AuthComponent;
-import com.ma.appcommon.ThreadLocalRequest;
 import com.ma.appcommon.WorkingDir;
 import com.ma.appcommon.logger.MsgLoggerImpl;
-import com.ma.appcommon.shared.auth.UserData;
 import com.ma.common.shared.Severity;
 
 @RestController
@@ -37,16 +34,16 @@ public class ImageUploadController {
 	@Autowired
 	private WorkingDir workingDir;
 
-	@Autowired
-	private AuthComponent authComponent;
+//	@Autowired
+//	private AuthComponent authComponent;
 
-	@Autowired
-	private ThreadLocalRequest threadLocalRequest;
+//	@Autowired
+//	private ThreadLocalRequest threadLocalRequest;
 
 	@ResponseBody
 	@PostMapping("/images")
 	public String handleFileUpload(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		threadLocalRequest.setRequest(req);
+//		threadLocalRequest.setRequest(req);
 //		if (!authComponent.getUser().hasPermission(UserData.PERMISSION_SETTINGS))
 //			return "";
 

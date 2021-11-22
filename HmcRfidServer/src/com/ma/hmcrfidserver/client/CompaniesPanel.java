@@ -14,7 +14,6 @@ import com.ma.common.gwtapp.client.auth.UserDialog;
 import com.ma.common.gwtapp.client.commondata.CommonListPanel;
 import com.ma.common.gwtapp.client.commondata.CommonListPanelWrapper;
 import com.ma.common.gwtapp.client.ui.ContextMenu;
-import com.ma.common.gwtapp.client.ui.dialog.UploadDialog;
 import com.ma.common.shared.eventbus.EventBus;
 import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmcdb.shared.Company;
@@ -24,7 +23,7 @@ public class CompaniesPanel extends CommonListPanelWrapper {
 	private static final LoginServiceAsync loginService = GWT.create(LoginService.class);
 
 	public CompaniesPanel(EventBus eventBus, String name, CompanyType companyType, List<String> showFields) {
-		super(new CommonListPanel(name, 2000) {
+		super(new CommonListPanel(name) {
 			@Override
 			protected void prepareContextMenu(ContextMenu menu, Set<CDObject> set) {
 				if (set.size() == 1 && Login.user.hasPermission(UserData.PERMISSION_USERS)) {
