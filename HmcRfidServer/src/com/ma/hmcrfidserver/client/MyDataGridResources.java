@@ -1,5 +1,6 @@
 package com.ma.hmcrfidserver.client;
 
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.DataResource;
 import com.google.gwt.resources.client.DataResource.MimeType;
 import com.google.gwt.user.cellview.client.DataGrid;
@@ -23,4 +24,8 @@ public interface MyDataGridResources extends DataGrid.Resources {
 	@Override
 	@Source({ "/resources/css/MyDataGrid.css" })
 	DataGridStyle dataGridStyle();
+	
+	@Source("/resources/css/Custom.css")
+    @CssResource.NotStrict
+    CssResource customization();
 };
