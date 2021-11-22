@@ -23,7 +23,7 @@ import com.ma.hmcdb.shared.RoomLayer;
 
 public class LayerPanel extends ResizeComposite {
 	private final CommonDataServiceAsync service = GWT.create(CommonDataService.class);
-	private final HmcServiceAsync hmcService = GWT.create(HmcService.class);
+	//private final HmcServiceAsync hmcService = GWT.create(HmcService.class);
 
 	// private Map<Long, CDObject> rooms;
 	private CDObject room;
@@ -51,10 +51,8 @@ public class LayerPanel extends ResizeComposite {
 
 						if (!e.getResults().isEmpty()) {
 							layer.set("imageUrl", e.getResults());
-							service.store(RoomLayer.class.getName(), layer, new AlertAsyncCallback<>(v -> {
-								version++;
-								updateImage();
-							}));
+							service.store(RoomLayer.class.getName(), layer,
+									new AlertAsyncCallback<>(v -> updateImage()));
 						}
 
 					}).center();
@@ -84,15 +82,13 @@ public class LayerPanel extends ResizeComposite {
 		initWidget(lp);
 	}
 
-	private int version;
-
 	private void updateImage() {
 
 		lp.clear();
 		lp.add(im);
 
 		if (layer != null)
-			im.setUrl(layer.get("imageUrl") + "&v" + version);
+			im.setUrl(layer.get("imageUrl"));
 		else
 			im.setUrl("");
 

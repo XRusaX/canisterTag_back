@@ -14,7 +14,6 @@ import com.ma.common.gwtapp.client.auth.UserDialog;
 import com.ma.common.gwtapp.client.commondata.CommonListPanel;
 import com.ma.common.gwtapp.client.commondata.CommonListPanelWrapper;
 import com.ma.common.gwtapp.client.ui.ContextMenu;
-import com.ma.common.gwtapp.client.ui.dialog.UploadDialog;
 import com.ma.common.shared.eventbus.EventBus;
 import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmcdb.shared.Company;

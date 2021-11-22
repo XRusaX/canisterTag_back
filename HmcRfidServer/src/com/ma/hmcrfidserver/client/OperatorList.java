@@ -12,7 +12,7 @@ public class OperatorList extends CommonListPanel {
 	static MyDataGridResources resource = GWT.create(MyDataGridResources.class);
 	static MyContextMenuResources menuResource = GWT.create(MyContextMenuResources.class);
 
-	public OperatorList(String title, Integer refreshPeriod) {
+	public OperatorList(String title) {
 		super(title, resource);
 		resource.customization().ensureInjected();
 		setAddButtonStyle("custom-button", true, "\uF067");

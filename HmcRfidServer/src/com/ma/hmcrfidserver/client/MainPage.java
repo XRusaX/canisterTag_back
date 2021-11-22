@@ -135,7 +135,7 @@ public class MainPage extends AppMainPage {
 
 			panel = new DockLayoutPanelX(Unit.PCT);
 //			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
-			OperatorList operatorList = new OperatorList(null, 2000);
+			OperatorList operatorList = new OperatorList(null);
 			panel.addW(new Label(), 35);
 			PropertiesPanel operatorPropPanel = new PropertiesPanel(eventBus, Operator.class.getName()) {
 				@Override
