@@ -458,7 +458,7 @@ h1 {
 }
 
 .flat-button:hover {
-    background-color: white;
+    background-color: transparent;
     color: var(--orange-color);
     transition: background 0.6s ease 0s;
     box-sizing: border-box;
