@@ -27,16 +27,18 @@ public class ImportDialog extends DialogBoxExt {
 
 		setContent(formPanel);
 
-		addButton("Ok", event -> {
+		addButton("ОТМЕНА", null, "6em", "button-cancel");
+
+		addButton("ОК", event -> {
 			String fileName = fileUpload.getFilename();
 			if (fileName.length() == 0)
 				Window.alert("Файл не выбран");
 			else {
 				formPanel.submit();
 			}
-		}, "6em");
+		}, "6em", "button-ok");
 
-		addButton("Cancel", null, "6em");
+		setStyleName("testDialog");
 	}
 
 	protected void onComplete(SubmitCompleteEvent event) {
