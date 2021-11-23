@@ -68,3 +68,11 @@
     background-color: antiquewhite;
     align-items: center;
 }
+
+.testDialog {
+    padding: 20px 20px 20px 20px;
+    margin: 20px 20px 20px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 2px 2px rgb(60 64 67 / 30%), 0 4px 6px 3px rgb(60 64 67 / 15%);
+    background-color: #FCF6EC;
+}
