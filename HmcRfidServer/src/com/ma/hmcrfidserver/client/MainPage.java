@@ -102,9 +102,14 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_CUSTOMER)) {
 
-			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
-					new CommonListPanel("Отчеты").setEditable(Login.user.company == null), Report.class,
-					eventBus);
+			MaterialUIList reportsList = new MaterialUIList("Отчеты");
+			reportsList.setEditable(Login.user.company == null);
+
+			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(reportsList, Report.class, eventBus);
+
+//			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
+//					new CommonListPanel("Отчеты").setEditable(Login.user.company == null), Report.class,
+//					eventBus);
 
 //			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
 //					new OperatorList(null, 2000).setEditable(Login.user.company == null), Report.class,
@@ -135,7 +140,7 @@ public class MainPage extends AppMainPage {
 
 			panel = new DockLayoutPanelX(Unit.PCT);
 //			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
-			OperatorList operatorList = new OperatorList(null);
+			MaterialUIList operatorList = new MaterialUIList(null);
 			panel.addW(new Label(), 35);
 			PropertiesPanel operatorPropPanel = new PropertiesPanel(eventBus, Operator.class.getName()) {
 				@Override
@@ -170,6 +175,33 @@ public class MainPage extends AppMainPage {
 			panel.addN(new Label(), 10);
 			panel.addS(new Label(), 10);
 			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
+
+				@Override
+				protected Widget getAdditionals(CDObject operator) {
+					Image img = new Image(operator.get("avatar") == null
+							? new Image(ImageResources.IMAGE_RESOURCES.avatarPlaceholder()).getUrl()
+							: operator.get("avatar"));
+
+					PushButton uploadImageButton = new PushButton(img, (ClickHandler) event -> {
+						new ImportDialog("Выберите файл", "api/images") {
+							@Override
+							protected void onComplete(SubmitCompleteEvent event) {
+								String results = event.getResults();
+								if (!results.isEmpty()) {
+									operator.set("avatar", results);
+									img.setUrl(operator.get("avatar"));
+								}
+							}
+						}.center();
+					});
+					uploadImageButton.setStyleName("uploadTestBtn");
+					uploadImageButton.setTitle("Загрузить изображение");
+					HorPanel horPanel = new HorPanel(uploadImageButton);
+					horPanel.setWidth("100%");
+					horPanel.setCellHorizontalAlignment(uploadImageButton, HasHorizontalAlignment.ALIGN_CENTER);
+					return horPanel;
+				}
+
 				@Override
 				public void edit(CDObject item) {
 					return;
@@ -207,11 +239,11 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_WRITE_RFID)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(
-					new CommonListPanel("Квоты").setEditable(Login.user.company == null), Quota.class, eventBus),
-					50);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel("Квоты").setEditable(Login.user.company == null),
+					Quota.class, eventBus), 50);
 			panel.add(new CommonListPanelWrapper(new CommonListPanel("Метки").setEditable(false), RfidLabel.class,
 					eventBus));
+
 			tabPanel2.add(panel, "Метки");
 		}
 
@@ -224,17 +256,15 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_TEST)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.add(
-					new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
-							TestReport.class, eventBus));
+			panel.add(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
+					TestReport.class, eventBus));
 			tabPanel2.add(panel, "Тесты");
 		}
 
 		eventBus = new PageEventBus();
 		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-				.addX(new CommonListPanelWrapper(
-						new CommonListPanel(null).setEditable(Login.user.company == null), Agent.class,
-						eventBus)),
+				.addX(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
+						Agent.class, eventBus)),
 				"Средства");
 
 		if (Login.user.company == null)
