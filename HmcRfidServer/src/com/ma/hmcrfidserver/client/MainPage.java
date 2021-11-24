@@ -177,6 +177,21 @@ public class MainPage extends AppMainPage {
 			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
 
 				@Override
+				protected String applyObjectEditorDialogStyle() {
+					return "uploadDialog";
+				}
+
+				@Override
+				protected String setStyleToEditorOkButton() {
+					return "button-ok";
+				}
+
+				@Override
+				protected String setStyleToEditorCancelButton() {
+					return "button-cancel";
+				}
+
+				@Override
 				protected Widget getAdditionals(CDObject operator) {
 					Image img = new Image(operator.get("avatar") == null
 							? new Image(ImageResources.IMAGE_RESOURCES.avatarPlaceholder()).getUrl()
