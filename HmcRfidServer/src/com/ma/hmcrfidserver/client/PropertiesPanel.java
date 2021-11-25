@@ -67,7 +67,7 @@ public class PropertiesPanel extends VerticalPanel {
 			if (objectEditor.readOnly)
 				objectEditor.setStyle("enum-field");
 			propPanel = (Widget) objectEditor.asPlatfomWidget();
-			propPanel.getElement().getStyle().setMargin(20, Unit.PX);
+			propPanel.getElement().getStyle().setMargin(10, Unit.PX);
 			propPanel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 			VerticalPanel container = new VerticalPanel();
 

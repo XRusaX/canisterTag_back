@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PushButton;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.AppConfig;
@@ -97,7 +98,7 @@ public class MainPage extends AppMainPage {
 		if (Login.user.company == null) {
 			tabPanel2 = new TabLayoutPanel(2, Unit.EM);
 			tabPanel.add(new DockLayoutPanelX(Unit.PCT)
-					.addW(new CompaniesPanel(eventBus, "Клиенты", CompanyType.CUSTOMER, Arrays.asList("name")), 20)
+					.addW(new CompaniesPanel(eventBus, "Клиенты", CompanyType.CUSTOMER, Arrays.asList("name")), 15)
 					.addX(tabPanel2), "Клиенты");
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_CUSTOMER)) {
@@ -118,7 +119,7 @@ public class MainPage extends AppMainPage {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new Label(), 5);
 
-			PropertiesPanel myTestPanel = new PropertiesPanel(eventBus, Hmc.class.getName());
+			PropertiesPanel hmcPropertiesPanel = new PropertiesPanel(eventBus, Hmc.class.getName());
 
 			panel.addW(new CommonListPanelWrapper(new HmcFlowList() {
 				@Override
@@ -129,7 +130,7 @@ public class MainPage extends AppMainPage {
 				}
 			}, Hmc.class, eventBus), 70);
 
-			panel.addE(myTestPanel, 25);
+			panel.addE(hmcPropertiesPanel, 25);
 
 			tabPanel2.add(panel, "Оборудование");
 			panel = new DockLayoutPanelX(Unit.PCT);
@@ -256,9 +257,9 @@ public class MainPage extends AppMainPage {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(new CommonListPanel("Квоты").setEditable(Login.user.company == null),
 					Quota.class, eventBus), 50);
+
 			panel.add(new CommonListPanelWrapper(new CommonListPanel("Метки").setEditable(false), RfidLabel.class,
 					eventBus));
-
 			tabPanel2.add(panel, "Метки");
 		}
 
@@ -271,20 +272,27 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_TEST)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.add(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
-					TestReport.class, eventBus));
+			MaterialUIList testList = new MaterialUIList("");
+			testList.setEditable(false);
+			panel.add(new CommonListPanelWrapper(testList, TestReport.class, eventBus));
+//			panel.add(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
+//					TestReport.class, eventBus));
 			tabPanel2.add(panel, "Тесты");
 		}
 
 		eventBus = new PageEventBus();
-		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-				.addX(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
-						Agent.class, eventBus)),
+		MaterialUIList disinfectantList = new MaterialUIList("");
+		disinfectantList.setEditable(false);
+		tabPanel.add(new DockLayoutPanelX(Unit.PCT)
+				.addX(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus)),
+//		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
+//				.addX(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
+//						Agent.class, eventBus)),
 				"Средства");
 
 		if (Login.user.company == null)
 			tabPanel.add(new LoggerPanel(true), "Журнал");
-
+		
 		if (Login.user.hasPermission(UserData.PERMISSION_USERS)) {
 			tabPanel.add(new UsersPage(true), "Пользователи");
 			// eventBus = new PageEventBus();
