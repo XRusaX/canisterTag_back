@@ -1,5 +1,8 @@
 package com.ma.hmcapp.datasource;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +30,14 @@ public class RoomLayerDataSource extends DataSourceImpl<RoomLayer> {
 		commonDataImpl.addDataSource(RoomLayer.class, this);
 	}
 
+	public List<RoomLayer> loadLayersByCompany(EM em, Company company) {
+		return Database2.select(em.em, RoomLayer.class).whereEQ("company", company).getResultStream()
+				.collect(Collectors.toList());
+	}
+	
 	public RoomLayer loadByCompany(EM em, Company company) {
 		RoomLayer layer = Database2.select(em.em, RoomLayer.class).whereEQ("company", company).getResultStream()
 				.findFirst().orElse(null);
 		return layer;
 	}
-
 }

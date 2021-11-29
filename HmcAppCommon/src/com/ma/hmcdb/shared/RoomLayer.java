@@ -25,6 +25,7 @@ public class RoomLayer {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
+//	@Column(length = 10000000)
 	public String imageUrl;
 
 	public RoomLayer() {
