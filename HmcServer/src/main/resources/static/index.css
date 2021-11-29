@@ -69,8 +69,8 @@ h1 {
 
 .prop-panel {
     height: 90%;
-    padding: 20px 20px 20px 20px;
-    margin: 20px 20px 20px 20px;
+    padding: 10px;
+    margin: 10px;
     border-radius: 12px;
     background-color: var(--prop-panel-background);
     box-shadow: 0 2px 2px 2px rgb(60 64 67 / 30%), 0 4px 6px 3px rgb(60 64 67 / 15%);
@@ -458,7 +458,7 @@ h1 {
 }
 
 .flat-button:hover {
-    background-color: white;
+    background-color: transparent;
     color: var(--orange-color);
     transition: background 0.6s ease 0s;
     box-sizing: border-box;
@@ -559,7 +559,8 @@ h1 {
 .button-edit::before {
     font-family: 'Font Awesome 5 Free';
     font-size: large;
-    content: '\f044';
+    content: '\f304';
+    font-weight: bold;
     /* text-align: center; */
     /* align-content: center; */
 }
@@ -604,6 +605,7 @@ h1 {
 }
 
 .okCancelPanel {
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     justify-content: right;
@@ -616,16 +618,30 @@ h1 {
 .enum-field {
     /* display: inline-table; */
     /* height: 25px; */
-    /* width: 150px; */
-    /* padding: 8px 16px; */
-    /* line-height: 25px; */
-    /* font-size: 14px; */
-    /* font-weight: 500; */
-    font-family: inherit;
+    /* width: 150px;
+    padding: 8px 16px;
+    margin-top: 20px; */
+    /* line-height: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit; */
     border-radius: 6px;
     border: 1px solid var(--input-border);
     background: var(--input-background);
     transition: all 0s ease 0s;
+    font-family: "OpenSans-Regular";
+}
+
+.enum-field:disabled {
+    opacity: 0.8;
+}
+
+.enum-field div {
+    line-height: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    font-family: "OpenSans-Regular";
 }
 
 .enum-field:focus {

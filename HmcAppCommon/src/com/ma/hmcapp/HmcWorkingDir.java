@@ -10,7 +10,7 @@ import com.ma.common.app.AppData;
 public class HmcWorkingDir extends WorkingDir {
 
 	public HmcWorkingDir(ApplicationContext context) {
-		super(AppData.getWorkingDir(context.getApplicationName().isEmpty() ? "dev" : context.getApplicationName()));
+		super(AppData.getWorkingDir(context.getApplicationName().isEmpty() ? "HMC_dev" : context.getApplicationName()));
 	}
 
 }

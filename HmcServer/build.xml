@@ -1,8 +1,8 @@
 <project default="gwtcompile">
 
-	<property name="appname" value="hmcrfidserver" />
+	<property name="appname" value="hmcserver" />
 
-	<property name="entrypoint" value="com.ma.hmcrfidserver.HmcRfidServer" />
+	<property name="entrypoint" value="com.ma.hmcserver.HmcServer" />
 
 	<property name="gwtdir" value="..\common-java\Libs\gwt-2.8.1" />
 
