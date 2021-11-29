@@ -4,17 +4,9 @@ import java.util.Arrays;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.AppConfig;
 import com.ma.appcommon.shared.AppState;
 import com.ma.appcommon.shared.auth.UserData;
@@ -32,20 +24,18 @@ import com.ma.common.gwtapp.client.commondata.PageEventBus;
 import com.ma.common.gwtapp.client.connections.ConnectionsPage;
 import com.ma.common.gwtapp.client.logger.LoggerPanel;
 import com.ma.common.gwtapp.client.ui.panel.DockLayoutPanelX;
-import com.ma.common.gwtapp.client.ui.panel.HorPanel;
 import com.ma.common.gwtapp.client.ui.toolbar.StatusBar;
-import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmcdb.shared.Agent;
 import com.ma.hmcdb.shared.Company.CompanyType;
 import com.ma.hmcdb.shared.Hmc;
 import com.ma.hmcdb.shared.Operator;
 import com.ma.hmcdb.shared.Permissions;
-import com.ma.hmcdb.shared.Room;
 import com.ma.hmcdb.shared.RoomLayer;
 import com.ma.hmcdb.shared.rfid.Quota;
 import com.ma.hmcdb.shared.rfid.Report;
 import com.ma.hmcdb.shared.rfid.RfidLabel;
 import com.ma.hmcdb.shared.test.TestReport;
+import com.ma.hmcrfidserver.client.customwidgets.PlacementPanel;
 
 public class MainPage extends AppMainPage {
 	// private final CommonDataServiceAsync commonDataService =
@@ -133,101 +123,26 @@ public class MainPage extends AppMainPage {
 			panel.addE(hmcPropertiesPanel, 25);
 
 			tabPanel2.add(panel, "Оборудование");
+
 			panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), RoomLayer.class, eventBus), 30);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Room.class, eventBus), 30);
-			panel.add(new LayerPanel(eventBus));
+
+			panel = new DockLayoutPanelX(Unit.PCT);
+			panel.addW(new PlacementPanel(eventBus), 100);
 			tabPanel2.add(panel, "Помещения");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
-			MaterialUIList operatorList = new MaterialUIList(null);
-			panel.addW(new Label(), 35);
-			PropertiesPanel operatorPropPanel = new PropertiesPanel(eventBus, Operator.class.getName()) {
-				@Override
-				protected Panel getAdditionals(CDObject operator) {
-
-					Image img = new Image(operator.get("avatar") == null
-							? new Image(ImageResources.IMAGE_RESOURCES.avatarPlaceholder()).getUrl()
-							: operator.get("avatar"));
-
-					PushButton uploadImageButton = new PushButton(img, (ClickHandler) event -> {
-						if (!isReadOnlyMode())
-							new ImportDialog("Выберите файл", "api/images") {
-								@Override
-								protected void onComplete(SubmitCompleteEvent event) {
-									String results = event.getResults();
-									if (!results.isEmpty()) {
-										operator.set("avatar", results);
-										img.setUrl(operator.get("avatar"));
-									}
-								}
-							}.center();
-					});
-					uploadImageButton.setStyleName("uploadTestBtn");
-					uploadImageButton.setTitle("Загрузить изображение");
-					HorPanel horPanel = new HorPanel(uploadImageButton);
-					horPanel.setWidth("100%");
-					horPanel.setCellHorizontalAlignment(uploadImageButton, HasHorizontalAlignment.ALIGN_CENTER);
-					return horPanel;
-				}
-			};
-			panel.addE(operatorPropPanel, 35);
-			panel.addN(new Label(), 10);
-			panel.addS(new Label(), 10);
-			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
-
-				@Override
-				protected String applyObjectEditorDialogStyle() {
-					return "uploadDialog";
-				}
-
-				@Override
-				protected String setStyleToEditorOkButton() {
-					return "button-ok";
-				}
-
-				@Override
-				protected String setStyleToEditorCancelButton() {
-					return "button-cancel";
-				}
-
-				@Override
-				protected Widget getAdditionals(CDObject operator) {
-					Image img = new Image(operator.get("avatar") == null
-							? new Image(ImageResources.IMAGE_RESOURCES.avatarPlaceholder()).getUrl()
-							: operator.get("avatar"));
-
-					PushButton uploadImageButton = new PushButton(img, (ClickHandler) event -> {
-						new ImportDialog("Выберите файл", "api/images") {
-							@Override
-							protected void onComplete(SubmitCompleteEvent event) {
-								String results = event.getResults();
-								if (!results.isEmpty()) {
-									operator.set("avatar", results);
-									img.setUrl(operator.get("avatar"));
-								}
-							}
-						}.center();
-					});
-					uploadImageButton.setStyleName("uploadTestBtn");
-					uploadImageButton.setTitle("Загрузить изображение");
-					HorPanel horPanel = new HorPanel(uploadImageButton);
-					horPanel.setWidth("100%");
-					horPanel.setCellHorizontalAlignment(uploadImageButton, HasHorizontalAlignment.ALIGN_CENTER);
-					return horPanel;
-				}
-
-				@Override
-				public void edit(CDObject item) {
-					return;
-				}
-			});
-
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Operator.class, eventBus), 30);
+//			OperatorList operatorList = new OperatorList(null, 2000);
+//			panel.addW(new Label(), 25);
+//			panel.addN(new Label(), 10);
+//			panel.addS(new Label(), 10);
+//			panel.addE(new Label(), 25);
+//			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus));
 			tabPanel2.add(panel, "Операторы");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Контроль дезинфекции");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
@@ -236,11 +151,11 @@ public class MainPage extends AppMainPage {
 			tabPanel2.add(panel, "Отчёты об обработке");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Журнал операций");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Статистика");
 
 		}
@@ -257,7 +172,6 @@ public class MainPage extends AppMainPage {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(new CommonListPanel("Квоты").setEditable(Login.user.company == null),
 					Quota.class, eventBus), 50);
-
 			panel.add(new CommonListPanelWrapper(new CommonListPanel("Метки").setEditable(false), RfidLabel.class,
 					eventBus));
 			tabPanel2.add(panel, "Метки");
@@ -272,27 +186,20 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_TEST)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			MaterialUIList testList = new MaterialUIList("");
-			testList.setEditable(false);
-			panel.add(new CommonListPanelWrapper(testList, TestReport.class, eventBus));
-//			panel.add(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
-//					TestReport.class, eventBus));
+			panel.add(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
+					TestReport.class, eventBus));
 			tabPanel2.add(panel, "Тесты");
 		}
 
 		eventBus = new PageEventBus();
-		MaterialUIList disinfectantList = new MaterialUIList("");
-		disinfectantList.setEditable(false);
-		tabPanel.add(new DockLayoutPanelX(Unit.PCT)
-				.addX(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus)),
-//		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-//				.addX(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
-//						Agent.class, eventBus)),
+		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
+				.addX(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
+						Agent.class, eventBus)),
 				"Средства");
 
 		if (Login.user.company == null)
 			tabPanel.add(new LoggerPanel(true), "Журнал");
-		
+
 		if (Login.user.hasPermission(UserData.PERMISSION_USERS)) {
 			tabPanel.add(new UsersPage(true), "Пользователи");
 			// eventBus = new PageEventBus();

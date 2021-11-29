@@ -25,4 +25,7 @@ public interface ImageResources extends ClientBundle {
 	
 	@Source("resources/avatar_placeholder.png")
 	ImageResource avatarPlaceholder();
+	
+//	@Source("resources/layerOut.png")
+//	ImageResource layerOut();
 }
