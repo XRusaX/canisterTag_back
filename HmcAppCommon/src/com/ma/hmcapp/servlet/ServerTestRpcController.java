@@ -21,14 +21,14 @@ import com.ma.hmcapp.datasource.HmcDataSource;
 import com.ma.hmcapp.datasource.OperatorDataSource;
 import com.ma.hmcapp.datasource.QuotaDataSource;
 import com.ma.hmcapp.datasource.RoomDataSource;
-import com.ma.hmcdb.shared.Agent;
-import com.ma.hmcdb.shared.Company;
-import com.ma.hmcdb.shared.Company.CompanyType;
-import com.ma.hmcdb.shared.Hmc;
-import com.ma.hmcdb.shared.Operator;
+import com.ma.hmcdb.entity.Agent;
+import com.ma.hmcdb.entity.Company;
+import com.ma.hmcdb.entity.Hmc;
+import com.ma.hmcdb.entity.Operator;
+import com.ma.hmcdb.entity.Room;
+import com.ma.hmcdb.entity.rfid.Quota;
+import com.ma.hmcdb.shared.CompanyType;
 import com.ma.hmcdb.shared.Permissions;
-import com.ma.hmcdb.shared.Room;
-import com.ma.hmcdb.shared.rfid.Quota;
 
 @RestController
 @RequestMapping(ServerTestRpcInterface.servletPath)

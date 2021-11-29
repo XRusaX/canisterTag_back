@@ -12,9 +12,9 @@ import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.logger.MsgLoggerImpl;
 import com.ma.common.shared.Severity;
 import com.ma.hmc.iface.shared.HmcType;
-import com.ma.hmcdb.shared.Hmc;
-import com.ma.hmcdb.shared.rfid.Report;
-import com.ma.hmcdb.shared.rfid.RfidLabel;
+import com.ma.hmcdb.entity.Hmc;
+import com.ma.hmcdb.entity.rfid.Report;
+import com.ma.hmcdb.entity.rfid.RfidLabel;
 
 @Component
 public class HmcDataSource extends DataSourceImpl<Hmc> {

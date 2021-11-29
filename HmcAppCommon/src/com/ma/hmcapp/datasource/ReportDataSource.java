@@ -12,9 +12,9 @@ import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.db.Database2.DBSelect.Dir;
-import com.ma.hmcdb.shared.Hmc;
-import com.ma.hmcdb.shared.rfid.Report;
-import com.ma.hmcdb.shared.rfid.RfidLabel;
+import com.ma.hmcdb.entity.Hmc;
+import com.ma.hmcdb.entity.rfid.Report;
+import com.ma.hmcdb.entity.rfid.RfidLabel;
 
 @Component
 public class ReportDataSource extends DataSourceImpl<Report> {

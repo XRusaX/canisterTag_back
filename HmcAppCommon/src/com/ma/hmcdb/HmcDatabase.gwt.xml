@@ -7,4 +7,5 @@
   "http://gwtproject.org/doctype/2.8.1/gwt-module.dtd">
 <module rename-to='hmcdatabase'>
   <source path='shared'/>
+  <source path='entity'/>
 </module>

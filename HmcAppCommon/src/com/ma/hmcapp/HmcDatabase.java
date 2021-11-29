@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 
 import com.ma.appcommon.SettingsHolder;
 import com.ma.appcommon.db.Database2;
-import com.ma.hmcdb.shared.Company;
-import com.ma.hmcdb.shared.Hmc;
-import com.ma.hmcdb.shared.rfid.Report;
+import com.ma.hmcdb.entity.Company;
+import com.ma.hmcdb.entity.Hmc;
+import com.ma.hmcdb.entity.rfid.Report;
 
 @Component
 public class HmcDatabase extends Database2 {
@@ -32,7 +32,7 @@ public class HmcDatabase extends Database2 {
 
 	@PostConstruct
 	private void init() {
-		createDatabase();
+		//createDatabase();
 		Map<String, String> properties = new HashMap<>();
 
 		String databaseHost = settingsHolder.getSettingsRO().databaseHost;

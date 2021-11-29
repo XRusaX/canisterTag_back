@@ -30,11 +30,11 @@ import com.ma.hmcapp.datasource.AgentDataSource;
 import com.ma.hmcapp.datasource.CompanyDataSource;
 import com.ma.hmcapp.datasource.QuotaDataSource;
 import com.ma.hmcapp.datasource.RfidLabelDataSource;
-import com.ma.hmcdb.shared.Agent;
-import com.ma.hmcdb.shared.Company;
+import com.ma.hmcdb.entity.Agent;
+import com.ma.hmcdb.entity.Company;
+import com.ma.hmcdb.entity.rfid.Quota;
+import com.ma.hmcdb.entity.rfid.RfidLabel;
 import com.ma.hmcdb.shared.Permissions;
-import com.ma.hmcdb.shared.rfid.Quota;
-import com.ma.hmcdb.shared.rfid.RfidLabel;
 
 @RestController
 @RequestMapping(HmcRfidRpcInterface.servletPath)

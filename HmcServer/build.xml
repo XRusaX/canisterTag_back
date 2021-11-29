@@ -1,0 +1,42 @@
+<project default="gwtcompile">
+
+	<property name="appname" value="hmcrfidserver" />
+
+	<property name="entrypoint" value="com.ma.hmcrfidserver.HmcRfidServer" />
+
+	<property name="gwtdir" value="..\common-java\Libs\gwt-2.8.1" />
+
+	<path id="gwtclasspath">
+		<fileset dir="${gwtdir}" includes="**/*.jar" />
+		<fileset dir="..\common-java\Libs\hibernate-release-5.5.0.Final\lib\required" includes="**/*.jar" />
+	</path>
+
+	<target name="gwtcompile">
+		<java fork="true" classname="com.google.gwt.dev.Compiler">
+			<classpath>
+				<pathelement location="src/main/java" />
+				<pathelement location="../common-java/Common/src" />
+				<pathelement location="../common-java/CommonUI/src" />
+				<pathelement location="../common-java/Chart/src" />
+				<pathelement location="../common-java/GwtApp/src" />
+				<pathelement location="../common-java/AppCommon/src" />
+				<pathelement location="../HmcInterface/src" />
+				<pathelement location="../HmcAppCommon/src" />
+				<path refid="gwtclasspath" />
+			</classpath>
+			<arg line="-war src/main/webapp" />
+			<arg line="-draftCompile" />
+			<arg line="-strict " />
+			<arg line="-incremental " />
+			<arg line="-setProperty user.agent=&quot;safari&quot; " />
+			<arg line="-style PRETTY" />
+			<arg value="${entrypoint}" />
+		</java>
+		
+		<copy todir="target\classes\static/${appname}">
+			<fileset dir="src/main/webapp/${appname}" includes="**/*" />
+		</copy>
+
+	</target>
+
+</project>

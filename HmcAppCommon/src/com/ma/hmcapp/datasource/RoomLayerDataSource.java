@@ -9,8 +9,8 @@ import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
-import com.ma.hmcdb.shared.Company;
-import com.ma.hmcdb.shared.RoomLayer;
+import com.ma.hmcdb.entity.Company;
+import com.ma.hmcdb.entity.RoomLayer;
 
 @Component
 public class RoomLayerDataSource extends DataSourceImpl<RoomLayer> {

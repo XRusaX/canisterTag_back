@@ -18,7 +18,7 @@ import com.ma.hmc.iface.boardtest.rpcdata.User;
 import com.ma.hmc.iface.boardtest.rpcinterface.HmcTestRpcInterface;
 import com.ma.hmcapp.datasource.HmcDataSource;
 import com.ma.hmcapp.datasource.TestReportDataSource;
-import com.ma.hmcdb.shared.Hmc;
+import com.ma.hmcdb.entity.Hmc;
 import com.ma.hmcdb.shared.Permissions;
 
 @RestController
@@ -70,7 +70,7 @@ public class HmcTestRpcController extends RpcController implements HmcTestRpcInt
 
 		database.execVoid(conn -> {
 			Hmc hmc = hmcDataSource.getCreateHmc(conn, testReport.hmcType, testReport.serialNumber);
-			com.ma.hmcdb.shared.test.TestReport r = new com.ma.hmcdb.shared.test.TestReport(hmc, testReport.testType,
+			com.ma.hmcdb.entity.test.TestReport r = new com.ma.hmcdb.entity.test.TestReport(hmc, testReport.testType,
 					testReport.testStatus, testReport.details);
 			testReportDataSource.store(conn, r);
 		});

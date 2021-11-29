@@ -13,9 +13,9 @@ import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
-import com.ma.hmcdb.shared.Agent;
-import com.ma.hmcdb.shared.Company;
-import com.ma.hmcdb.shared.rfid.Quota;
+import com.ma.hmcdb.entity.Agent;
+import com.ma.hmcdb.entity.Company;
+import com.ma.hmcdb.entity.rfid.Quota;
 
 @Component
 public class QuotaDataSource extends DataSourceImpl<Quota> {

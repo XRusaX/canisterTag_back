@@ -1,0 +1,254 @@
+/*
+ * Copyright 2011 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+@def selectionBorderWidth 2px;
+
+/* ЦВЕТА*/
+
+@def headerBackgroundColor #36304a;
+@def tableBorderColor #36304a;
+@def textColor #555555;
+
+/* ШРИФТЫ */
+
+@url OPEN_SANS_REGULAR_TTF openSansRegularTtf;
+@font-face {
+    font-family: "OpenSans-Regular";
+    src: OPEN_SANS_REGULAR_TTF format("truetype");
+}
+
+@url MONTSERRAT_REGULAR_TTF montserratRegularTtf;
+@font-face {
+    font-family: "Montserrat-Regular";
+    src: MONTSERRAT_REGULAR_TTF format("truetype");
+}
+
+@url ROBOTO_REGULAR_TTF robotoRegularTtf;
+@font-face {
+    font-family: "Roboto-Regular";
+    src: ROBOTO_REGULAR_TTF format("truetype");
+}
+
+.dataGridWidget {}
+
+.dataGridFirstColumn {
+    /* max-width: 150px; */
+    align-content: center;
+}
+
+.dataGridFirstColumn div {
+    /* max-width: 150px; */
+    align-content: center;
+}
+
+.dataGridLastColumn {}
+
+.dataGridFooter {
+    border-top: 2px solid #6f7277;
+    padding: 3px 15px;
+    text-align: left;
+    color: #4b4a4a;
+    text-shadow: #ddf 1px 1px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: headerBorderColor;
+}
+
+.dataGridHeader {
+    height: 45px;
+    /* min-height: 45px; */
+    font-size: 1.2rem;
+    /* padding-top: 0.5rem; */
+    /* padding-bottom: 0.5rem; */
+    color: white;
+    overflow: hidden;
+    font-family: "OpenSans-Regular";
+    background-color: headerBackgroundColor;
+}
+
+.dataGridCell {
+    padding: 2px 15px;
+    overflow: hidden;
+}
+
+.dataGridFirstColumnFooter {}
+
+.dataGridFirstColumnHeader {
+    border-top-left-radius: 12px;
+    /* max-width: 150px; */
+}
+
+.dataGridLastColumnFooter {}
+
+.dataGridLastColumnHeader {
+    border-top-right-radius: 12px;
+}
+
+.dataGridSortableHeader {
+    cursor: pointer;
+    cursor: hand;
+    /* font-size: large; */
+    text-align: center;
+}
+
+.dataGridSortedHeaderAscending {}
+
+.dataGridSortedHeaderDescending {}
+
+.dataGridEvenRow {
+    background: #ffffff;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.dataGridEvenRow div {
+    color: textColor;
+    font-size: 1rem;
+    line-height: 1.2rem;
+    font-family: "OpenSans-Regular";
+    word-spacing: 0px;
+    text-decoration: none solid rgb(85, 85, 85);
+}
+
+
+/* .dataGridEvenRow::before {
+    content: url(http://placehold.it/40x40);
+} */
+
+.dataGridEvenRow button {
+    border-radius: 4px;
+    border: none;
+    color: black;
+    text-align: center;
+    font-size: 16px;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.dataGridEvenRow button:hover {
+    box-shadow: 0px 0px 4px headerBackgroundColor;
+    transform: scale(1.15);
+}
+
+.dataGridEvenRowCell {
+    /* border: selectionBorderWidth solid #ffffff; */
+    border: none;
+}
+
+.dataGridOddRow {
+    background: #f3f7fb;
+    height: 50px;
+    text-align: center;
+}
+
+.dataGridOddRow img {
+    border-radius: 50%;
+    border: none;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.dataGridEvenRow img {
+    border-radius: 50%;
+    border: none;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.dataGridOddRow div {
+    color: textColor;
+    font-size: 1rem;
+    line-height: 1.2rem;
+    font-family: "OpenSans-Regular";
+    word-spacing: 0px;
+    text-decoration: none solid rgb(85, 85, 85);
+}
+
+.dataGridOddRow button {
+    border-radius: 4px;
+    border: none;
+    color: black;
+    text-align: center;
+    font-size: 16px;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.dataGridOddRow button:hover {
+    box-shadow: 0px 0px 4px headerBackgroundColor;
+    transform: scale(1.15);
+}
+
+.dataGridOddRowCell {
+    /* border: selectionBorderWidth solid #f3f7fb; */
+    border: none;
+}
+
+.dataGridHoveredRow {
+    background: #eee;
+    transition: 0.5s;
+    transform: eve;
+}
+
+.dataGridHoveredRowCell {
+    /* border: selectionBorderWidth solid #eee; */
+    border: none;
+}
+
+.dataGridKeyboardSelectedRow {
+    background: #ffc;
+}
+
+.dataGridKeyboardSelectedRowCell {
+    /* border: selectionBorderWidth solid #ffc; */
+    border: none;
+}
+
+.dataGridSelectedRow {
+    /* background: #fc9967; */
+    background-color: #ff906b;
+    color: white;
+    /*height: auto;*/
+    overflow: auto;
+}
+
+.dataGridSelectedRow div {
+    color: white;
+}
+
+.dataGridSelectedRowCell {
+    /* border: selectionBorderWidth solid #f26622; */
+    border: none;
+}
+
+
+/**
+ * The keyboard selected cell is visible over selection.
+ */
+
+.dataGridKeyboardSelectedCell {
+    /* border: selectionBorderWidth solid #d7dde8; */
+    border: none;
+}
