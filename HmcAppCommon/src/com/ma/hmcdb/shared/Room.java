@@ -1,4 +1,4 @@
-package com.ma.hmcdb.entity;
+package com.ma.hmcdb.shared;
 
 import java.util.Date;
 import java.util.List;

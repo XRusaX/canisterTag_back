@@ -1,8 +1,8 @@
-package com.ma.hmc.demo.server;
+package com.ma.hmc.HmcServer.server;
 
 import org.springframework.stereotype.Service;
 
-import com.ma.hmc.demo.client.DemoService;
+import com.ma.hmc.HmcServer.client.DemoService;
 
 @Service("demo")
 public class DemoServiceImpl implements DemoService {

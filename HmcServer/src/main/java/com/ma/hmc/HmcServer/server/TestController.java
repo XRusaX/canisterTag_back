@@ -1,4 +1,4 @@
-package com.ma.hmc.demo.server;
+package com.ma.hmc.HmcServer.server;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

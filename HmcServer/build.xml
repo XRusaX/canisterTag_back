@@ -27,8 +27,10 @@
 			<arg line="-war src/main/webapp" />
 			<arg line="-draftCompile" />
 			<arg line="-strict " />
+			<!-- 
 			<arg line="-incremental " />
 			<arg line="-setProperty user.agent=&quot;safari&quot; " />
+			 -->
 			<arg line="-style PRETTY" />
 			<arg value="${entrypoint}" />
 		</java>

@@ -1,4 +1,4 @@
-package com.ma.hmc.demo.client;
+package com.ma.hmc.HmcServer.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

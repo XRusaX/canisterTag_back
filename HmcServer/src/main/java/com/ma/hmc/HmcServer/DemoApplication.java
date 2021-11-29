@@ -1,4 +1,4 @@
-package com.ma.hmc.demo;
+package com.ma.hmc.HmcServer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

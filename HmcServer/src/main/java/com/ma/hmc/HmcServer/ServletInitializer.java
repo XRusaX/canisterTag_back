@@ -1,4 +1,4 @@
-package com.ma.hmc.demo;
+package com.ma.hmc.HmcServer;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

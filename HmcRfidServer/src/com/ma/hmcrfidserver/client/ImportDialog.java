@@ -1,5 +1,6 @@
 package com.ma.hmcrfidserver.client;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -24,19 +25,22 @@ public class ImportDialog extends DialogBoxExt {
 		fileUpload.setName("fileChooser");
 		fileUpload.getElement().setAttribute("accept", ".png");
 		formPanel.setWidget(fileUpload);
+		formPanel.getElement().getStyle().setMarginBottom(20, Unit.PX);
 
 		setContent(formPanel);
 
-		addButton("Ok", event -> {
+		addButton("ОТМЕНА", null, "6em", "button-cancel");
+
+		addButton("ОК", event -> {
 			String fileName = fileUpload.getFilename();
 			if (fileName.length() == 0)
 				Window.alert("Файл не выбран");
 			else {
 				formPanel.submit();
 			}
-		}, "6em");
+		}, "6em", "button-ok");
 
-		addButton("Cancel", null, "6em");
+		setStyleName("uploadDialog");
 	}
 
 	protected void onComplete(SubmitCompleteEvent event) {

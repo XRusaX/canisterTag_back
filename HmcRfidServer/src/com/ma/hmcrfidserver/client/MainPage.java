@@ -4,16 +4,9 @@ import java.util.Arrays;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.AppConfig;
 import com.ma.appcommon.shared.AppState;
 import com.ma.appcommon.shared.auth.UserData;
@@ -31,13 +24,10 @@ import com.ma.common.gwtapp.client.commondata.PageEventBus;
 import com.ma.common.gwtapp.client.connections.ConnectionsPage;
 import com.ma.common.gwtapp.client.logger.LoggerPanel;
 import com.ma.common.gwtapp.client.ui.panel.DockLayoutPanelX;
-import com.ma.common.gwtapp.client.ui.panel.HorPanel;
 import com.ma.common.gwtapp.client.ui.toolbar.StatusBar;
-import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmcdb.entity.Agent;
 import com.ma.hmcdb.entity.Hmc;
 import com.ma.hmcdb.entity.Operator;
-import com.ma.hmcdb.entity.Room;
 import com.ma.hmcdb.entity.RoomLayer;
 import com.ma.hmcdb.entity.rfid.Quota;
 import com.ma.hmcdb.entity.rfid.Report;
@@ -45,6 +35,7 @@ import com.ma.hmcdb.entity.rfid.RfidLabel;
 import com.ma.hmcdb.entity.test.TestReport;
 import com.ma.hmcdb.shared.CompanyType;
 import com.ma.hmcdb.shared.Permissions;
+import com.ma.hmcrfidserver.client.customwidgets.PlacementPanel;
 
 public class MainPage extends AppMainPage {
 	// private final CommonDataServiceAsync commonDataService =
@@ -97,14 +88,19 @@ public class MainPage extends AppMainPage {
 		if (Login.user.company == null) {
 			tabPanel2 = new TabLayoutPanel(2, Unit.EM);
 			tabPanel.add(new DockLayoutPanelX(Unit.PCT)
-					.addW(new CompaniesPanel(eventBus, "Клиенты", CompanyType.CUSTOMER, Arrays.asList("name")), 20)
+					.addW(new CompaniesPanel(eventBus, "Клиенты", CompanyType.CUSTOMER, Arrays.asList("name")), 15)
 					.addX(tabPanel2), "Клиенты");
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_CUSTOMER)) {
 
-			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
-					new CommonListPanel("Отчеты").setEditable(Login.user.company == null), Report.class,
-					eventBus);
+			MaterialUIList reportsList = new MaterialUIList("Отчеты");
+			reportsList.setEditable(Login.user.company == null);
+
+			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(reportsList, Report.class, eventBus);
+
+//			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
+//					new CommonListPanel("Отчеты").setEditable(Login.user.company == null), Report.class,
+//					eventBus);
 
 //			CommonListPanelWrapper reportsTab = new CommonListPanelWrapper(
 //					new OperatorList(null, 2000).setEditable(Login.user.company == null), Report.class,
@@ -113,7 +109,7 @@ public class MainPage extends AppMainPage {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new Label(), 5);
 
-			PropertiesPanel myTestPanel = new PropertiesPanel(eventBus, Hmc.class.getName());
+			PropertiesPanel hmcPropertiesPanel = new PropertiesPanel(eventBus, Hmc.class.getName());
 
 			panel.addW(new CommonListPanelWrapper(new HmcFlowList() {
 				@Override
@@ -124,62 +120,29 @@ public class MainPage extends AppMainPage {
 				}
 			}, Hmc.class, eventBus), 70);
 
-			panel.addE(myTestPanel, 25);
+			panel.addE(hmcPropertiesPanel, 25);
 
 			tabPanel2.add(panel, "Оборудование");
+
 			panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), RoomLayer.class, eventBus), 30);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Room.class, eventBus), 30);
-			panel.add(new LayerPanel(eventBus));
+
+			panel = new DockLayoutPanelX(Unit.PCT);
+			panel.addW(new PlacementPanel(eventBus), 100);
 			tabPanel2.add(panel, "Помещения");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
-			OperatorList operatorList = new OperatorList(null);
-			panel.addW(new Label(), 35);
-			PropertiesPanel operatorPropPanel = new PropertiesPanel(eventBus, Operator.class.getName()) {
-				@Override
-				protected Panel getAdditionals(CDObject operator) {
-
-					Image img = new Image(operator.get("avatar") == null
-							? new Image(ImageResources.IMAGE_RESOURCES.avatarPlaceholder()).getUrl()
-							: operator.get("avatar"));
-
-					PushButton uploadImageButton = new PushButton(img, (ClickHandler) event -> {
-						if (!isReadOnlyMode())
-							new ImportDialog("Выберите файл", "api/images") {
-								@Override
-								protected void onComplete(SubmitCompleteEvent event) {
-									String results = event.getResults();
-									if (!results.isEmpty()) {
-										operator.set("avatar", results);
-										img.setUrl(operator.get("avatar"));
-									}
-								}
-							}.center();
-					});
-					uploadImageButton.setStyleName("uploadTestBtn");
-					uploadImageButton.setTitle("Загрузить изображение");
-					HorPanel horPanel = new HorPanel(uploadImageButton);
-					horPanel.setWidth("100%");
-					horPanel.setCellHorizontalAlignment(uploadImageButton, HasHorizontalAlignment.ALIGN_CENTER);
-					return horPanel;
-				}
-			};
-			panel.addE(operatorPropPanel, 35);
-			panel.addN(new Label(), 10);
-			panel.addS(new Label(), 10);
-			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
-				@Override
-				public void edit(CDObject item) {
-					return;
-				}
-			});
-
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Operator.class, eventBus), 30);
+//			OperatorList operatorList = new OperatorList(null, 2000);
+//			panel.addW(new Label(), 25);
+//			panel.addN(new Label(), 10);
+//			panel.addS(new Label(), 10);
+//			panel.addE(new Label(), 25);
+//			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus));
 			tabPanel2.add(panel, "Операторы");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Контроль дезинфекции");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
@@ -188,11 +151,11 @@ public class MainPage extends AppMainPage {
 			tabPanel2.add(panel, "Отчёты об обработке");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Журнал операций");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
-//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), Operator.class, eventBus), 30);
 			tabPanel2.add(panel, "Статистика");
 
 		}
@@ -207,9 +170,8 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_WRITE_RFID)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(
-					new CommonListPanel("Квоты").setEditable(Login.user.company == null), Quota.class, eventBus),
-					50);
+			panel.addW(new CommonListPanelWrapper(new CommonListPanel("Квоты").setEditable(Login.user.company == null),
+					Quota.class, eventBus), 50);
 			panel.add(new CommonListPanelWrapper(new CommonListPanel("Метки").setEditable(false), RfidLabel.class,
 					eventBus));
 			tabPanel2.add(panel, "Метки");
@@ -224,17 +186,15 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_TEST)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.add(
-					new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
-							TestReport.class, eventBus));
+			panel.add(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
+					TestReport.class, eventBus));
 			tabPanel2.add(panel, "Тесты");
 		}
 
 		eventBus = new PageEventBus();
 		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-				.addX(new CommonListPanelWrapper(
-						new CommonListPanel(null).setEditable(Login.user.company == null), Agent.class,
-						eventBus)),
+				.addX(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
+						Agent.class, eventBus)),
 				"Средства");
 
 		if (Login.user.company == null)

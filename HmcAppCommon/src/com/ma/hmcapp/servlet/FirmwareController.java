@@ -111,10 +111,13 @@ public class FirmwareController {
 		File[] dirs = getFirmwareDir().listFiles((FileFilter) pathname -> pathname.isDirectory());
 
 		Map<String, String> res = new LinkedHashMap<>();
-		for (File dir : dirs) {
-			String[] files = dir.list();
-			if (files != null && files.length > 0)
-				res.put(dir.getName(), files[0]);
+
+		if (dirs != null) {
+			for (File dir : dirs) {
+				String[] files = dir.list();
+				if (files != null && files.length > 0)
+					res.put(dir.getName(), files[0]);
+			}
 		}
 
 		// for (HmcType line : HmcType.values()) {
