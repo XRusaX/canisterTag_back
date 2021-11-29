@@ -1,6 +1,8 @@
 package com.ma.hmcapp.datasource;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -13,6 +15,7 @@ import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
 import com.ma.hmcdb.shared.Company;
 import com.ma.hmcdb.shared.Room;
+import com.ma.hmcdb.shared.RoomLayer;
 
 @Component
 public class RoomDataSource extends DataSourceImpl<Room> {
@@ -29,14 +32,19 @@ public class RoomDataSource extends DataSourceImpl<Room> {
 		commonDataImpl.addDataSource(Room.class, this);
 	}
 
-	public Room loadByName(EM em, String name, Company company) {
-		return Database2.select(em.em, Room.class).whereEQ("name", name).whereEQ("company", company).getResultStream()
-				.findFirst().orElse(null);
+	public List<Room> loadByLayer(EM em, RoomLayer roomLayer) {
+		return Database2.select(em.em, Room.class).whereEQ("roomLayer", roomLayer).getResultStream()
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	protected void onBeforeStore(EM em, Room obj) {
 		if (obj.lastModified == null)
 			obj.lastModified = new Date();
+	}
+
+	public Room loadByName(EM em, String name, Company company) {
+		return Database2.select(em.em, Room.class).whereEQ("company", company).whereEQ("name", name)
+				.getResultStream().findFirst().get();
 	}
 }

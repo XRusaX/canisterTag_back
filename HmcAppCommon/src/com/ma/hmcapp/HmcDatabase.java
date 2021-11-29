@@ -22,10 +22,6 @@ import com.ma.hmcdb.shared.rfid.Report;
 @Component
 public class HmcDatabase extends Database2 {
 
-	private static final String dbname = "HTEST";
-	private static final String user = "HTEST";
-	private static final String password = "HTEST";
-
 	public HmcDatabase() {
 		super("HTEST");
 	}
@@ -35,7 +31,12 @@ public class HmcDatabase extends Database2 {
 		createDatabase();
 		Map<String, String> properties = new HashMap<>();
 
-		String databaseHost = settingsHolder.getSettingsRO().databaseHost;
+		 SettingsRO settings = settingsHolder.getSettingsRO();
+		 String dbname = settings.dbname;
+		 String user = settings.user;
+		 String databaseHost = settings.databaseHost;
+		 String password = settings.password;
+
 
 		properties.put("javax.persistence.jdbc.url", "jdbc:mysql://" + databaseHost + "/" + dbname);
 		properties.put("javax.persistence.jdbc.user", user);
@@ -62,7 +63,11 @@ public class HmcDatabase extends Database2 {
 				+ "&useLegacyDatetimeCode=false"//
 				+ "&useSSL=false";
 
-		String databaseHost = settingsHolder.getSettingsRO().databaseHost;
+		 SettingsRO settings = settingsHolder.getSettingsRO();
+		 String dbname = settings.dbname;
+		 String user = settings.user;
+		 String databaseHost = settings.databaseHost;
+		 String password = settings.password;
 
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://" + databaseHost + params, user, password);
 				Statement stmt = conn.createStatement();) {
