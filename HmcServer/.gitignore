@@ -29,5 +29,6 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/webapp/
+src/main/webapp/hmcserver
+src/main/webapp/WEB-INF/deploy
 **/gwt-unitCache
