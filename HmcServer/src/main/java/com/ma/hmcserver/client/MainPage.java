@@ -133,11 +133,12 @@ public class MainPage extends AppMainPage {
 
 			tabPanel2.add(panel, "Оборудование");
 
-			panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), RoomLayer.class, eventBus), 30);
+//			panel = new DockLayoutPanelX(Unit.PCT);
+//			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null), RoomLayer.class, eventBus), 30);
 
 			panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new PlacementPanel(eventBus), 100);
+			
 			tabPanel2.add(panel, "Помещения");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
@@ -283,7 +284,7 @@ public class MainPage extends AppMainPage {
 
 		eventBus = new PageEventBus();
 		MaterialUIList disinfectantList = new MaterialUIList("");
-		disinfectantList.setEditable(false);
+		disinfectantList.setEditable(Login.user.company == null);
 		tabPanel.add(new DockLayoutPanelX(Unit.PCT)
 				.addX(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus)),
 //		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//

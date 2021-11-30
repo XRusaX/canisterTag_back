@@ -1,6 +1,5 @@
 package com.ma.hmcdb.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +20,7 @@ public class RoomLayer {
 	@UILabel(label = "Имя", sortable = true)
 	public String name;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 

@@ -2,7 +2,6 @@ package com.ma.hmcdb.entity.rfid;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,12 +28,12 @@ public class Quota {
 	public String userName;
 
 	@UILabel(label = "Производство", sortable = true)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
 	@UILabel(label = "Средство", sortable = true)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Agent agent;
 

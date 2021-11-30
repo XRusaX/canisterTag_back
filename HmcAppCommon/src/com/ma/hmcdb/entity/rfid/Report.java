@@ -28,7 +28,7 @@ public class Report {
 	public long id;
 
 	@UILabel(label = "Организация", nullable = true, sortable = true)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
@@ -43,17 +43,17 @@ public class Report {
 	public HmcReportStatus status;
 
 	@UILabel(label = "МГЦ", sortable = true)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Hmc hmc;
 
 	@UILabel(label = "Оператор", nullable = true, sortable = true)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Operator operator;
 
 	@UILabel(label = "Помещ./объект", nullable = true, sortable = true)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Room room;
 
@@ -67,7 +67,7 @@ public class Report {
 	public Integer cleaningId;
 
 	@UILabel(label = "Метка", sortable = true)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public RfidLabel rfidLabel;
 

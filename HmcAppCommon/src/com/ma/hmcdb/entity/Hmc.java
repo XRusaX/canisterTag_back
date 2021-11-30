@@ -1,6 +1,5 @@
 package com.ma.hmcdb.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -32,7 +31,7 @@ public class Hmc {
 	public String serialNumber;
 
 	@UILabel(label = "Владелец", sortable = true, nullable = true)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 

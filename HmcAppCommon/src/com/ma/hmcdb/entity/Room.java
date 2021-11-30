@@ -1,10 +1,7 @@
 package com.ma.hmcdb.entity;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +11,6 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.ma.appcommon.datasource.EM;
-import com.ma.appcommon.db.Database2;
 import com.ma.commonui.shared.annotations.UILabel;
 
 @Entity
@@ -28,11 +23,11 @@ public class Room {
 	public String name;
 
 //	@UILabel(label = "Организация", sortable = true, nullable = true)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Company company;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public RoomLayer roomLayer;
 	
@@ -41,7 +36,7 @@ public class Room {
 
 	public Integer y;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public RoomLayer layer;
 

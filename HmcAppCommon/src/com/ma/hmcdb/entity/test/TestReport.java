@@ -2,7 +2,6 @@ package com.ma.hmcdb.entity.test;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -29,7 +28,7 @@ public class TestReport {
 	public Date time = new Date();
 
 	@UILabel(label = "МГЦ", sortable = true, readOnly = true)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Hmc hmc;
 

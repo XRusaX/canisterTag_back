@@ -30,7 +30,8 @@
 			<!-- 
 			<arg line="-incremental " />
 			<arg line="-setProperty user.agent=&quot;safari&quot; " />
-			 -->
+			-->
+			
 			<arg line="-style PRETTY" />
 			<arg value="${entrypoint}" />
 		</java>
