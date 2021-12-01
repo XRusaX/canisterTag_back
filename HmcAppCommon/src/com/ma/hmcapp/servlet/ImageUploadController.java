@@ -41,7 +41,7 @@ public class ImageUploadController {
 //	private ThreadLocalRequest threadLocalRequest;
 
 	@ResponseBody
-	@PostMapping("/images")
+	@PostMapping("/api/images")
 	public String handleFileUpload(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 //		threadLocalRequest.setRequest(req);
 //		if (!authComponent.getUser().hasPermission(UserData.PERMISSION_SETTINGS))
@@ -69,7 +69,7 @@ public class ImageUploadController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/images", produces = MediaType.IMAGE_PNG_VALUE)
+	@GetMapping(value = "/api/images", produces = MediaType.IMAGE_PNG_VALUE)
 	public byte[] handleFileDownload(@RequestParam("filename") String fileName) throws IOException {
 		File dir = getUploadingDir();
 		File file = new File(dir, fileName);

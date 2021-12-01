@@ -9,7 +9,7 @@ import com.ma.hmc.iface.version.VersionInfo;
 
 @RestController
 public class VersionController {
-	@GetMapping(value = "/version")
+	@GetMapping(value = "/api/version")
 	public synchronized String version() {
 		VersionInfo versionInfo = new VersionInfo();
 		versionInfo.version = Version.VERSION;

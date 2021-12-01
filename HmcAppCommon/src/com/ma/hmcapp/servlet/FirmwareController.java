@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -48,7 +49,7 @@ public class FirmwareController {
 	private ThreadLocalRequest threadLocalRequest;
 
 	@ResponseBody
-	@PostMapping("/firmware")
+	@PostMapping("/api/firmware")
 	public String handleFileUpload(HttpServletRequest req, HttpServletResponse resp, @RequestParam("line") String line)
 			throws IOException {
 		threadLocalRequest.setRequest(req);
@@ -74,7 +75,7 @@ public class FirmwareController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/firmware/version")
+	@GetMapping(value = "/api/firmware/version")
 	public String handleVersion(@RequestParam("line") String line) throws IOException {
 		File dir = new File(getFirmwareDir(), line);
 		String[] files = dir.list();
@@ -82,7 +83,7 @@ public class FirmwareController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/firmware", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@GetMapping(value = "/api/firmware", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<InputStreamResource> handleFileDownload(@RequestParam("line") String line)
 			throws IOException {
 

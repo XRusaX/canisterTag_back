@@ -31,7 +31,7 @@ public class PingController {
 		}
 	}
 
-	@GetMapping(value = "/ping")
+	@GetMapping(value = "/api/ping")
 	private synchronized void ping(@RequestParam("serNum") String hmcSerialNumber) throws IOException {
 		synchronized (pingMap) {
 			pingMap.put(hmcSerialNumber, new AtomicInteger(ONLINE_COUNTEER));
