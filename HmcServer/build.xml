@@ -36,10 +36,9 @@
 			<arg value="${entrypoint}" />
 		</java>
 		
-		<copy todir="target\classes\static/${appname}">
-			<fileset dir="src/main/webapp/${appname}" includes="**/*" />
+		<copy todir="target\classes\static">
+			<fileset dir="src/main/webapp" includes="**/*" />
 		</copy>
-
 	</target>
 
 </project>
