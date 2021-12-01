@@ -4,7 +4,7 @@ import com.ma.hmc.iface.shared.HmcType;
 
 public interface ServerTestRpcInterface {
 
-	String servletPath = "/servertest";
+	String servletPath = "/api/servertest";
 
 	void clear() throws Exception;
 

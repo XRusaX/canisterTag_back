@@ -53,7 +53,7 @@ public class HmcReportController {
 	@Autowired
 	private RfidLabelDataSource rfidLabelDataSource;
 
-	@GetMapping("/lastreport")
+	@GetMapping("/api/lastreport")
 	private long getLastReport(String serialNumber) throws IOException {
 		if (serialNumber == null)
 			return 0;
@@ -68,7 +68,7 @@ public class HmcReportController {
 		return result;
 	}
 
-	@PostMapping(value = "/report")
+	@PostMapping(value = "/api/report")
 	private synchronized String report(@RequestBody String strreport) throws IOException {
 
 		HmcReport report = new Gson().fromJson(strreport, HmcReport.class);

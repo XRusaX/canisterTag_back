@@ -5,7 +5,7 @@ import com.ma.hmc.iface.boardtest.rpcdata.User;
 
 public interface HmcTestRpcInterface {
 	
-	public String servletpath = "/testrpc";
+	public String servletpath = "/api/testrpc";
 	
 	void report(TestReport testReport) throws Exception;
 

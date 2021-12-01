@@ -24,7 +24,6 @@ import com.ma.common.ui.HorPanel;
 import com.ma.common.ui.VertPanel;
 import com.ma.commonui.shared.annotations.UILabel;
 import com.ma.hmc.iface.report.HmcReport;
-import com.ma.hmc.iface.rfid.rpcinterface.HmcRfidRpcInterface;
 import com.ma.hmc.iface.servertest.rpcinterface.ServerTestRpcInterface;
 import com.ma.hmc.simulator.sim.WorldSim;
 
@@ -110,7 +109,7 @@ public class HmcSimulatorFrame extends JFrame {
 
 	private ServerTestRpcInterface getProxy() {
 		return HttpProxy.makeProxy(ServerTestRpcInterface.class,
-				connectionPanel.getData().serverURL + HmcRfidRpcInterface.api + ServerTestRpcInterface.servletPath,
+				connectionPanel.getData().serverURL + ServerTestRpcInterface.servletPath,
 				null);
 	}
 
@@ -172,7 +171,7 @@ public class HmcSimulatorFrame extends JFrame {
 
 	public static String report(String serverURL, HmcReport report) throws IOException {
 		report.time = System.currentTimeMillis();
-		String requestJson = GsonUtils.requestJson(new URL(serverURL + HmcRfidRpcInterface.api + "/report"), report,
+		String requestJson = GsonUtils.requestJson(new URL(serverURL + "/api/report"), report,
 				String.class, null);
 		return requestJson;
 	}

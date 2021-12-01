@@ -32,7 +32,7 @@ public class OperatorsSyncController {
 	@Autowired
 	private OperatorDataSource operatorDataSource;
 
-	@PostMapping(value = "/operatorsync")
+	@PostMapping(value = "/api/operatorsync")
 	private synchronized String sync(@RequestBody String opsync, @RequestParam("serNum") String hmcSerialNumber)
 			throws IOException {
 
