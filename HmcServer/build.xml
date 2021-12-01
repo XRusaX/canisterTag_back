@@ -4,7 +4,7 @@
 
 	<property name="entrypoint" value="com.ma.hmcserver.HmcServer" />
 
-	<property name="gwtdir" value="..\common-java\Libs\gwt-2.8.1" />
+	<property name="gwtdir" value="..\common-java\Libs\gwt-2.9.0" />
 
 	<path id="gwtclasspath">
 		<fileset dir="${gwtdir}" includes="**/*.jar" />

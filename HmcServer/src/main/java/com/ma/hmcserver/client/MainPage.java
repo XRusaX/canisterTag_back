@@ -83,7 +83,7 @@ public class MainPage extends AppMainPage {
 	@Override
 	protected void createTabs(TabLayoutPanel tabPanel) {
 		if (appState.error != null) {
-			tabPanel.add(new Label(appState.error), "Ошибка!");
+			tabPanel.add(new Label(appState.error), "Ошибка!!!");
 			if (Login.user.hasPermission(UserData.PERMISSION_SETTINGS))
 				tabPanel.add(new CommonSettingsPanel(null, null), "Настройки");
 			return;
