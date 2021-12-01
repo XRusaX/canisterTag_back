@@ -25,7 +25,7 @@
 			<dependency>
 				<groupId>com.google.gwt</groupId>
 				<artifactId>gwt</artifactId>
-				<version>2.8.1</version>
+				<version>2.9.0</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -61,8 +61,13 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- <dependency> <groupId>com.google.gwt</groupId> <artifactId>gwt-servlet</artifactId> 
-			<scope>runtime</scope> </dependency> -->
+
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
@@ -74,6 +79,39 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.5.0-b01</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+
 
 	</dependencies>
 
@@ -96,6 +134,13 @@
 						<configuration>
 							<sources>
 								<source>${project.basedir}/../HmcAppCommon/src</source>
+								<source>${project.basedir}/../HmcInterface/src</source>
+								<source>${project.basedir}/../common-java/AppCommon/src</source>
+								<source>${project.basedir}/../common-java/Common/src</source>
+								<source>${project.basedir}/../common-java/CommonUI/src</source>
+								<source>${project.basedir}/../common-java/Chart/src</source>
+								<source>${project.basedir}/../common-java/CommonMail/src</source>
+								<source>${project.basedir}/../common-java/GwtApp/src</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -109,7 +154,6 @@
 				<executions>
 					<execution>
 						<configuration>
-							<webappDirectory>${project.basedir}/src/main/resources/static/</webappDirectory>
 							<strict>true</strict>
 							<style>DETAILED</style>
 							<extraJvmArgs>-Xms1024M -Xmx2048M
