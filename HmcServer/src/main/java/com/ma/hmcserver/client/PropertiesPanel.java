@@ -36,7 +36,6 @@ public class PropertiesPanel extends VerticalPanel {
 	private ObjectEditor objectEditor;
 	private Panel additionalsPanel;
 	private final CommonDataServiceAsync service = GWT.create(CommonDataService.class);
-	private boolean readOnlyMode;
 
 	public PropertiesPanel(EventBus eventBus, String className) {
 		FontAwesomeBundle.INSTANCE.fontAwesome().ensureInjected();
@@ -52,7 +51,6 @@ public class PropertiesPanel extends VerticalPanel {
 	private void showPropertiesPanel(EventBus eventBus, String className, SelChangeEvent sce) {
 
 		if (sce.clazz.getName().equals(className) && sce.selectedSet.size() == 1) {
-			readOnlyMode = true;
 			GWT.log(sce.clazz.getName() + " item selected");
 			cdClass = sce.cdClass;
 			objectEditor = new ObjectEditor(new GwtUIBuilder()) {
@@ -61,7 +59,7 @@ public class PropertiesPanel extends VerticalPanel {
 					service.loadRange(className, new Filter(), null,
 							new AlertAsyncCallback<DataRange<CDObject>>(result -> asyncCallback.accept(result.range)));
 				}
-			}.create(cdClass, readOnlyMode);
+			}.create(cdClass, true);
 			CDObject cdObject = sce.selectedSet.iterator().next();
 			objectEditor.toUI(cdObject);
 			if (objectEditor.readOnly)
@@ -151,13 +149,10 @@ public class PropertiesPanel extends VerticalPanel {
 		return null;
 	}
 
-	private void updateReadOnlyMode(boolean editMode) {
+
+	protected void updateReadOnlyMode(boolean editMode) {
 		objectEditor.setRO(editMode);
-		readOnlyMode = editMode;
 	}
 
-	public boolean isReadOnlyMode() {
-		return readOnlyMode;
-	}
 
 }
