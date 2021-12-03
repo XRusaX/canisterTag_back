@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 APPNAME="HMC_dev"
 PASSWDDB="HTEST"
 
