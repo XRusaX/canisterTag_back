@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.ma.appcommon.SettingsHolder;
@@ -22,36 +23,25 @@ import com.ma.hmcdb.entity.rfid.Report;
 @Component
 public class HmcDatabase extends Database2 {
 
+	@Autowired
+	private ApplicationContext applicationContext;
+
+	@Autowired
+	private SettingsHolder<Settings, SettingsRO> settingsHolder;
+
 	public HmcDatabase() {
 		super("HTEST");
 	}
 
 	@PostConstruct
 	private void init() {
-		//createDatabase();
-		Map<String, String> properties = new HashMap<>();
-
-		 SettingsRO settings = settingsHolder.getSettingsRO();
-		 String dbname = settings.dbname;
-		 String user = settings.user;
-		 String databaseHost = settings.databaseHost;
-		 String password = settings.password;
-
-
-		properties.put("javax.persistence.jdbc.url", "jdbc:mysql://" + databaseHost + "/" + dbname);
-		properties.put("javax.persistence.jdbc.user", user);
-		properties.put("javax.persistence.jdbc.password", password);
-
-		create(properties);
+//		createDatabase();
 	}
-
-	@Autowired
-	private SettingsHolder<Settings, SettingsRO> settingsHolder;
 
 	private void createDatabase() {
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -63,11 +53,13 @@ public class HmcDatabase extends Database2 {
 				+ "&useLegacyDatetimeCode=false"//
 				+ "&useSSL=false";
 
-		 SettingsRO settings = settingsHolder.getSettingsRO();
-		 String dbname = settings.dbname;
-		 String user = settings.user;
-		 String databaseHost = settings.databaseHost;
-		 String password = settings.password;
+		SettingsRO settings = settingsHolder.getSettingsRO();
+		String appName = applicationContext.getApplicationName().isEmpty() ? "HMC_dev"
+				: applicationContext.getApplicationName();
+		String dbname = appName;
+		String user = appName;
+		String databaseHost = settings.databaseHost;
+		String password = settings.password;
 
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://" + databaseHost + params, user, password);
 				Statement stmt = conn.createStatement();) {
@@ -87,6 +79,12 @@ public class HmcDatabase extends Database2 {
 	}
 
 }
+
+//CREATE DATABASE IF NOT EXISTS HMC_dev CHARACTER SET utf8 COLLATE utf8_bin;
+//CREATE USER 'HMC_dev'@'%' IDENTIFIED BY 'HTEST';
+//GRANT ALL PRIVILEGES ON HMC_dev . * TO 'HMC_dev'@'%';
+//FLUSH PRIVILEGES;
+
 // CREATE USER 'HMC'@'%' IDENTIFIED BY 'HMC';
 // GRANT ALL PRIVILEGES ON HMC . * TO 'HMC'@'%';
 
