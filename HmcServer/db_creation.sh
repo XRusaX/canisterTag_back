@@ -1,0 +1,8 @@
+#!/bin/sh
+APPNAME="HMC_dev"
+PASSWDDB="HTEST"
+
+mysql -e "CREATE DATABASE IF NOT EXISTS ${APPNAME} CHARACTER SET utf8 COLLATE utf8_bin;"
+mysql -e "CREATE USER ${APPNAME}@localhost IDENTIFIED BY '${PASSWDDB}';"
+mysql -e "GRANT ALL PRIVILEGES ON ${APPNAME}.* TO '${APPNAME}'@'localhost';"
+mysql -e "FLUSH PRIVILEGES;"
