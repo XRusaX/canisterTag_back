@@ -2,10 +2,10 @@ package com.ma.hmcdb.entity.rfid;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,58 +21,61 @@ import com.ma.hmcdb.entity.Operator;
 import com.ma.hmcdb.entity.Room;
 import com.ma.hmcdb.shared.HmcReportStatus;
 
+import lombok.Data;
+
+@Data
 @Entity
 public class Report {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long id;
+	private long id;
 
 	@UILabel(label = "Организация", nullable = true, sortable = true)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Company company;
+	private Company company;
 
 	@UILabel(label = "Начало работы", sortable = true)
-	public Date startTime;
+	private Date startTime;
 
 	@UILabel(label = "Продолж. работы (с)")
-	public Integer durationS;
+	private Integer durationS;
 
 	@UILabel(label = "Статус", sortable = true)
 	@Enumerated(EnumType.STRING)
-	public HmcReportStatus status;
+	private HmcReportStatus status;
 
 	@UILabel(label = "МГЦ", sortable = true)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Hmc hmc;
+	private Hmc hmc;
 
 	@UILabel(label = "Оператор", nullable = true, sortable = true)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Operator operator;
+	private Operator operator;
 
 	@UILabel(label = "Помещ./объект", nullable = true, sortable = true)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Room room;
+	private Room room;
 
 	@UILabel(label = "Расход (ml)")
-	public Integer consumtion_ml;
+	private Integer consumtion_ml;
 
 	@UILabel(label = "Остаток")
-	public Integer remain_ml;
+	private Integer remain_ml;
 
 	@UILabel(label = "cleaningId")
-	public Integer cleaningId;
+	private Integer cleaningId;
 
 	@UILabel(label = "Метка", sortable = true)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public RfidLabel rfidLabel;
+	private RfidLabel rfidLabel;
 
 	// @UILabel(label = "Получено", sortable = true, readOnly = true)
-	public Date time = new Date();
+	private Date time = new Date();
 
 	public Report() {
 	}
@@ -92,8 +95,8 @@ public class Report {
 		this.status = status;
 	}
 
-	@Override
-	public String toString() {
-		return "Report " + id + " hmc:" + hmc.id + " " + time;
-	}
+//	@Override
+//	public String toString() {
+//		//return "Report " + id + " hmc:" + hmc.getId() + " " + time;
+//	}
 }

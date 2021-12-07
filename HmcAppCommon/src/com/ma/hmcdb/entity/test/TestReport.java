@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public class TestReport {
 	public Date time = new Date();
 
 	@UILabel(label = "МГЦ", sortable = true, readOnly = true)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	public Hmc hmc;
 

@@ -3,6 +3,7 @@ package com.ma.hmcdb.entity.rfid;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,33 +16,36 @@ import com.ma.commonui.shared.annotations.UILabel;
 import com.ma.hmcdb.entity.Agent;
 import com.ma.hmcdb.entity.Company;
 
+import lombok.Data;
+
+@Data
 @Entity
 public class Quota {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long id;
+	private long id;
 
 	@UILabel(label = "Дата/время", sortable = true, readOnly = true)
-	public Date time = new Date();
+	private Date time = new Date();
 
 	@UILabel(label = "Пользователь", sortable = true, readOnly = true)
-	public String userName;
+	private String userName;
 
 	@UILabel(label = "Производство", sortable = true)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Company company;
+	private Company company;
 
 	@UILabel(label = "Средство", sortable = true)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Agent agent;
+	private Agent agent;
 
 	@UILabel(label = "Объем (ml)")
-	public int volume;
+	private int volume;
 
 	@UILabel(label = "Остаток")
-	public int remain;
+	private int remain;
 
 	public Quota() {
 	}

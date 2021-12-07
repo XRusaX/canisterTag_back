@@ -3,6 +3,7 @@ package com.ma.hmcdb.entity;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,34 +14,37 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import com.ma.commonui.shared.annotations.UILabel;
 
+import lombok.Data;
+
+@Data
 @Entity
 public class Room {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long id;
+	private long id;
 
 	@UILabel(label = "Название", sortable = true)
-	public String name;
+	private String name;
 
 //	@UILabel(label = "Организация", sortable = true, nullable = true)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Company company;
+	private Company company;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public RoomLayer roomLayer;
+	private RoomLayer roomLayer;
 	
 
-	public Integer x;
+	private Integer x;
 
-	public Integer y;
+	private Integer y;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public RoomLayer layer;
+	private RoomLayer layer;
 
-	public Date lastModified;
+	private Date lastModified;
 
 	public Room() {
 	}

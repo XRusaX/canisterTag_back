@@ -11,31 +11,32 @@ import javax.persistence.Id;
 import com.ma.commonui.shared.annotations.UILabel;
 import com.ma.hmcdb.shared.CompanyType;
 
+import lombok.Data;
+
 @Entity
+@Data
 public class Company {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long id;
+	private long id;
 
 	@Column(unique = true)
 	@UILabel(label = "Название", sortable = true)
-	public String name;
+	private String name;
 
 	@UILabel(label = "Тип", sortable = true)
 	@Enumerated(EnumType.STRING)
-	public CompanyType companyType;
+	private CompanyType companyType;
 
 	@UILabel(label = "Адрес", sortable = true)
-	public String addr;
+	private String addr;
 
 	@UILabel(label = "Контакты", sortable = true)
-	public String contacts;
+	private String contacts;
 
 	@UILabel(label = "Размер блока меток", sortable = true)
-	public Integer rfidBlockSize;
+	private Integer rfidBlockSize;
 
-//	public byte[] plan;
-	
 	public Company() {
 	}
 

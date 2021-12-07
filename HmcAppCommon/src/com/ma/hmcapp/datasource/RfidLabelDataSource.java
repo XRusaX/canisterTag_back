@@ -17,14 +17,14 @@ import com.ma.hmcdb.entity.rfid.RfidLabel;
 public class RfidLabelDataSource extends DataSourceImpl<RfidLabel> {
 
 	@Autowired
-	private Database2 database;
-
-	@Autowired
 	private CommonData commonDataImpl;
+
+	public RfidLabelDataSource() {
+		super(RfidLabel.class);
+	}
 
 	@PostConstruct
 	private void init() {
-		super.init(RfidLabel.class, database);
 		commonDataImpl.addDataSource(RfidLabel.class, this);
 	}
 

@@ -90,7 +90,7 @@ public class DatasourceSynchronizer<T> extends Synchronizer<T> {
 
 	@Override
 	protected List<T> getModified(EM em, Date lastSync) {
-		return dataSource.loadRange(em, new Filter().addEQ("company", company.id + ""), null).right.stream()
+		return dataSource.loadRange(em, new Filter().addEQ("company", company.getId() + ""), null).right.stream()
 				.filter(o -> getStoreTime(o).after(lastSync)).collect(Collectors.toList());
 	}
 
@@ -101,7 +101,7 @@ public class DatasourceSynchronizer<T> extends Synchronizer<T> {
 
 	@Override
 	protected T loadByName(EM em, String name) {
-		return dataSource.loadRange(em, new Filter().addEQ("company", company.id + ""), null).right.stream()
+		return dataSource.loadRange(em, new Filter().addEQ("company", company.getId() + ""), null).right.stream()
 				.filter(o -> getName(o).equals(name)).findFirst().orElse(null);
 	}
 

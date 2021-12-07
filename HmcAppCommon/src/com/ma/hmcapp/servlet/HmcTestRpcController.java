@@ -69,7 +69,7 @@ public class HmcTestRpcController extends RpcController implements HmcTestRpcInt
 		authComponent.checkPermissions(Permissions.PERMISSION_TEST);
 
 		database.execVoid(conn -> {
-			Hmc hmc = hmcDataSource.getCreateHmc(conn, testReport.hmcType, testReport.serialNumber);
+			Hmc hmc = hmcDataSource.getBySerNum(conn, testReport.serialNumber);
 			com.ma.hmcdb.entity.test.TestReport r = new com.ma.hmcdb.entity.test.TestReport(hmc, testReport.testType,
 					testReport.testStatus, testReport.details);
 			testReportDataSource.store(conn, r);

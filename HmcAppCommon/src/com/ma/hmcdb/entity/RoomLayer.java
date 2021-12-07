@@ -1,6 +1,7 @@
 package com.ma.hmcdb.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,21 +12,24 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import com.ma.commonui.shared.annotations.UILabel;
 
+import lombok.Data;
+
+@Data
 @Entity
 public class RoomLayer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long id;
+	private long id;
 
 	@UILabel(label = "Имя", sortable = true)
-	public String name;
+	private String name;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Company company;
+	private Company company;
 
 //	@Column(length = 10000000)
-	public String imageUrl;
+	private String imageUrl;
 
 	public RoomLayer() {
 	}

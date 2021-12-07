@@ -62,6 +62,7 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 	public void clear() throws IOException {
 		database.execVoid(em -> {
 			companyDataSource.clear(em);
+			agentDataSource.clear(em);
 			try {
 				userService.clear();
 			} catch (IOException e) {
@@ -74,13 +75,15 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 
 		database.execVoid(em -> {
 			try {
+				agentDataSource.store(em, new Agent("Гриндез", 1000, 100, 10, 10));
+
 				userService.addUser("admin", AuthUtils.getPwdHash("admin", "admin"),
 						Arrays.asList(UserData.PERMISSIONS_ALL), null, null);
 
 				Company testCompany = new Company("testcompany", CompanyType.TEST, "addr", "contacts", 0);
 				companyDataSource.store(em, testCompany);
 				userService.addUser("t", AuthUtils.getPwdHash("t", "t"), Arrays.asList(Permissions.PERMISSION_TEST),
-						null, testCompany.id);
+						null, testCompany.getId());
 
 				Company canisterCompany = new Company("завод1", CompanyType.CANISTER, "addr", "contacts", 10);
 				companyDataSource.store(em, canisterCompany);
@@ -88,13 +91,13 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 				// canisterCompanyID);
 
 				UserData user_u1 = userService.addUser("u1", AuthUtils.getPwdHash("u1", "p1"),
-						Arrays.asList(Permissions.PERMISSION_WRITE_RFID), null, canisterCompany.id);
+						Arrays.asList(Permissions.PERMISSION_WRITE_RFID), null, canisterCompany.getId());
 
 				Agent agent = agentDataSource.getByName(em, "Гриндез");
 
 				Quota q = new Quota(user_u1.name, canisterCompany, agent, 3000, 10000);
 				quotaDataSource.store(em, q);
-				id.set(q.id);
+				id.set(q.getId());
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -110,7 +113,7 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 				try {
 					userService.addUser(user, AuthUtils.getPwdHash(user, password),
 							Arrays.asList(UserData.PERMISSION_USERS, Permissions.PERMISSION_CUSTOMER), null,
-							company.id);
+							company.getId());
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}

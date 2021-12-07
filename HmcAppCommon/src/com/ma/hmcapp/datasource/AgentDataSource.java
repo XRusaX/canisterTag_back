@@ -8,21 +8,25 @@ import org.springframework.stereotype.Component;
 import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
-import com.ma.appcommon.db.Database2;
 import com.ma.hmcdb.entity.Agent;
 
 @Component
 public class AgentDataSource extends DataSourceImpl<Agent> {
 
 	@Autowired
-	private Database2 database;
-
-	@Autowired
 	private CommonData commonDataImpl;
 
+	public AgentDataSource() {
+		super(Agent.class);
+	}
+	
+	public void clear(EM em) {
+		em.em.createQuery("delete from Agent").executeUpdate();
+	}
+
+	
 	@PostConstruct
 	private void init() {
-		super.init(Agent.class, database);
 		commonDataImpl.addDataSource(Agent.class, this);
 	}
 

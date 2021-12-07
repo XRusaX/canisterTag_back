@@ -3,6 +3,7 @@ package com.ma.hmcdb.entity;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,32 +17,35 @@ import com.ma.hmcdb.shared.synchronizer.ModifTime;
 import com.ma.hmcdb.shared.synchronizer.Name;
 import com.ma.hmcdb.shared.synchronizer.StoreTime;
 
+import lombok.Data;
+
+@Data
 @Entity
 public class Operator {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long id;
+	private long id;
 
 	@UILabel(label = "", sortable = false, isImage = true, widthEM = 10)
-	public String avatar;
+	private String avatar;
 	
 	@Name
 	@UILabel(label = "Имя", sortable = true)
-	public String name;
+	private String name;
 	
 	@UILabel(label = "Организация", sortable = true, nullable = true)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	public Company company;
+	private Company company;
 
 	// @UILabel(label = "Removed")
-	public Boolean removed;
+	private Boolean removed;
 
 	@ModifTime
-	public Date modifTime;
+	private Date modifTime;
 	
 	@StoreTime
-	public Date storeTime;
+	private Date storeTime;
 
 	public Operator() {
 	}

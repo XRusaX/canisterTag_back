@@ -63,10 +63,10 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 
 	@Autowired
 	private QuotaDataSource quotaDataSource;
-	
+
 	@Autowired
 	private RfidLabelDataSource rfidLabelDataSource;
-	
+
 	@Override
 	public void tagWriteDone(String uid) {
 		msgLogger.add(authComponent.getUserName(), Severity.INFO, "Метка " + uid + " записана");
@@ -97,7 +97,7 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 
 			Company company = companyDataSource.load(conn, user.company);
 
-			if (company.rfidBlockSize <= 0)
+			if (company.getRfidBlockSize() <= 0)
 				throw new RuntimeException("Размер блока меток <= 0");
 
 			Agent agent = agentDataSource.getByName(conn, agentName);
@@ -106,32 +106,32 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				throw new RuntimeException("Вещество " + agentName + " не зарегистрировано с системе");
 
 			List<Quota> quotas = quotaDataSource.get(conn, company, agent, canisterVolume);
-			
-			quotas.sort((q1, q2) -> q1.time.compareTo(q2.time));
+
+			quotas.sort((q1, q2) -> q1.getTime().compareTo(q2.getTime()));
 
 			// List<Quota> quotas = DBExt.select(conn, Quota.class,
 			// "where companyId=? and agentId=? and volume=? and counter>0 order
 			// by time", user.company, agent.id,
 			// canisterVolume);
 
-			int rest = quotas.stream().mapToInt(q -> q.remain).sum();
-			if (company.rfidBlockSize > rest) {
+			int rest = quotas.stream().mapToInt(q -> q.getRemain()).sum();
+			if (company.getRfidBlockSize() > rest) {
 				throw new IllegalArgumentException("Недостаточно квоты " + agentName + " " + canisterVolume + "ml "
-						+ company.name + " " + company.rfidBlockSize + ">" + rest);
+						+ company.getName() + " " + company.getRfidBlockSize() + ">" + rest);
 			}
 
 			int allowed = 0;
 
 			for (Quota quota : quotas) {
-				int x = Math.min(company.rfidBlockSize - allowed, quota.remain);
+				int x = Math.min(company.getRfidBlockSize() - allowed, quota.getRemain());
 				allowed += x;
-				quota.remain -= x;
+				quota.setRemain(quota.getRemain() - x);
 				quotaDataSource.store(conn, quota);
-				if (allowed == company.rfidBlockSize)
+				if (allowed == company.getRfidBlockSize())
 					break;
 			}
 
-			if (allowed != company.rfidBlockSize) {
+			if (allowed != company.getRfidBlockSize()) {
 				throw new IllegalArgumentException("Ошибка при выделении RFID");
 			}
 
@@ -151,23 +151,23 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 
 			Date time = new Date();
 
-			for (int i = 0; i < company.rfidBlockSize; i++) {
+			for (int i = 0; i < company.getRfidBlockSize(); i++) {
 
 				RfidLabel rfidLabel = new RfidLabel(0, time, user.name, company, agent, canisterVolume);
 				rfidLabelDataSource.store(conn, rfidLabel);
-				rfidLabel.name = (int) rfidLabel.id;
+				rfidLabel.setName((int) rfidLabel.getId());
 				rfidLabelDataSource.store(conn, rfidLabel);
 
-				int id = (int) rfidLabel.id;
+				int id = (int) rfidLabel.getId();
 
 				RfidData data = new RfidData();
 				data.UNIQUE_ID = id;
 				data.CANISTER_NAME = agentName;
 				data.CANISTER_VOLUME_ML = canisterVolume;
-				data.CANISTER_MANUFACTURER_NAME = company.name;
-				data.CANISTER_CONSUMPTION_ML_M3 = agent.consumption_ml_m3;
-				data.CANISTER_CONSUMPTION2_ML_M3 = agent.consumption2_ml_m3;
-				data.CANISTER_AERATION_MIN = agent.aeration_min;
+				data.CANISTER_MANUFACTURER_NAME = company.getName();
+				data.CANISTER_CONSUMPTION_ML_M3 = agent.getConsumption_ml_m3();
+				data.CANISTER_CONSUMPTION2_ML_M3 = agent.getConsumption2_ml_m3();
+				data.CANISTER_AERATION_MIN = agent.getAeration_min();
 
 				try {
 					data.DIGIT_SIG = sig.sign(RfidDataUtils.getKey(data));

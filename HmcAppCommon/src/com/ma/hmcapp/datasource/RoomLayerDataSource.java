@@ -19,14 +19,14 @@ import com.ma.hmcdb.entity.RoomLayer;
 public class RoomLayerDataSource extends DataSourceImpl<RoomLayer> {
 
 	@Autowired
-	private Database2 database;
-
-	@Autowired
 	private CommonData commonDataImpl;
+
+	public RoomLayerDataSource() {
+		super(RoomLayer.class);
+	}
 
 	@PostConstruct
 	private void init() {
-		super.init(RoomLayer.class, database);
 		commonDataImpl.addDataSource(RoomLayer.class, this);
 	}
 
@@ -34,7 +34,7 @@ public class RoomLayerDataSource extends DataSourceImpl<RoomLayer> {
 		return Database2.select(em.em, RoomLayer.class).whereEQ("company", company).getResultStream()
 				.collect(Collectors.toList());
 	}
-	
+
 	public RoomLayer loadByCompany(EM em, Company company) {
 		RoomLayer layer = Database2.select(em.em, RoomLayer.class).whereEQ("company", company).getResultStream()
 				.findFirst().orElse(null);

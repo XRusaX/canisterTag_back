@@ -56,7 +56,7 @@ public class HmcServiceImpl implements HmcService {
 
 			try {
 				userService.addUser(adminName, adminPasswordHash, Arrays.asList(Permissions.PERMISSION_CUSTOMER,
-						UserData.PERMISSION_USERS, UserData.PERMISSION_SETTINGS), adminEmail, company.id);
+						UserData.PERMISSION_USERS, UserData.PERMISSION_SETTINGS), adminEmail, company.getId());
 			} catch (Exception e) {
 				throw new RuntimeException("Пользователь с таким именем уже существует");
 			}

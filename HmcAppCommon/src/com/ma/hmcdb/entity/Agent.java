@@ -8,23 +8,39 @@ import javax.persistence.Id;
 
 import com.ma.commonui.shared.annotations.UILabel;
 
+import lombok.Data;
+
+@Data
 @Entity
 public class Agent {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long id;
+	private long id;
 
 	@Column(unique = true)
 	@UILabel(label = "Название", sortable = true)
-	public String name;
+	private String name;
 
 	@UILabel(label = "Расход (мл/м3)")
-	public int consumption_ml_m3;
+	private int consumption_ml_m3;
 	@UILabel(label = "Расход профилакт. (мл/м3)")
-	public int consumption2_ml_m3;
+	private int consumption2_ml_m3;
 	@UILabel(label = "Время аэрации (мин)")
-	public int aeration_min;
+	private int aeration_min;
 
 	@UILabel(label = "Срок годности (месяцев)")
-	public Integer shelfLife_months;
+	private Integer shelfLife_months;
+	
+	public Agent() {
+	}
+
+	public Agent(String name, int consumption_ml_m3, int consumption2_ml_m3, int aeration_min,
+			Integer shelfLife_months) {
+		this.name = name;
+		this.consumption_ml_m3 = consumption_ml_m3;
+		this.consumption2_ml_m3 = consumption2_ml_m3;
+		this.aeration_min = aeration_min;
+		this.shelfLife_months = shelfLife_months;
+	}
+	
 }

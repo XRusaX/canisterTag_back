@@ -9,6 +9,7 @@
 	<path id="gwtclasspath">
 		<fileset dir="${gwtdir}" includes="**/*.jar" />
 		<fileset dir="..\common-java\Libs\hibernate-release-5.5.0.Final\lib\required" includes="**/*.jar" />
+		<fileset dir="..\common-java\Libs\lombok" includes="**/*.jar" />
 	</path>
 
 	<target name="gwtcompile">

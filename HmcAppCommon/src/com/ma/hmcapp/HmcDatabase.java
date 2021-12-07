@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -22,32 +20,10 @@ import com.ma.hmcdb.entity.rfid.Report;
 @Component
 public class HmcDatabase extends Database2 {
 
-	public HmcDatabase() {
-		super("HTEST");
-	}
-
-	@PostConstruct
-	private void init() {
-		//createDatabase();
-		Map<String, String> properties = new HashMap<>();
-
-		 SettingsRO settings = settingsHolder.getSettingsRO();
-		 String dbname = settings.dbname;
-		 String user = settings.user;
-		 String databaseHost = settings.databaseHost;
-		 String password = settings.password;
-
-
-		properties.put("javax.persistence.jdbc.url", "jdbc:mysql://" + databaseHost + "/" + dbname);
-		properties.put("javax.persistence.jdbc.user", user);
-		properties.put("javax.persistence.jdbc.password", password);
-
-		create(properties);
-	}
-
 	@Autowired
 	private SettingsHolder<Settings, SettingsRO> settingsHolder;
 
+	@PostConstruct
 	private void createDatabase() {
 
 		try {
@@ -75,15 +51,6 @@ public class HmcDatabase extends Database2 {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void incrementTableVersion(EntityManager em, Object o) {
-		if (o instanceof Report) {
-			Company company = ((Report) o).company;
-			_incrementTableVersion(em, Hmc.class, company == null ? null : company.id);
-		}
-		super.incrementTableVersion(em, o);
 	}
 
 }

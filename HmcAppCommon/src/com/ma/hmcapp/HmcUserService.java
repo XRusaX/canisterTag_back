@@ -25,7 +25,7 @@ public class HmcUserService extends UserServiceDB {
 			if (user.company != null) {
 				Company company = em.find(Company.class, user.company);
 				if (company != null)
-					user.companyName = company.name;
+					user.companyName = company.getName();
 				else
 					user.companyName = "---";
 			} else

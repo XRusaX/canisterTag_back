@@ -21,14 +21,14 @@ import com.ma.hmcdb.entity.RoomLayer;
 public class RoomDataSource extends DataSourceImpl<Room> {
 
 	@Autowired
-	private Database2 database;
-
-	@Autowired
 	private CommonData commonDataImpl;
+
+	public RoomDataSource() {
+		super(Room.class);
+	}
 
 	@PostConstruct
 	private void init() {
-		super.init(Room.class, database);
 		commonDataImpl.addDataSource(Room.class, this);
 	}
 
@@ -39,12 +39,12 @@ public class RoomDataSource extends DataSourceImpl<Room> {
 
 	@Override
 	protected void onBeforeStore(EM em, Room obj) {
-		if (obj.lastModified == null)
-			obj.lastModified = new Date();
+		if (obj.getLastModified() == null)
+			obj.setLastModified(new Date());
 	}
 
 	public Room loadByName(EM em, String name, Company company) {
-		return Database2.select(em.em, Room.class).whereEQ("company", company).whereEQ("name", name)
-				.getResultStream().findFirst().get();
+		return Database2.select(em.em, Room.class).whereEQ("company", company).whereEQ("name", name).getResultStream()
+				.findFirst().get();
 	}
 }

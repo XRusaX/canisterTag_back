@@ -43,18 +43,18 @@ public class OperatorsSyncController {
 			database.execVoid(em -> {
 				Hmc hmc = hmcDataSource.getBySerNum(em, hmcSerialNumber);
 
-				if (hmc.company == null)
+				if (hmc.getCompany() == null)
 					return;
 
 				if (opSync.operators != null) {
 					DatasourceSynchronizer<Operator> operatorsSynchronizer = new DatasourceSynchronizer<>(
-							operatorDataSource, hmc.company);
+							operatorDataSource, hmc.getCompany());
 					List<Operator> toClient = operatorsSynchronizer.sync(em, opSync.operators.stream()
-							.map(o -> new Operator(o.id, o.name, hmc.company, o.removed, new Date(o.modifTime), null))
+							.map(o -> new Operator(o.id, o.name, hmc.getCompany(), o.removed, new Date(o.modifTime), null))
 							.collect(Collectors.toList()), new Date(opSync.lastSync));
 
 					response.operators = toClient.stream()
-							.map(o -> new OpSync.Operator(o.id, o.name, o.removed, o.modifTime.getTime()))
+							.map(o -> new OpSync.Operator(o.getId(), o.getName(), o.getRemoved(), o.getModifTime().getTime()))
 							.collect(Collectors.toList());
 					response.lastSync = System.currentTimeMillis();
 				}

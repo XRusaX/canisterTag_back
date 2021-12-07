@@ -62,7 +62,7 @@ public class HmcReportController {
 			Report report = reportDataSource.getLastReport(em, serialNumber);
 			if (report == null)
 				return 0l;
-			return report.time.getTime();
+			return report.getTime().getTime();
 		});
 
 		return result;
@@ -82,7 +82,7 @@ public class HmcReportController {
 			}
 
 			Hmc hmc = hmcDataSource.getBySerNum(em, report.hmcSerialNumber);
-			Company company = hmc.company;
+			Company company = hmc.getCompany();
 
 			Operator operator = null;
 			Room room = null;
@@ -99,9 +99,9 @@ public class HmcReportController {
 
 			List<Report> reports = reportDataSource.loadByRfidLabel(em, label);
 
-			int sum_consumption = reports.stream().mapToInt(r -> r.consumtion_ml).sum();
-			if (sum_consumption > label.canisterVolume)
-				msgLogger.add(null, Severity.ERROR, "Перерасход из канистры " + label.name);
+			int sum_consumption = reports.stream().mapToInt(r -> r.getConsumtion_ml()).sum();
+			if (sum_consumption > label.getCanisterVolume())
+				msgLogger.add(null, Severity.ERROR, "Перерасход из канистры " + label.getName());
 
 			return "success";
 		});
@@ -114,7 +114,7 @@ public class HmcReportController {
 
 		if (id != null) {
 			Operator operator = operatorDataSource.load(em, id);
-			if (operator.company != company)
+			if (operator.getCompany() != company)
 				msgLogger.add(null, Severity.WARNING, "Компания оператора и владелец МГЦ не совпадают");
 			return operator;
 		}
@@ -135,7 +135,7 @@ public class HmcReportController {
 
 		if (id != null) {
 			Room room = roomDataSource.load(em, id);
-			if (room.company != company)
+			if (room.getCompany() != company)
 				msgLogger.add(null, Severity.WARNING, "Владелец комнаты и владелец МГЦ не совпадают");
 			return room;
 		}

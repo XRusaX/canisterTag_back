@@ -15,14 +15,14 @@ import com.ma.hmcdb.entity.Company;
 public class CompanyDataSource extends DataSourceImpl<Company> {
 
 	@Autowired
-	private Database2 database;
-
-	@Autowired
 	private CommonData commonDataImpl;
 
+	public CompanyDataSource() {
+		super(Company.class);
+	}
+	
 	@PostConstruct
 	private void init() {
-		super.init(Company.class, database);
 		commonDataImpl.addDataSource(Company.class, this);
 	}
 

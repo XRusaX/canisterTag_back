@@ -13,7 +13,6 @@ import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
-import com.ma.appcommon.logger.MsgLoggerImpl;
 import com.ma.appcommon.shared.Filter;
 import com.ma.common.shared.Pair;
 import com.ma.hmcdb.entity.Company;
@@ -23,17 +22,14 @@ import com.ma.hmcdb.entity.Operator;
 public class OperatorDataSource extends DataSourceImpl<Operator> {
 
 	@Autowired
-	private Database2 database;
-
-	@Autowired
 	private CommonData commonDataImpl;
 
-	@Autowired
-	private MsgLoggerImpl msgLogger;
-
+	public OperatorDataSource() {
+		super(Operator.class);
+	}
+	
 	@PostConstruct
 	private void init() {
-		super.init(Operator.class, database);
 		commonDataImpl.addDataSource(Operator.class, this);
 	}
 
@@ -44,14 +40,14 @@ public class OperatorDataSource extends DataSourceImpl<Operator> {
 
 	@Override
 	protected synchronized void onBeforeStore(EM em, Operator obj) {
-		obj.storeTime = new Date();
+		obj.setStoreTime(new Date());
 	}
 
 	@Override
 	public void delete(EM em, Collection<Long> list) {
 		list.forEach(id -> {
 			Operator op = load(em, id);
-			op.removed = true;
+			op.setRemoved(true);
 			store(em, op);
 		});
 	}

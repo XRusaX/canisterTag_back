@@ -12,7 +12,6 @@ import com.ma.appcommon.AuthComponent;
 import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
-import com.ma.appcommon.db.Database2;
 import com.ma.hmcdb.entity.Agent;
 import com.ma.hmcdb.entity.Company;
 import com.ma.hmcdb.entity.rfid.Quota;
@@ -21,24 +20,24 @@ import com.ma.hmcdb.entity.rfid.Quota;
 public class QuotaDataSource extends DataSourceImpl<Quota> {
 
 	@Autowired
-	private Database2 database;
-
-	@Autowired
 	private AuthComponent authComponent;
 
 	@Autowired
 	private CommonData commonDataImpl;
 
+	public QuotaDataSource() {
+		super(Quota.class);
+	}
+
 	@PostConstruct
 	private void init() {
-		super.init(Quota.class, database);
 		commonDataImpl.addDataSource(Quota.class, this);
 	}
 
 	@Override
 	protected void onAfterCreate(Quota quota) {
-		quota.userName = authComponent.getUser().name;
-		quota.time = new Date();
+		quota.setUserName(authComponent.getUser().name);
+		quota.setTime(new Date());
 	}
 
 	public List<Quota> get(EM conn, Company company, Agent agent, int canisterVolume) {
