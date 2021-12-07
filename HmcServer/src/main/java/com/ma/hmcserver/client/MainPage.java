@@ -3,6 +3,7 @@ package com.ma.hmcserver.client;
 import java.util.Arrays;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.AppConfig;
 import com.ma.appcommon.shared.AppState;
 import com.ma.appcommon.shared.auth.UserData;
+import com.ma.common.cd.swing.SettingsTest.Microwave.Color;
 import com.ma.common.gwtapp.client.AppMainPage;
 import com.ma.common.gwtapp.client.AppService;
 import com.ma.common.gwtapp.client.AppServiceAsync;
@@ -138,7 +140,7 @@ public class MainPage extends AppMainPage {
 
 			panel = new DockLayoutPanelX(Unit.PCT);
 			panel.addW(new PlacementPanel(eventBus), 100);
-			
+
 			tabPanel2.add(panel, "Помещения");
 
 			panel = new DockLayoutPanelX(Unit.PCT);
@@ -146,15 +148,16 @@ public class MainPage extends AppMainPage {
 			MaterialUIList operatorList = new MaterialUIList(null);
 			panel.addW(new Label(), 35);
 			PropertiesPanel operatorPropPanel = new PropertiesPanel(eventBus, Operator.class.getName()) {
+				private PushButton uploadImageButton;
+
 				@Override
 				protected Panel getAdditionals(CDObject operator) {
 
 					Image img = new Image(operator.get("avatar") == null
-							? new Image(ImageResources.IMAGE_RESOURCES.avatarPlaceholder()).getUrl()
+							? new Image(ImageResources.IMAGE_RESOURCES.notFound()).getUrl()
 							: operator.get("avatar"));
 
-					PushButton uploadImageButton = new PushButton(img, (ClickHandler) event -> {
-						if (!isReadOnlyMode())
+					uploadImageButton = new PushButton(img, (ClickHandler) event -> {
 							new ImportDialog("Выберите файл", "api/images") {
 								@Override
 								protected void onComplete(SubmitCompleteEvent event) {
@@ -171,7 +174,15 @@ public class MainPage extends AppMainPage {
 					HorPanel horPanel = new HorPanel(uploadImageButton);
 					horPanel.setWidth("100%");
 					horPanel.setCellHorizontalAlignment(uploadImageButton, HasHorizontalAlignment.ALIGN_CENTER);
+					updateReadOnlyMode(true);
 					return horPanel;
+				}
+
+				@Override
+				protected void updateReadOnlyMode(boolean roMode) {
+					super.updateReadOnlyMode(roMode);
+					uploadImageButton.getElement().getStyle().setOpacity(roMode ? 0.2 : 1);
+					uploadImageButton.setEnabled(!roMode);
 				}
 			};
 			panel.addE(operatorPropPanel, 35);
@@ -197,7 +208,7 @@ public class MainPage extends AppMainPage {
 				@Override
 				protected Widget getAdditionals(CDObject operator) {
 					Image img = new Image(operator.get("avatar") == null
-							? new Image(ImageResources.IMAGE_RESOURCES.avatarPlaceholder()).getUrl()
+							? new Image(ImageResources.IMAGE_RESOURCES.notFound()).getUrl()
 							: operator.get("avatar"));
 
 					PushButton uploadImageButton = new PushButton(img, (ClickHandler) event -> {
@@ -294,7 +305,7 @@ public class MainPage extends AppMainPage {
 
 		if (Login.user.company == null)
 			tabPanel.add(new LoggerPanel(true), "Журнал");
-		
+
 		if (Login.user.hasPermission(UserData.PERMISSION_USERS)) {
 			tabPanel.add(new UsersPage(true), "Пользователи");
 			// eventBus = new PageEventBus();
