@@ -3,6 +3,7 @@ package com.ma.hmcserver;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -17,13 +18,20 @@ public class Config {
 	@Autowired
 	private SettingsHolder<Settings, SettingsRO> settingsHolder;
 	
+	@Autowired
+	private ApplicationContext applicationContext;
+	
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
 		SettingsRO settings = settingsHolder.getSettingsRO();
-		String dbname = settings.dbname;
-		String user = settings.user;
+//		String dbname = settings.dbname;
+//		String user = settings.user;
+		
+		String appName = DemoApplication.getAppName(applicationContext);
+		String dbname = appName;
+		String user = appName;
 		String databaseHost = settings.databaseHost;
 		String password = settings.password;
 
