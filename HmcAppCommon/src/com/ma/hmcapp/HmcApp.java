@@ -7,8 +7,13 @@ import com.ma.appcommon.App;
 
 @Component
 public class HmcApp extends App {
-	@SuppressWarnings("unused")
-	public HmcApp(ApplicationContext context) {
-		super(context.getApplicationName().isEmpty() ? "dev" : context.getApplicationName(), true);
+	public HmcApp() {
+		super(true);
+	}
+	
+	public static String getAppName(ApplicationContext context) {
+		String applicationName = context.getApplicationName().replaceAll("/", "");
+		System.out.println("************************** applicationName '" + applicationName + "'");
+		return applicationName.isEmpty() ? "HMC_dev" : applicationName;
 	}
 }

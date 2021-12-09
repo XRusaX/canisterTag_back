@@ -13,14 +13,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "com.ma")
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.ma")
-public class DemoApplication {
+public class MainApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
-	}
-
-	public static String getAppName(ApplicationContext context) {
-		return context.getApplicationName().isEmpty() ? "HMC_dev" : context.getApplicationName();
+		SpringApplication.run(MainApplication.class, args);
 	}
 
 }

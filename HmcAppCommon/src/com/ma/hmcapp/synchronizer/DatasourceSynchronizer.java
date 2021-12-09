@@ -33,11 +33,17 @@ public class DatasourceSynchronizer<T> extends Synchronizer<T> {
 				.filter(f -> f.getAnnotation(clazz) != null);
 		return fields;
 	}
+	
+	private Field getAnnotatedField(T t, Class<? extends Annotation> clazz) {
+		Field field = getAnnotatedFields(t, clazz).findFirst().orElse(null);
+		field.setAccessible(true);
+		return field;
+	}
 
 	@Override
 	protected long getId(T t) {
 		try {
-			return getAnnotatedFields(t, Id.class).findFirst().orElse(null).getLong(t);
+			return getAnnotatedField(t, Id.class).getLong(t);
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 			throw new RuntimeException(e);
 		}
@@ -46,7 +52,7 @@ public class DatasourceSynchronizer<T> extends Synchronizer<T> {
 	@Override
 	protected void setId(T t, long id) {
 		try {
-			getAnnotatedFields(t, Id.class).findFirst().orElse(null).setLong(t, id);
+			getAnnotatedField(t, Id.class).setLong(t, id);
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 			throw new RuntimeException(e);
 		}
@@ -55,7 +61,7 @@ public class DatasourceSynchronizer<T> extends Synchronizer<T> {
 	@Override
 	protected String getName(T t) {
 		try {
-			return (String) getAnnotatedFields(t, Name.class).findFirst().orElse(null).get(t);
+			return (String) getAnnotatedField(t, Name.class).get(t);
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 			throw new RuntimeException(e);
 		}
@@ -64,7 +70,7 @@ public class DatasourceSynchronizer<T> extends Synchronizer<T> {
 	@Override
 	protected Date getModifTime(T t) {
 		try {
-			return (Date) getAnnotatedFields(t, ModifTime.class).findFirst().orElse(null).get(t);
+			return (Date) getAnnotatedField(t, ModifTime.class).get(t);
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 			throw new RuntimeException(e);
 		}
@@ -73,7 +79,7 @@ public class DatasourceSynchronizer<T> extends Synchronizer<T> {
 	@Override
 	protected Date getStoreTime(T t) {
 		try {
-			return (Date) getAnnotatedFields(t, StoreTime.class).findFirst().orElse(null).get(t);
+			return (Date) getAnnotatedField(t, StoreTime.class).get(t);
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 			throw new RuntimeException(e);
 		}
@@ -82,7 +88,7 @@ public class DatasourceSynchronizer<T> extends Synchronizer<T> {
 	@Override
 	protected Company getCompany(T t) {
 		try {
-			return (Company) getAnnotatedFields(t, CompanyField.class).findFirst().orElse(null).get(t);
+			return (Company) getAnnotatedField(t, CompanyField.class).get(t);
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 			throw new RuntimeException(e);
 		}

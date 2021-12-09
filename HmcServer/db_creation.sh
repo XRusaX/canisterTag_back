@@ -1,8 +1,9 @@
 #!/bin/bash
-APPNAME="HMC_dev"
+APPNAME="disinfection"
 PASSWDDB="HTEST"
 
-mysql -e "CREATE DATABASE IF NOT EXISTS ${APPNAME} CHARACTER SET utf8 COLLATE utf8_bin;"
-mysql -e "CREATE USER ${APPNAME}@localhost IDENTIFIED BY '${PASSWDDB}';"
-mysql -e "GRANT ALL PRIVILEGES ON ${APPNAME}.* TO '${APPNAME}'@'localhost';"
-mysql -e "FLUSH PRIVILEGES;"
+mysql -u root -p -e "CREATE USER ${APPNAME}@'%' IDENTIFIED BY '${PASSWDDB}';"
+mysql -u root -p -e "GRANT ALL PRIVILEGES ON ${APPNAME}.* TO '${APPNAME}'@'%';"
+mysql -u root -p -e "FLUSH PRIVILEGES;"
+
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS ${APPNAME} CHARACTER SET utf8 COLLATE utf8_bin;"

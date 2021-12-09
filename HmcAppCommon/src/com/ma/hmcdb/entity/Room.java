@@ -13,6 +13,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.ma.commonui.shared.annotations.UILabel;
+import com.ma.hmcdb.shared.synchronizer.CompanyField;
 
 import lombok.Data;
 
@@ -29,6 +30,7 @@ public class Room {
 //	@UILabel(label = "Организация", sortable = true, nullable = true)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@CompanyField
 	private Company company;
 
 	@ManyToOne(fetch=FetchType.LAZY)

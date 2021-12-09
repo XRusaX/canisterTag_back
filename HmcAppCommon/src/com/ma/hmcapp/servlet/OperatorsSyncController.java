@@ -49,13 +49,20 @@ public class OperatorsSyncController {
 				if (opSync.operators != null) {
 					DatasourceSynchronizer<Operator> operatorsSynchronizer = new DatasourceSynchronizer<>(
 							operatorDataSource, hmc.getCompany());
-					List<Operator> toClient = operatorsSynchronizer.sync(em, opSync.operators.stream()
-							.map(o -> new Operator(o.id, o.name, hmc.getCompany(), o.removed, new Date(o.modifTime), null))
-							.collect(Collectors.toList()), new Date(opSync.lastSync));
+					List<Operator> toClient = operatorsSynchronizer.sync(em,
+							opSync.operators.stream()
+									.map(o -> new Operator(o.id, o.name, hmc.getCompany(), o.removed,
+											new Date(o.modifTime), null))
+									.collect(Collectors.toList()),
+							new Date(opSync.lastSync));
 
-					response.operators = toClient.stream()
-							.map(o -> new OpSync.Operator(o.getId(), o.getName(), o.getRemoved(), o.getModifTime().getTime()))
-							.collect(Collectors.toList());
+					response.operators = toClient.stream().map(o -> {
+						Boolean removed = o.getRemoved();
+						if (removed == null)
+							removed = false;
+						long modifTime = o.getModifTime() == null ? 0 : o.getModifTime().getTime();
+						return new OpSync.Operator(o.getId(), o.getName(), null, null, removed, modifTime);
+					}).collect(Collectors.toList());
 					response.lastSync = System.currentTimeMillis();
 				}
 			});

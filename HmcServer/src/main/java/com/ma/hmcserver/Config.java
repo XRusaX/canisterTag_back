@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import com.ma.appcommon.SettingsHolder;
+import com.ma.hmcapp.HmcApp;
 import com.ma.hmcapp.Settings;
 import com.ma.hmcapp.SettingsRO;
 
@@ -29,7 +30,7 @@ public class Config {
 //		String dbname = settings.dbname;
 //		String user = settings.user;
 		
-		String appName = DemoApplication.getAppName(applicationContext);
+		String appName = HmcApp.getAppName(applicationContext);
 		String dbname = appName;
 		String user = appName;
 		String databaseHost = settings.databaseHost;
