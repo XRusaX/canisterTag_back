@@ -1,0 +1,11 @@
+.center-new {
+    position: absolute;
+    box-sizing: border-box;
+    top: 50%;
+    left: 50%;
+    padding: 100px;
+    transform: translateX(-50%) translateY(-50%);
+    border-radius: 8px;
+    align-items: center;
+    background-color: indigo;
+}
