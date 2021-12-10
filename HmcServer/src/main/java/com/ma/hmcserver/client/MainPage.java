@@ -36,16 +36,16 @@ import com.ma.common.gwtapp.client.ui.panel.DockLayoutPanelX;
 import com.ma.common.gwtapp.client.ui.panel.HorPanel;
 import com.ma.common.gwtapp.client.ui.toolbar.StatusBar;
 import com.ma.commonui.shared.cd.CDObject;
-import com.ma.hmcdb.entity.Agent;
-import com.ma.hmcdb.entity.Hmc;
-import com.ma.hmcdb.entity.Operator;
-import com.ma.hmcdb.entity.RoomLayer;
-import com.ma.hmcdb.entity.rfid.Quota;
-import com.ma.hmcdb.entity.rfid.Report;
-import com.ma.hmcdb.entity.rfid.RfidLabel;
-import com.ma.hmcdb.entity.test.TestReport;
-import com.ma.hmcdb.shared.CompanyType;
-import com.ma.hmcdb.shared.Permissions;
+import com.ma.hmcapp.entity.Agent;
+import com.ma.hmcapp.entity.Hmc;
+import com.ma.hmcapp.entity.Operator;
+import com.ma.hmcapp.entity.RoomLayer;
+import com.ma.hmcapp.entity.rfid.Quota;
+import com.ma.hmcapp.entity.rfid.Report;
+import com.ma.hmcapp.entity.rfid.RfidLabel;
+import com.ma.hmcapp.entity.test.TestReport;
+import com.ma.hmcapp.shared.CompanyType;
+import com.ma.hmcapp.shared.Permissions;
 import com.ma.hmcserver.client.customwidgets.PlacementPanel;
 
 public class MainPage extends AppMainPage {

@@ -7,8 +7,8 @@ import com.ma.common.gwtapp.client.commondata.CommonListPanelWrapper;
 import com.ma.common.gwtapp.client.commondata.PageEventBus;
 import com.ma.common.gwtapp.client.commondata.SelChangeEvent;
 import com.ma.commonui.shared.cd.CDObject;
-import com.ma.hmcdb.entity.Room;
-import com.ma.hmcdb.entity.RoomLayer;
+import com.ma.hmcapp.entity.Room;
+import com.ma.hmcapp.entity.RoomLayer;
 
 public class RoomsPanel extends ResizeComposite {
 

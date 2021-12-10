@@ -40,8 +40,8 @@ import com.ma.common.gwtapp.client.commondata.SelChangeEvent;
 import com.ma.common.gwtapp.client.ui.ContextMenu;
 import com.ma.commonui.shared.cd.CDClass;
 import com.ma.commonui.shared.cd.CDObject;
-import com.ma.hmcdb.entity.Room;
-import com.ma.hmcdb.entity.RoomLayer;
+import com.ma.hmcapp.entity.Room;
+import com.ma.hmcapp.entity.RoomLayer;
 
 public class LayersPanel extends Composite {
 	private final CommonDataServiceAsync service = GWT.create(CommonDataService.class);
