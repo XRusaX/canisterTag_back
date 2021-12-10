@@ -5,7 +5,9 @@ import java.util.function.Consumer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -13,6 +15,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.DataRange;
@@ -63,7 +66,7 @@ public class PropertiesPanel extends VerticalPanel {
 			CDObject cdObject = sce.selectedSet.iterator().next();
 			objectEditor.toUI(cdObject);
 			if (objectEditor.readOnly)
-				objectEditor.setStyle("enum-field");
+				objectEditor.setStyle("object-property-field");
 			propPanel = (Widget) objectEditor.asPlatfomWidget();
 			propPanel.getElement().getStyle().setMargin(10, Unit.PX);
 			propPanel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
@@ -131,11 +134,16 @@ public class PropertiesPanel extends VerticalPanel {
 
 			container.setStyleName("prop-panel");
 //				setWidget(container);
-			setWidth("100%");
+			
+			setWidth("100");
+			setHeight("100");
+			getElement().getStyle().setPaddingTop(50, Unit.PX);
 //				setHeight("100%");
+			SimplePanel wrapperPanel = new SimplePanel(container);
+			wrapperPanel.getElement().getStyle().setWidth(50, Unit.PCT);
 			setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-			add(container);
+			add(wrapperPanel);
 		} else {
 			GWT.log("other selected ");
 			if (propPanel != null)

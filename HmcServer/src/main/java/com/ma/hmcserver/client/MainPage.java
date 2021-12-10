@@ -52,6 +52,7 @@ public class MainPage extends AppMainPage {
 	// private final CommonDataServiceAsync commonDataService =
 	// GWT.create(CommonDataService.class);
 	private final AppServiceAsync settingsService = GWT.create(AppService.class);
+	static MyDataGridResources resource = GWT.create(MyDataGridResources.class);
 
 	private AppState appState;
 
@@ -60,6 +61,8 @@ public class MainPage extends AppMainPage {
 	public MainPage(AppConfig appConfig, AppState appState) {
 		super(appConfig.loginNeeded, false);
 		this.appState = appState;
+//		resource.verticalTabPanelStyles().ensureInjected();
+		resource.horizontalTabPanelStyles().ensureInjected();
 		settingsService.getSettingsValues(new AsyncCallback<SettingsValues>() {
 			@Override
 			public void onSuccess(SettingsValues result) {
@@ -94,7 +97,6 @@ public class MainPage extends AppMainPage {
 		PageEventBus eventBus;
 
 		TabLayoutPanel tabPanel2 = tabPanel;
-
 		eventBus = new PageEventBus();
 		if (Login.user.company == null) {
 			tabPanel2 = new TabLayoutPanel(2, Unit.EM);
@@ -118,7 +120,7 @@ public class MainPage extends AppMainPage {
 //					eventBus);
 
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new Label(), 5);
+//			panel.addW(new Label(), 5);
 
 			PropertiesPanel hmcPropertiesPanel = new PropertiesPanel(eventBus, Hmc.class.getName());
 
@@ -130,8 +132,7 @@ public class MainPage extends AppMainPage {
 					}
 				}
 			}, Hmc.class, eventBus), 70);
-
-			panel.addE(hmcPropertiesPanel, 25);
+			panel.addW(hmcPropertiesPanel, 30);
 
 			tabPanel2.add(panel, "Оборудование");
 
@@ -146,7 +147,6 @@ public class MainPage extends AppMainPage {
 			panel = new DockLayoutPanelX(Unit.PCT);
 //			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			MaterialUIList operatorList = new MaterialUIList(null);
-			panel.addW(new Label(), 35);
 			PropertiesPanel operatorPropPanel = new PropertiesPanel(eventBus, Operator.class.getName()) {
 				private PushButton uploadImageButton;
 
@@ -185,10 +185,11 @@ public class MainPage extends AppMainPage {
 					uploadImageButton.setEnabled(!roMode);
 				}
 			};
-			panel.addE(operatorPropPanel, 35);
+			panel.addW(new Label(), 30);
+			panel.addE(operatorPropPanel, 30);
 			panel.addN(new Label(), 10);
 			panel.addS(new Label(), 10);
-			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
+			panel.addW(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
 
 				@Override
 				protected String applyObjectEditorDialogStyle() {
@@ -235,7 +236,7 @@ public class MainPage extends AppMainPage {
 				public void edit(CDObject item) {
 					return;
 				}
-			});
+			}, 30);
 
 			tabPanel2.add(panel, "Операторы");
 

@@ -1,0 +1,55 @@
+@external gwt-TabLayoutPanel;
+.gwt-TabLayoutPanel {
+    margin-top: 4px;
+}
+
+@external gwt-TabLayoutPanelTabs;
+.gwt-TabLayoutPanelTabs {}
+
+@external gwt-TabLayoutPanelTab;
+.gwt-TabLayoutPanelTab {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: transparent !important;
+}
+
+.gwt-TabLayoutPanelTab:hover {
+    background-color: rgba(65, 105, 225, 0.7) !important;
+}
+
+.gwt-TabLayoutPanelTab:hover>div {
+    color: black !important;
+}
+
+@external gwt-TabLayoutPanelTabInner;
+.gwt-TabLayoutPanelTabInner {
+    color: #616876;
+    font-family: 'Font Awesome 5 Free', "Lato", Arial, Helvetica, sans-serif;
+    font-size: 0.9rem;
+}
+
+.gwt-TabLayoutPanelTabInner:hover {
+    /* color: black; */
+}
+
+@external gwt-TabLayoutPanelTab-selected;
+.gwt-TabLayoutPanelTab-selected {
+    background-color: royalblue !important;
+}
+
+.gwt-TabLayoutPanelTab-selected>div {
+    color: white !important;
+}
+
+@external gwt-TabLayoutPanelContentContainer;
+.gwt-TabLayoutPanelContentContainer {
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    border-top-color: royalblue;
+}
+
+@external gwt-TabLayoutPanelContent;
+.gwt-TabLayoutPanelContent {
+    border: none !important;
+}
