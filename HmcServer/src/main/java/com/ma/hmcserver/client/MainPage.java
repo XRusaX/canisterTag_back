@@ -158,16 +158,16 @@ public class MainPage extends AppMainPage {
 							: operator.get("avatar"));
 
 					uploadImageButton = new PushButton(img, (ClickHandler) event -> {
-							new ImportDialog("Выберите файл", "api/images") {
-								@Override
-								protected void onComplete(SubmitCompleteEvent event) {
-									String results = event.getResults();
-									if (!results.isEmpty()) {
-										operator.set("avatar", results);
-										img.setUrl(operator.get("avatar"));
-									}
+						new ImportDialog("Выберите файл", "api/images") {
+							@Override
+							protected void onComplete(SubmitCompleteEvent event) {
+								String results = event.getResults();
+								if (!results.isEmpty()) {
+									operator.set("avatar", results);
+									img.setUrl(operator.get("avatar"));
 								}
-							}.center();
+							}
+						}.center();
 					});
 					uploadImageButton.setStyleName("uploadTestBtn");
 					uploadImageButton.setTitle("Загрузить изображение");
@@ -298,11 +298,7 @@ public class MainPage extends AppMainPage {
 		MaterialUIList disinfectantList = new MaterialUIList("");
 		disinfectantList.setEditable(Login.user.company == null);
 		tabPanel.add(new DockLayoutPanelX(Unit.PCT)
-				.addX(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus)),
-//		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-//				.addX(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
-//						Agent.class, eventBus)),
-				"Средства");
+				.addX(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus)), "Средства");
 
 		if (Login.user.company == null)
 			tabPanel.add(new LoggerPanel(true), "Журнал");
