@@ -18,7 +18,11 @@
 
 /* ЦВЕТА*/
 
+
+/*тёмный цвет шапки*/
+
 @def headerBackgroundColor #36304a;
+@def headerBackgroundColor steelblue;
 @def tableBorderColor #36304a;
 @def textColor #555555;
 
@@ -228,14 +232,15 @@
 
 .dataGridSelectedRow {
     /* background: #fc9967; */
-    background-color: #ff906b;
+    /* background-color: #ff906b; */
+    background: rgba(32, 178, 171, 0.39);
     color: white;
     /*height: auto;*/
     overflow: auto;
 }
 
 .dataGridSelectedRow div {
-    color: white;
+    color: black;
 }
 
 .dataGridSelectedRowCell {

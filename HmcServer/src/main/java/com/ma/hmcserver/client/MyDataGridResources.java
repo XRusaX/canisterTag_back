@@ -28,4 +28,10 @@ public interface MyDataGridResources extends DataGrid.Resources {
 	@Source("/resources/css/Custom.css")
     @CssResource.NotStrict
     CssResource customization();
+	
+	@Source("/resources/css/verticaltabpanel.css")
+    CssResource verticalTabPanelStyles();
+	
+	@Source("/resources/css/horizontalTabPane.css")
+    CssResource horizontalTabPanelStyles();
 };
