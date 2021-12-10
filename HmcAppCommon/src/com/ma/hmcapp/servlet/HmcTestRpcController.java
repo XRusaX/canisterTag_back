@@ -18,8 +18,8 @@ import com.ma.hmc.iface.boardtest.rpcdata.User;
 import com.ma.hmc.iface.boardtest.rpcinterface.HmcTestRpcInterface;
 import com.ma.hmcapp.datasource.HmcDataSource;
 import com.ma.hmcapp.datasource.TestReportDataSource;
-import com.ma.hmcdb.entity.Hmc;
-import com.ma.hmcdb.shared.Permissions;
+import com.ma.hmcapp.entity.Hmc;
+import com.ma.hmcapp.shared.Permissions;
 
 @RestController
 @RequestMapping(HmcTestRpcInterface.servletpath)
@@ -70,7 +70,7 @@ public class HmcTestRpcController extends RpcController implements HmcTestRpcInt
 
 		database.execVoid(conn -> {
 			Hmc hmc = hmcDataSource.getBySerNum(conn, testReport.serialNumber);
-			com.ma.hmcdb.entity.test.TestReport r = new com.ma.hmcdb.entity.test.TestReport(hmc, testReport.testType,
+			com.ma.hmcapp.entity.test.TestReport r = new com.ma.hmcapp.entity.test.TestReport(hmc, testReport.testType,
 					testReport.testStatus, testReport.details);
 			testReportDataSource.store(conn, r);
 		});

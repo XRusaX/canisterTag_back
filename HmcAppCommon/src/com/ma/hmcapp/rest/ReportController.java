@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ma.hmcdb.entity.rfid.Report;
+import com.ma.hmcapp.entity.rfid.Report;
 
 @RestController
 public class ReportController extends BaseController {

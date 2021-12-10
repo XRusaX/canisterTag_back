@@ -1,4 +1,4 @@
-package com.ma.hmcdb.entity;
+package com.ma.hmcapp.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

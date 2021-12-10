@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.ma.appcommon.auth.UserServiceDB;
 import com.ma.appcommon.shared.auth.UserData;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.shared.Permissions;
+import com.ma.hmcapp.entity.Company;
+import com.ma.hmcapp.shared.Permissions;
 
 @Component
 public class HmcUserService extends UserServiceDB {

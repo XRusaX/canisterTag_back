@@ -1,4 +1,4 @@
-package com.ma.hmcdb.entity;
+package com.ma.hmcapp.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.ma.commonui.shared.annotations.UILabel;
 import com.ma.commonui.shared.annotations.UINameField;
 import com.ma.hmc.iface.shared.HmcType;
-import com.ma.hmcdb.shared.HmcReportStatus;
+import com.ma.hmcapp.shared.HmcReportStatus;
 
 import lombok.Data;
 

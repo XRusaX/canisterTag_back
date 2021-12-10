@@ -1,4 +1,4 @@
-package com.ma.hmcdb.shared;
+package com.ma.hmcapp.shared;
 
 public class Permissions {
 	public static final String PERMISSION_WRITE_RFID = "PERMISSION_WRITE_RFID";

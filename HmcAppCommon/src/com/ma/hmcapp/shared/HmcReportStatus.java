@@ -1,4 +1,4 @@
-package com.ma.hmcdb.shared;
+package com.ma.hmcapp.shared;
 
 import com.ma.commonui.shared.annotations.UILabel;
 

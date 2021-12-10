@@ -1,4 +1,4 @@
-package com.ma.hmcdb.entity.test;
+package com.ma.hmcapp.entity.test;
 
 import java.util.Date;
 
@@ -17,7 +17,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.ma.commonui.shared.annotations.UILabel;
 import com.ma.hmc.iface.boardtest.shared.HmcTestStatus;
 import com.ma.hmc.iface.boardtest.shared.HmcTestType;
-import com.ma.hmcdb.entity.Hmc;
+import com.ma.hmcapp.entity.Hmc;
 
 @Entity
 public class TestReport {

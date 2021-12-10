@@ -21,13 +21,13 @@ import com.ma.hmcapp.datasource.OperatorDataSource;
 import com.ma.hmcapp.datasource.ReportDataSource;
 import com.ma.hmcapp.datasource.RfidLabelDataSource;
 import com.ma.hmcapp.datasource.RoomDataSource;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.entity.Hmc;
-import com.ma.hmcdb.entity.Operator;
-import com.ma.hmcdb.entity.Room;
-import com.ma.hmcdb.entity.rfid.Report;
-import com.ma.hmcdb.entity.rfid.RfidLabel;
-import com.ma.hmcdb.shared.HmcReportStatus;
+import com.ma.hmcapp.entity.Company;
+import com.ma.hmcapp.entity.Hmc;
+import com.ma.hmcapp.entity.Operator;
+import com.ma.hmcapp.entity.Room;
+import com.ma.hmcapp.entity.rfid.Report;
+import com.ma.hmcapp.entity.rfid.RfidLabel;
+import com.ma.hmcapp.shared.HmcReportStatus;
 
 @RestController
 public class HmcReportController {

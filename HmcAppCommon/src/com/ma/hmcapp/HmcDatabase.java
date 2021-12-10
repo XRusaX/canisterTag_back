@@ -1,14 +1,6 @@
 package com.ma.hmcapp;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -16,9 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.ma.appcommon.SettingsHolder;
 import com.ma.appcommon.db.Database2;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.entity.Hmc;
-import com.ma.hmcdb.entity.rfid.Report;
 
 @Component
 public class HmcDatabase extends Database2 {

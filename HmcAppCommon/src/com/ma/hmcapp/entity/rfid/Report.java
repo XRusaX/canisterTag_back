@@ -1,4 +1,4 @@
-package com.ma.hmcdb.entity.rfid;
+package com.ma.hmcapp.entity.rfid;
 
 import java.util.Date;
 
@@ -15,11 +15,11 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.ma.commonui.shared.annotations.UILabel;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.entity.Hmc;
-import com.ma.hmcdb.entity.Operator;
-import com.ma.hmcdb.entity.Room;
-import com.ma.hmcdb.shared.HmcReportStatus;
+import com.ma.hmcapp.entity.Company;
+import com.ma.hmcapp.entity.Hmc;
+import com.ma.hmcapp.entity.Operator;
+import com.ma.hmcapp.entity.Room;
+import com.ma.hmcapp.shared.HmcReportStatus;
 
 import lombok.Data;
 

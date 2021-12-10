@@ -1,4 +1,4 @@
-package com.ma.hmcdb.entity;
+package com.ma.hmcapp.entity;
 
 import java.util.Date;
 
@@ -18,10 +18,10 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.ma.commonui.shared.annotations.UILabel;
-import com.ma.hmcdb.shared.synchronizer.CompanyField;
-import com.ma.hmcdb.shared.synchronizer.ModifTime;
-import com.ma.hmcdb.shared.synchronizer.Name;
-import com.ma.hmcdb.shared.synchronizer.StoreTime;
+import com.ma.hmcapp.shared.synchronizer.CompanyField;
+import com.ma.hmcapp.shared.synchronizer.ModifTime;
+import com.ma.hmcapp.shared.synchronizer.Name;
+import com.ma.hmcapp.shared.synchronizer.StoreTime;
 
 import lombok.Data;
 

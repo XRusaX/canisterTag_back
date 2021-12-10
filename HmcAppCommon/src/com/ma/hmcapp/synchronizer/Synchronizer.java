@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ma.appcommon.datasource.EM;
-import com.ma.hmcdb.entity.Company;
+import com.ma.hmcapp.entity.Company;
 
 public abstract class Synchronizer<T> {
 
