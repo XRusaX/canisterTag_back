@@ -9,5 +9,5 @@
   <source path='shared'/>
   <source path='entity'/>
   <source path='client'/>
-  <inherits name="com.google.gwt.resources.Resources" />
+  <!-- <inherits name="com.google.gwt.resources.Resources" />-->
 </module>

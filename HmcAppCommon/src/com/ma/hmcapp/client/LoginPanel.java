@@ -28,8 +28,8 @@ public class LoginPanel extends LoginPageBase{
 	protected void onErr(String text) {
 		GWT.log("LOGIN ERROR");
 		// err.setText(text);
-		loginTextField.addStyleName("myfirst");
-		passwordTextField.addStyleName("myfirst");
+		loginTextField.addStyleName("invalid");
+		passwordTextField.addStyleName("invalid");
 	}
 
 	public LoginPanel(String appName, Runnable addUser) {
@@ -77,7 +77,6 @@ public class LoginPanel extends LoginPageBase{
 
 		HorizontalPanel buttonsPanel = new HorizontalPanel();
 
-		// buttonsPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
 		buttonsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		buttonsPanel.setWidth("100%");
 		buttonsPanel.setSpacing(10);
@@ -88,7 +87,6 @@ public class LoginPanel extends LoginPageBase{
 		if (addUser != null) {
 			Button newUserButton = new Button("Новый пользователь", (ClickHandler) event -> addUser.run());
 			newUserButton.setStyleName("button-google");
-			newUserButton.getElement().getStyle().setBackgroundColor("khaki");
 			buttonsPanel.add(newUserButton);
 		}
 
@@ -104,10 +102,7 @@ public class LoginPanel extends LoginPageBase{
 		// restorePasswordBtn.getElement().getStyle().setMarginTop(20, Unit.PX);
 		// verticalPanel.add(restorePasswordBtn);
 
-		verticalPanel.setStyleName("center-new");
-//		verticalPanel.addStyleName("container");
-		// verticalPanel.addStyleName("grid");
-//		verticalPanel.getElement().getStyle().setBackgroundColor("khaki");
+		verticalPanel.setStyleName("main-panel");
 
 		initWidget(verticalPanel);
 	}

@@ -1,6 +1,5 @@
 package com.ma.hmccanistertags.client;
 
-
 import java.util.Arrays;
 
 import com.google.gwt.core.client.GWT;
@@ -19,7 +18,6 @@ import com.ma.common.gwtapp.client.MainToolbar;
 import com.ma.common.gwtapp.client.SettingsValues;
 import com.ma.common.gwtapp.client.auth.Login;
 import com.ma.common.gwtapp.client.auth.UsersPage;
-import com.ma.common.gwtapp.client.commondata.CommonListPanel;
 import com.ma.common.gwtapp.client.commondata.CommonListPanelWrapper;
 import com.ma.common.gwtapp.client.commondata.PageEventBus;
 import com.ma.common.gwtapp.client.connections.ConnectionsPage;
@@ -45,7 +43,7 @@ public class MainPage extends AppMainPage {
 		this.appState = appState;
 		FontAwesomeBundle.INSTANCE.fontAwesome().ensureInjected();
 		resource.horizontalTabPanelStyles().ensureInjected();
-		
+
 		settingsService.getSettingsValues(new AsyncCallback<SettingsValues>() {
 			@Override
 			public void onSuccess(SettingsValues result) {
@@ -88,17 +86,19 @@ public class MainPage extends AppMainPage {
 		}
 		if (Login.user.hasPermission(Permissions.PERMISSION_WRITE_RFID)) {
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new CommonListPanelWrapper(new CommonListPanel("Квоты").setEditable(Login.user.company == null),
-					Quota.class, eventBus), 50);
+			MaterialUIList quotesList = new MaterialUIList("Квоты");
+			quotesList.setEditable(Login.user.company == null);
+			panel.addW(new CommonListPanelWrapper(quotesList, Quota.class, eventBus), 50);
 
-			panel.add(new CommonListPanelWrapper(new CommonListPanel("Метки").setEditable(false), RfidLabel.class,
-					eventBus));
+			MaterialUIList tagsList = new MaterialUIList("Метки");
+			tagsList.setEditable(false);
+			panel.add(new CommonListPanelWrapper(tagsList, RfidLabel.class, eventBus));
 			tabPanel2.add(panel, "Метки");
 		}
 
 		eventBus = new PageEventBus();
 		eventBus = new PageEventBus();
-		
+
 		MaterialUIList disinfectantList = new MaterialUIList("");
 		disinfectantList.setEditable(Login.user.company == null);
 		tabPanel.add(new DockLayoutPanelX(Unit.PCT)

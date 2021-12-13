@@ -7,7 +7,7 @@ import com.google.gwt.resources.client.CssResource;
 public interface CSSBundle extends ClientBundle{
 	public static final CSSBundle css = (CSSBundle) GWT.create(CSSBundle.class);
 	
-		@Source("/resources/css/example.css")
+		@Source("/resources/css/loginPanel.css")
 		@CssResource.NotStrict
 		CssResource myCss();
 
