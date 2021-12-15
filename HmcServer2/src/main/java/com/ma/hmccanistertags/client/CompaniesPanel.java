@@ -1,5 +1,6 @@
 package com.ma.hmccanistertags.client;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -16,20 +17,24 @@ import com.ma.common.gwtapp.client.commondata.CommonListPanelWrapper;
 import com.ma.common.gwtapp.client.ui.ContextMenu;
 import com.ma.common.shared.eventbus.EventBus;
 import com.ma.commonui.shared.cd.CDObject;
+import com.ma.hmcapp.client.MaterialUIList;
 import com.ma.hmcapp.entity.Company;
 import com.ma.hmcapp.shared.CompanyType;
+import com.ma.hmcapp.shared.Permissions;
 
 public class CompaniesPanel extends CommonListPanelWrapper {
 	private static final LoginServiceAsync loginService = GWT.create(LoginService.class);
 
 	public CompaniesPanel(EventBus eventBus, String name, CompanyType companyType, List<String> showFields) {
-		super(new CommonListPanel(name) {
+		super(new MaterialUIList(name) {
 			@Override
 			protected void prepareContextMenu(ContextMenu menu, Set<CDObject> set) {
 				if (set.size() == 1 && Login.user.hasPermission(UserData.PERMISSION_USERS)) {
 					CDObject company = set.iterator().next();
 					menu.addItem("Создать пользователя", () -> {
-						new UserDialog("Новый пользователь", true, true, true, Login.permissions) {
+						HashMap<String, String> permissions = new HashMap<>();
+						permissions.put(Permissions.PERMISSION_WRITE_RFID, "Запись меток канистр");
+						new UserDialog("Новый пользователь", true, true, true, permissions) {
 							@Override
 							protected void onOk(String user, String passwordNew, String passwordOld, String email,
 									List<String> permissions) {
