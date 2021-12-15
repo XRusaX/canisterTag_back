@@ -1,4 +1,4 @@
-package com.ma.hmccanistertags.client;
+package com.ma.hmcapp.client;
 
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.DataResource;
