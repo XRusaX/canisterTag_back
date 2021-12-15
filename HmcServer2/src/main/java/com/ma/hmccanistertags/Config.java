@@ -19,22 +19,22 @@ public class Config {
 	@Autowired
 	private SettingsHolder<Settings, SettingsRO> settingsHolder;
 	
-	@Autowired
-	private ApplicationContext applicationContext;
+//	@Autowired
+//	private ApplicationContext applicationContext;
 	
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
 		SettingsRO settings = settingsHolder.getSettingsRO();
-//		String dbname = settings.dbname;
-//		String user = settings.user;
 		
-		String appName = HmcApp.getAppName(applicationContext);
-		String dbname = appName;
-		String user = appName;
+//		String appName = HmcApp.getAppName(applicationContext);
+//		String dbname = appName;
+//		String user = appName;
 		String databaseHost = settings.databaseHost;
 		String password = settings.password;
+		String dbname = settings.dbname;
+		String user = settings.user;
 
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		dataSource.setUrl("jdbc:mysql://" + databaseHost + ":3306/" + dbname);
