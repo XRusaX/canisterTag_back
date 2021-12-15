@@ -29,6 +29,9 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/webapp/hmcserver
+### Eclipse ###
+.settings/*
+
+src/main/webapp/canister-rfid
 src/main/webapp/WEB-INF/deploy
 **/gwt-unitCache

@@ -1,8 +1,8 @@
 <project default="gwtcompile">
 
-	<property name="appname" value="hmcserver" />
+	<property name="appname" value="canister-rfid" />
 
-	<property name="entrypoint" value="com.ma.hmccanistertags.HmcServer" />
+	<property name="entrypoint" value="com.ma.hmccanistertags.CanisterRfid" />
 
 	<property name="gwtdir" value="..\common-java\Libs\gwt-2.9.0" />
 
