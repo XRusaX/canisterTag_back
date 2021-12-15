@@ -6,6 +6,6 @@ import javax.servlet.annotation.WebServlet;
 import com.ma.common.gwtapp.server.SpringGwtRemoteServiceServlet;
 
 @SuppressWarnings("serial")
-@WebServlet("/hmcserver/gwtservice/*")
+@WebServlet("/canister-rfid/gwtservice/*")
 public class GwtRemoteServiceServlet extends SpringGwtRemoteServiceServlet {
 }

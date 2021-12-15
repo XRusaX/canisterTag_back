@@ -8,7 +8,7 @@ import com.ma.hmcapp.client.LoginPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class HmcServerEntryPoint extends AppEntryPoint {
+public class CanisterRfidEntryPoint extends AppEntryPoint {
 
 	@Override
 	public void onModuleLoad1() {
