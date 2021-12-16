@@ -10,11 +10,11 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ma.hmc</groupId>
-	<artifactId>canister-rfid</artifactId>
+	<artifactId>canisterrfid</artifactId>
 	<version>0.0.1</version>
 	<packaging>war</packaging>
-	<name>HmcCanisterTags</name>
-	<description>Модуль записи меток для канистр</description>
+	<name>canisterrfid</name>
+	<description>canisterrfid</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
@@ -159,10 +159,10 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
+				<version>2.9.0</version>
 				<executions>
 					<execution>
 						<configuration>
-							<strict>true</strict>
 							<style>DETAILED</style>
 							<extraJvmArgs>-Xms1024M -Xmx2048M
 								-Dgwt.compiler.enableClosureCompiler=false</extraJvmArgs>

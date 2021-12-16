@@ -1,4 +1,4 @@
-package com.ma.hmccanistertags.client;
+package com.ma.canisterrfid.client;
 
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;

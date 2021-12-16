@@ -1,4 +1,4 @@
-package com.ma.hmccanistertags;
+package com.ma.canisterrfid;
 
 import javax.sql.DataSource;
 

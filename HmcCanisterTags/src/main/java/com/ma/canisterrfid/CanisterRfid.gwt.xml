@@ -27,7 +27,7 @@
 
 	<!-- Specify the app entry point class. -->
 	<entry-point
-		class='com.ma.hmccanistertags.client.CanisterRfidEntryPoint' />
+		class='com.ma.canisterrfid.client.CanisterRfidEntryPoint' />
 
 	<!-- Specify the paths for translatable code -->
 	<source path='client' />

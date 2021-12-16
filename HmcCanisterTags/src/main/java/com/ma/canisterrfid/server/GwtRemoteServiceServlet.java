@@ -1,4 +1,4 @@
-package com.ma.hmccanistertags.server;
+package com.ma.canisterrfid.server;
 
 
 import javax.servlet.annotation.WebServlet;
@@ -6,6 +6,6 @@ import javax.servlet.annotation.WebServlet;
 import com.ma.common.gwtapp.server.SpringGwtRemoteServiceServlet;
 
 @SuppressWarnings("serial")
-@WebServlet("/canister-rfid/gwtservice/*")
+@WebServlet("/canisterrfid/gwtservice/*")
 public class GwtRemoteServiceServlet extends SpringGwtRemoteServiceServlet {
 }

@@ -1,4 +1,4 @@
-package com.ma.hmccanistertags.client;
+package com.ma.canisterrfid.client;
 
 import java.util.Arrays;
 
