@@ -5,9 +5,7 @@ import java.util.function.Consumer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -31,6 +29,7 @@ import com.ma.common.shared.eventbus.EventBus;
 import com.ma.commonui.shared.cd.CDClass;
 import com.ma.commonui.shared.cd.CDObject;
 import com.ma.commonui.shared.cd.ObjectEditor;
+import com.ma.hmcapp.client.FontAwesomeBundle;
 
 public class PropertiesPanel extends VerticalPanel {
 	private CDClass cdClass;
