@@ -32,6 +32,6 @@ build/
 ### Eclipse ###
 .settings/*
 
-src/main/webapp/canister-rfid
+src/main/webapp/canisterrfid
 src/main/webapp/WEB-INF/deploy
 **/gwt-unitCache
