@@ -75,7 +75,7 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 
 		database.execVoid(em -> {
 			try {
-				agentDataSource.store(em, new Agent("Гриндез", 1000, 100, 10, 10));
+				agentDataSource.store(em, new Agent("Гриндез", 1000, 100, 10, 10, "гипохлорид", 3));
 
 				userService.addUser("admin", AuthUtils.getPwdHash("admin", "admin"),
 						Arrays.asList(UserData.PERMISSIONS_ALL), null, null);
