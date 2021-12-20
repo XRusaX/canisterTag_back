@@ -9,9 +9,9 @@ import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
-import com.ma.hmcdb.entity.Hmc;
-import com.ma.hmcdb.entity.rfid.Report;
-import com.ma.hmcdb.entity.rfid.RfidLabel;
+import com.ma.hmcapp.entity.Hmc;
+import com.ma.hmcapp.entity.rfid.Report;
+import com.ma.hmcapp.entity.rfid.RfidLabel;
 
 @Component
 public class HmcDataSource extends DataSourceImpl<Hmc> {

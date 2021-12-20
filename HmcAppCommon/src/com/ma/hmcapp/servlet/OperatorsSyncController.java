@@ -16,9 +16,9 @@ import com.ma.appcommon.db.Database2;
 import com.ma.hmc.iface.opsync.OpSync;
 import com.ma.hmcapp.datasource.HmcDataSource;
 import com.ma.hmcapp.datasource.OperatorDataSource;
+import com.ma.hmcapp.entity.Hmc;
+import com.ma.hmcapp.entity.Operator;
 import com.ma.hmcapp.synchronizer.DatasourceSynchronizer;
-import com.ma.hmcdb.entity.Hmc;
-import com.ma.hmcdb.entity.Operator;
 
 @RestController
 public class OperatorsSyncController {

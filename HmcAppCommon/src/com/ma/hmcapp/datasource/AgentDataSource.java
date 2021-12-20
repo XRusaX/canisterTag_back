@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
-import com.ma.hmcdb.entity.Agent;
+import com.ma.hmcapp.entity.Agent;
 
 @Component
 public class AgentDataSource extends DataSourceImpl<Agent> {

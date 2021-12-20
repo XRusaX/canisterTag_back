@@ -30,11 +30,11 @@ import com.ma.hmcapp.datasource.AgentDataSource;
 import com.ma.hmcapp.datasource.CompanyDataSource;
 import com.ma.hmcapp.datasource.QuotaDataSource;
 import com.ma.hmcapp.datasource.RfidLabelDataSource;
-import com.ma.hmcdb.entity.Agent;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.entity.rfid.Quota;
-import com.ma.hmcdb.entity.rfid.RfidLabel;
-import com.ma.hmcdb.shared.Permissions;
+import com.ma.hmcapp.entity.Agent;
+import com.ma.hmcapp.entity.Company;
+import com.ma.hmcapp.entity.rfid.Quota;
+import com.ma.hmcapp.entity.rfid.RfidLabel;
+import com.ma.hmcapp.shared.Permissions;
 
 @RestController
 @RequestMapping(HmcRfidRpcInterface.servletPath)
@@ -161,16 +161,15 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				int id = (int) rfidLabel.getId();
 
 				RfidData data = new RfidData();
-				data.UNIQUE_ID = id;
-				data.CANISTER_NAME = agentName;
-				data.CANISTER_VOLUME_ML = canisterVolume;
-				data.CANISTER_MANUFACTURER_NAME = company.getName();
-				data.CANISTER_CONSUMPTION_ML_M3 = agent.getConsumption_ml_m3();
-				data.CANISTER_CONSUMPTION2_ML_M3 = agent.getConsumption2_ml_m3();
-				data.CANISTER_AERATION_MIN = agent.getAeration_min();
+				data.CAN_UNIQUE_ID = id;
+				data.CAN_VOLUME_ML = canisterVolume;
+				data.CAN_MANUFACTURER_NAME = company.getName();
+				data.CAN_DESINFICTANT_NAME = agentName;
+				data.CAN_ACTIVE_INGRIDIENT_NAME = agent.getIngridientName();
+				data.CAN_INGRIDIENT_CONCENTRATION = agent.getConcentration();
 
 				try {
-					data.DIGIT_SIG = sig.sign(RfidDataUtils.getKey(data));
+					data.CAN_DIGIT_SIG = sig.sign(RfidDataUtils.getKey(data));
 				} catch (UnsupportedEncodingException | GeneralSecurityException e) {
 					throw new RuntimeException(e);
 				}

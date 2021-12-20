@@ -3,7 +3,6 @@ package com.ma.hmcserver.client;
 import java.util.Arrays;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -18,7 +17,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.ma.appcommon.shared.AppConfig;
 import com.ma.appcommon.shared.AppState;
 import com.ma.appcommon.shared.auth.UserData;
-import com.ma.common.cd.swing.SettingsTest.Microwave.Color;
 import com.ma.common.gwtapp.client.AppMainPage;
 import com.ma.common.gwtapp.client.AppService;
 import com.ma.common.gwtapp.client.AppServiceAsync;
@@ -36,22 +34,24 @@ import com.ma.common.gwtapp.client.ui.panel.DockLayoutPanelX;
 import com.ma.common.gwtapp.client.ui.panel.HorPanel;
 import com.ma.common.gwtapp.client.ui.toolbar.StatusBar;
 import com.ma.commonui.shared.cd.CDObject;
-import com.ma.hmcdb.entity.Agent;
-import com.ma.hmcdb.entity.Hmc;
-import com.ma.hmcdb.entity.Operator;
-import com.ma.hmcdb.entity.RoomLayer;
-import com.ma.hmcdb.entity.rfid.Quota;
-import com.ma.hmcdb.entity.rfid.Report;
-import com.ma.hmcdb.entity.rfid.RfidLabel;
-import com.ma.hmcdb.entity.test.TestReport;
-import com.ma.hmcdb.shared.CompanyType;
-import com.ma.hmcdb.shared.Permissions;
+import com.ma.hmcapp.client.MaterialUIList;
+import com.ma.hmcapp.client.MyDataGridResources;
+import com.ma.hmcapp.entity.Agent;
+import com.ma.hmcapp.entity.Hmc;
+import com.ma.hmcapp.entity.Operator;
+import com.ma.hmcapp.entity.rfid.Quota;
+import com.ma.hmcapp.entity.rfid.Report;
+import com.ma.hmcapp.entity.rfid.RfidLabel;
+import com.ma.hmcapp.entity.test.TestReport;
+import com.ma.hmcapp.shared.CompanyType;
+import com.ma.hmcapp.shared.Permissions;
 import com.ma.hmcserver.client.customwidgets.PlacementPanel;
 
 public class MainPage extends AppMainPage {
 	// private final CommonDataServiceAsync commonDataService =
 	// GWT.create(CommonDataService.class);
 	private final AppServiceAsync settingsService = GWT.create(AppService.class);
+	static MyDataGridResources resource = GWT.create(MyDataGridResources.class);
 
 	private AppState appState;
 
@@ -60,6 +60,8 @@ public class MainPage extends AppMainPage {
 	public MainPage(AppConfig appConfig, AppState appState) {
 		super(appConfig.loginNeeded, false);
 		this.appState = appState;
+//		resource.verticalTabPanelStyles().ensureInjected();
+		resource.horizontalTabPanelStyles().ensureInjected();
 		settingsService.getSettingsValues(new AsyncCallback<SettingsValues>() {
 			@Override
 			public void onSuccess(SettingsValues result) {
@@ -94,7 +96,6 @@ public class MainPage extends AppMainPage {
 		PageEventBus eventBus;
 
 		TabLayoutPanel tabPanel2 = tabPanel;
-
 		eventBus = new PageEventBus();
 		if (Login.user.company == null) {
 			tabPanel2 = new TabLayoutPanel(2, Unit.EM);
@@ -118,7 +119,7 @@ public class MainPage extends AppMainPage {
 //					eventBus);
 
 			DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
-			panel.addW(new Label(), 5);
+//			panel.addW(new Label(), 5);
 
 			PropertiesPanel hmcPropertiesPanel = new PropertiesPanel(eventBus, Hmc.class.getName());
 
@@ -130,8 +131,7 @@ public class MainPage extends AppMainPage {
 					}
 				}
 			}, Hmc.class, eventBus), 70);
-
-			panel.addE(hmcPropertiesPanel, 25);
+			panel.addW(hmcPropertiesPanel, 30);
 
 			tabPanel2.add(panel, "Оборудование");
 
@@ -146,7 +146,6 @@ public class MainPage extends AppMainPage {
 			panel = new DockLayoutPanelX(Unit.PCT);
 //			panel.addW(new CommonListPanelWrapper(new CommonListPanel(null, 2000), Operator.class, eventBus), 30);
 			MaterialUIList operatorList = new MaterialUIList(null);
-			panel.addW(new Label(), 35);
 			PropertiesPanel operatorPropPanel = new PropertiesPanel(eventBus, Operator.class.getName()) {
 				private PushButton uploadImageButton;
 
@@ -158,16 +157,16 @@ public class MainPage extends AppMainPage {
 							: operator.get("avatar"));
 
 					uploadImageButton = new PushButton(img, (ClickHandler) event -> {
-							new ImportDialog("Выберите файл", "api/images") {
-								@Override
-								protected void onComplete(SubmitCompleteEvent event) {
-									String results = event.getResults();
-									if (!results.isEmpty()) {
-										operator.set("avatar", results);
-										img.setUrl(operator.get("avatar"));
-									}
+						new ImportDialog("Выберите файл", "api/images") {
+							@Override
+							protected void onComplete(SubmitCompleteEvent event) {
+								String results = event.getResults();
+								if (!results.isEmpty()) {
+									operator.set("avatar", results);
+									img.setUrl(operator.get("avatar"));
 								}
-							}.center();
+							}
+						}.center();
 					});
 					uploadImageButton.setStyleName("uploadTestBtn");
 					uploadImageButton.setTitle("Загрузить изображение");
@@ -185,10 +184,11 @@ public class MainPage extends AppMainPage {
 					uploadImageButton.setEnabled(!roMode);
 				}
 			};
-			panel.addE(operatorPropPanel, 35);
+			panel.addW(new Label(), 30);
+			panel.addE(operatorPropPanel, 30);
 			panel.addN(new Label(), 10);
 			panel.addS(new Label(), 10);
-			panel.addX(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
+			panel.addW(new CommonListPanelWrapper(operatorList, Operator.class, eventBus) {
 
 				@Override
 				protected String applyObjectEditorDialogStyle() {
@@ -235,7 +235,7 @@ public class MainPage extends AppMainPage {
 				public void edit(CDObject item) {
 					return;
 				}
-			});
+			}, 30);
 
 			tabPanel2.add(panel, "Операторы");
 
@@ -297,11 +297,7 @@ public class MainPage extends AppMainPage {
 		MaterialUIList disinfectantList = new MaterialUIList("");
 		disinfectantList.setEditable(Login.user.company == null);
 		tabPanel.add(new DockLayoutPanelX(Unit.PCT)
-				.addX(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus)),
-//		tabPanel.add(new DockLayoutPanelX(Unit.PCT)//
-//				.addX(new CommonListPanelWrapper(new CommonListPanel(null).setEditable(Login.user.company == null),
-//						Agent.class, eventBus)),
-				"Средства");
+				.addX(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus)), "Средства");
 
 		if (Login.user.company == null)
 			tabPanel.add(new LoggerPanel(true), "Журнал");

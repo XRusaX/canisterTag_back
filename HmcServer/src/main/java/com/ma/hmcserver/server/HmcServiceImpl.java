@@ -12,10 +12,10 @@ import com.ma.appcommon.UserService;
 import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.shared.auth.UserData;
 import com.ma.hmcapp.datasource.CompanyDataSource;
+import com.ma.hmcapp.entity.Company;
 import com.ma.hmcapp.servlet.FirmwareController;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.shared.CompanyType;
-import com.ma.hmcdb.shared.Permissions;
+import com.ma.hmcapp.shared.CompanyType;
+import com.ma.hmcapp.shared.Permissions;
 import com.ma.hmcserver.client.HmcService;
 
 @Service("hmc")

@@ -9,7 +9,7 @@ import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
-import com.ma.hmcdb.entity.Company;
+import com.ma.hmcapp.entity.Company;
 
 @Component
 public class CompanyDataSource extends DataSourceImpl<Company> {

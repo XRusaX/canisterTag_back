@@ -12,9 +12,9 @@ import com.ma.appcommon.AuthComponent;
 import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
-import com.ma.hmcdb.entity.Agent;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.entity.rfid.Quota;
+import com.ma.hmcapp.entity.Agent;
+import com.ma.hmcapp.entity.Company;
+import com.ma.hmcapp.entity.rfid.Quota;
 
 @Component
 public class QuotaDataSource extends DataSourceImpl<Quota> {

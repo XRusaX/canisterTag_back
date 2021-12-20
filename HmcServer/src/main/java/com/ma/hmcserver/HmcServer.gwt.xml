@@ -22,7 +22,7 @@
 	<inherits name='com.ma.common.gwtapp.GwtApp' />
 	<inherits name='com.ma.appcommon.AppCommon' />
 	<inherits name='com.ma.hmc.iface.HmcInterface' />
-	<inherits name='com.ma.hmcdb.HmcDatabase' />
+	<inherits name='com.ma.hmcapp.HmcApp' />
 	<inherits name="com.google.gwt.resources.Resources" />
 
 	<!-- Specify the app entry point class. -->

@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.ma.common.gwtapp.client.ui.panel.VertPanel;
 import com.ma.commonui.shared.cd.CDObject;
-import com.ma.hmcdb.shared.HmcReportStatus;
+import com.ma.hmcapp.shared.HmcReportStatus;
 
 public class HmcTileWidget extends Composite{
 	

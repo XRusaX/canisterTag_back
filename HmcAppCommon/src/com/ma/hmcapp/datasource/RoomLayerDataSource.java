@@ -12,8 +12,8 @@ import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
 import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.entity.RoomLayer;
+import com.ma.hmcapp.entity.Company;
+import com.ma.hmcapp.entity.RoomLayer;
 
 @Component
 public class RoomLayerDataSource extends DataSourceImpl<RoomLayer> {

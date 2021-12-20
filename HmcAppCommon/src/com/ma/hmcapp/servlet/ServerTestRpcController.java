@@ -21,14 +21,14 @@ import com.ma.hmcapp.datasource.HmcDataSource;
 import com.ma.hmcapp.datasource.OperatorDataSource;
 import com.ma.hmcapp.datasource.QuotaDataSource;
 import com.ma.hmcapp.datasource.RoomDataSource;
-import com.ma.hmcdb.entity.Agent;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.entity.Hmc;
-import com.ma.hmcdb.entity.Operator;
-import com.ma.hmcdb.entity.Room;
-import com.ma.hmcdb.entity.rfid.Quota;
-import com.ma.hmcdb.shared.CompanyType;
-import com.ma.hmcdb.shared.Permissions;
+import com.ma.hmcapp.entity.Agent;
+import com.ma.hmcapp.entity.Company;
+import com.ma.hmcapp.entity.Hmc;
+import com.ma.hmcapp.entity.Operator;
+import com.ma.hmcapp.entity.Room;
+import com.ma.hmcapp.entity.rfid.Quota;
+import com.ma.hmcapp.shared.CompanyType;
+import com.ma.hmcapp.shared.Permissions;
 
 @RestController
 @RequestMapping(ServerTestRpcInterface.servletPath)
@@ -75,7 +75,7 @@ public class ServerTestRpcController extends RpcController implements ServerTest
 
 		database.execVoid(em -> {
 			try {
-				agentDataSource.store(em, new Agent("Гриндез", 1000, 100, 10, 10));
+				agentDataSource.store(em, new Agent("Гриндез", 1000, 100, 10, 10, "гипохлорид", 3));
 
 				userService.addUser("admin", AuthUtils.getPwdHash("admin", "admin"),
 						Arrays.asList(UserData.PERMISSIONS_ALL), null, null);
