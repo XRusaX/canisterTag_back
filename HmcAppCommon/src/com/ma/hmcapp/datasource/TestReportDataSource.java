@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.ma.appcommon.datasource.CommonData;
 import com.ma.appcommon.datasource.DataSourceImpl;
-import com.ma.hmcdb.entity.test.TestReport;
+import com.ma.hmcapp.entity.test.TestReport;
 
 @Component
 public class TestReportDataSource extends DataSourceImpl<TestReport> {

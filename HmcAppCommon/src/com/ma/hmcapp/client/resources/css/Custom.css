@@ -1,0 +1,83 @@
+.add-button {
+    /* display: inline-block; */
+    border-radius: 50%;
+    background-color: lightseagreen;
+    border: 1px solid lightseagreen;
+    /* font-size: 1rem; */
+    transition: all 0.3s;
+    cursor: pointer;
+    height: 52px;
+    width: 52px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, .4);
+    color: #FFFFFF;
+    margin: 0px 15px 15px 15px;
+    /* padding: 1em; */
+    transition: all 0.2s;
+    font-family: 'Font Awesome 5 Free';
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+
+/* .custom-button::before {
+    font-family: 'Font Awesome 5 Free';
+    font-size: large;
+    content: '\f067';
+    font-weight: bold;
+} */
+
+.add-button:active {
+    transform: scale(0.9);
+    -webkit-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+}
+
+.uploadTestBtn {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.uploadTestBtn img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.uploadTestBtn img:hover {
+    opacity: 0.6;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
+}
+
+.uploadTestBtn:active {
+    transform: scale(0.9);
+    transition: all 0.1s;
+    -webkit-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+}
+
+.uploadTestBtn:disabled {
+    opacity: 0.1;
+}
+
+.horPanel {
+    background-color: antiquewhite;
+    align-items: center;
+}
+
+.uploadDialog {
+    padding: 20px 20px 20px 20px;
+    margin: 20px 20px 20px 20px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
+    background-color: #FCF6EC;
+}
+
+.uploadDialog .Caption {
+    /* line-height: 25px; */
+    font-size: 18px;
+    font-weight: 500;
+    font-family: inherit;
+    font-family: "OpenSans-Regular";
+    text-align: center;
+}

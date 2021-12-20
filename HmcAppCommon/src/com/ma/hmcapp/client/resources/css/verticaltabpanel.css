@@ -1,0 +1,61 @@
+@external gwt-TabLayoutPanelTabInner;
+.gwt-TabLayoutPanelTabInner {
+    /* margin-top: 4px;
+        margin-left: 6px;
+        margin-right: 6px; */
+    color: #616876;
+    font-family: 'Font Awesome 5 Free', "Lato", Arial, Helvetica, sans-serif;
+    font-size: 0.9rem;
+}
+
+.gwt-TabLayoutPanelTabInner:hover {
+    color: black;
+}
+
+@external gwt-TabLayoutPanelContent;
+.gwt-TabLayoutPanelContent {
+    border: none !important;
+    /*margin: 8px;*/
+    /*padding:8px;*/
+}
+
+@external gwt-TabLayoutPanel;
+.gwt-TabLayoutPanel>div {
+    position: static !important;
+}
+
+@external gwt-TabLayoutPanelTabs;
+.gwt-TabLayoutPanelTabs {
+    top: 0;
+    max-width: 140px;
+    /* background-color: mediumslateblue;
+        border-radius: 4px;
+        padding: 5px;
+        margin: 5px */
+}
+
+@external gwt-TabLayoutPanelTab;
+.gwt-TabLayoutPanelTab {
+    display: block !important;
+    margin-top: 2px;
+    /* padding: 8px 6px !important; */
+    border-radius: 4px;
+    background-color: transparent !important;
+}
+
+@external gwt-TabLayoutPanelTab-selected;
+.gwt-TabLayoutPanelTab-selected {
+    background-color: royalblue !important;
+}
+
+.gwt-TabLayoutPanelTab-selected>div {
+    color: white !important;
+    /* background-color: #92C1F0 !important; */
+}
+
+@external gwt-TabLayoutPanelContentContainer;
+.gwt-TabLayoutPanelContentContainer {
+    border: none;
+    left: 150px !important;
+    top: 20px !important;
+}

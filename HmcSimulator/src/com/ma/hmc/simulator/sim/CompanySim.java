@@ -119,7 +119,7 @@ public class CompanySim {
 			try {
 				int volume = 3000;
 				List<RfidData> sigs = proxy2.getSigs("Гриндез", volume);
-				canisters = sigs.stream().map(s -> new CanisterSim(s.UNIQUE_ID, volume)).collect(Collectors.toList());
+				canisters = sigs.stream().map(s -> new CanisterSim(s.CAN_UNIQUE_ID, volume)).collect(Collectors.toList());
 			} finally {
 				proxy2.logout();
 			}

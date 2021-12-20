@@ -15,8 +15,8 @@ import com.ma.appcommon.datasource.EM;
 import com.ma.appcommon.db.Database2;
 import com.ma.appcommon.shared.Filter;
 import com.ma.common.shared.Pair;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.entity.Operator;
+import com.ma.hmcapp.entity.Company;
+import com.ma.hmcapp.entity.Operator;
 
 @Component
 public class OperatorDataSource extends DataSourceImpl<Operator> {

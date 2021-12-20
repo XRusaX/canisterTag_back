@@ -12,6 +12,8 @@ public @interface Tag {
 	int tag();
 
 	int len();
-
+	
+	int used();
+	
 	String comment() default "";
 }

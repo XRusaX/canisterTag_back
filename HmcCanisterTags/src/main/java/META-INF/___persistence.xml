@@ -1,0 +1,45 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+	<persistence-unit name="HTEST"
+		transaction-type="RESOURCE_LOCAL">
+		<!-- Persistence provider -->
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+		<!-- Entity classes -->
+		<class>com.ma.appcommon.shared.MsgLoggerItem</class>
+		<class>com.ma.appcommon.shared.auth.UserData</class>
+		<class>com.ma.hmcdb.shared.Hmc</class>
+		<class>com.ma.hmcdb.shared.Agent</class>
+		<class>com.ma.hmcdb.shared.Company</class>
+		<class>com.ma.hmcdb.shared.Operator</class>
+		<class>com.ma.hmcdb.shared.Room</class>
+		<class>com.ma.hmcdb.shared.RoomLayer</class>
+		<class>com.ma.hmcdb.shared.rfid.Quota</class>
+		<class>com.ma.hmcdb.shared.rfid.Report</class>
+		<class>com.ma.hmcdb.shared.rfid.RfidLabel</class>
+		<class>com.ma.hmcdb.shared.test.TestReport</class>
+
+		<properties>
+			<property name="javax.persistence.jdbc.driver"
+				value="com.mysql.jdbc.Driver" />
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.MySQL55Dialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<!-- <property name="hibernate.show_sql" value="true" /> -->
+			<property name="hibernate.temp.use_jdbc_metadata_defaults"
+				value="false" />
+			<property name="hibernate.use_sql_comments" value="true" />
+
+			<property name="hibernate.connection.characterEncoding"
+				value="utf8" />
+			<property name="hibernate.connection.useUnicode"
+				value="true" />
+			<property name="hibernate.connection.charSet" value="UTF-8" />
+			<property name="hibernate.connection.serverTimezone"
+				value="UTC" />
+			<property name="hibernate.connection.pool_size" value="100" />
+		</properties>
+	</persistence-unit>
+</persistence>

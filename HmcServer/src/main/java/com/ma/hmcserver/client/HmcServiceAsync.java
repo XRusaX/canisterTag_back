@@ -1,10 +1,8 @@
 package com.ma.hmcserver.client;
 
-import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.ma.commonui.shared.cd.CDObject;
 
 public interface HmcServiceAsync {
 	void getFirmwareList(AsyncCallback<Map<String, String>> callback);

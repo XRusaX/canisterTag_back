@@ -56,8 +56,8 @@ import com.ma.common.gwtapp.client.ui.canvas.ResizeFocusPanel;
 import com.ma.common.gwtapp.client.ui.dialog.UploadDialog;
 import com.ma.common.gwtapp.client.ui.panel.VertPanel;
 import com.ma.commonui.shared.cd.CDObject;
-import com.ma.hmcdb.entity.Room;
-import com.ma.hmcdb.entity.RoomLayer;
+import com.ma.hmcapp.entity.Room;
+import com.ma.hmcapp.entity.RoomLayer;
 
 public class LayerMapPanel extends ResizeComposite {
 	private final CommonDataServiceAsync service = GWT.create(CommonDataService.class);

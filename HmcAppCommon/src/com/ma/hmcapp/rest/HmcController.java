@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.GsonBuilder;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.entity.Hmc;
+import com.ma.hmcapp.entity.Company;
+import com.ma.hmcapp.entity.Hmc;
 
 @RestController
 public class HmcController extends BaseController {

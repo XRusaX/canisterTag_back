@@ -16,8 +16,8 @@ import com.ma.common.gwtapp.client.commondata.CommonListPanelWrapper;
 import com.ma.common.gwtapp.client.ui.ContextMenu;
 import com.ma.common.shared.eventbus.EventBus;
 import com.ma.commonui.shared.cd.CDObject;
-import com.ma.hmcdb.entity.Company;
-import com.ma.hmcdb.shared.CompanyType;
+import com.ma.hmcapp.entity.Company;
+import com.ma.hmcapp.shared.CompanyType;
 
 public class CompaniesPanel extends CommonListPanelWrapper {
 	private static final LoginServiceAsync loginService = GWT.create(LoginService.class);
