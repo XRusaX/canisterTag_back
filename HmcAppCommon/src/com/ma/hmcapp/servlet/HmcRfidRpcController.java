@@ -2,7 +2,10 @@ package com.ma.hmcapp.servlet;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,13 +27,17 @@ import com.ma.common.rsa.Sig;
 import com.ma.common.shared.Severity;
 import com.ma.hmc.iface.rfid.rpcdata.User;
 import com.ma.hmc.iface.rfid.rpcinterface.HmcRfidRpcInterface;
+import com.ma.hmc.iface.rfid.ruslandata.DataItem;
+import com.ma.hmc.iface.rfid.ruslandata.DataItem.Tag;
 import com.ma.hmc.iface.rfid.ruslandata.RfidData;
 import com.ma.hmc.iface.rfid.ruslandata.RfidDataUtils;
 import com.ma.hmcapp.datasource.AgentDataSource;
+import com.ma.hmcapp.datasource.CanisterWorkModeDataSource;
 import com.ma.hmcapp.datasource.CompanyDataSource;
 import com.ma.hmcapp.datasource.QuotaDataSource;
 import com.ma.hmcapp.datasource.RfidLabelDataSource;
 import com.ma.hmcapp.entity.Agent;
+import com.ma.hmcapp.entity.CanisterWorkMode;
 import com.ma.hmcapp.entity.Company;
 import com.ma.hmcapp.entity.rfid.Quota;
 import com.ma.hmcapp.entity.rfid.RfidLabel;
@@ -60,6 +67,9 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 
 	@Autowired
 	private AgentDataSource agentDataSource;
+
+	@Autowired
+	private CanisterWorkModeDataSource canisterWorkModeDataSource;
 
 	@Autowired
 	private QuotaDataSource quotaDataSource;
@@ -104,6 +114,8 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 
 			if (agent == null)
 				throw new RuntimeException("Вещество " + agentName + " не зарегистрировано с системе");
+
+			CanisterWorkMode canWorkMode = canisterWorkModeDataSource.getByAgent(conn, agent);
 
 			List<Quota> quotas = quotaDataSource.get(conn, company, agent, canisterVolume);
 
@@ -150,6 +162,10 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 			// DBExt.insert(conn, rfidLabelGroup);
 
 			Date time = new Date();
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(time);
+
+			DateFormat dateString = new SimpleDateFormat("yyMMdd");
 
 			for (int i = 0; i < company.getRfidBlockSize(); i++) {
 
@@ -161,15 +177,59 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				int id = (int) rfidLabel.getId();
 
 				RfidData data = new RfidData();
-				data.CAN_UNIQUE_ID = id;
-				data.CAN_VOLUME_ML = canisterVolume;
-				data.CAN_MANUFACTURER_NAME = company.getName();
-				data.CAN_DESINFICTANT_NAME = agentName;
-				data.CAN_ACTIVE_INGRIDIENT_NAME = agent.getIngridientName();
-				data.CAN_INGRIDIENT_CONCENTRATION = agent.getConcentration();
+//				data.rfidData.add(new DataItem(Tag.CAN_VERSION,1));
+////				data.CAN_VERSION = 1; // TODO: Подумать куда вынести
+				data.rfidData.add(new DataItem(Tag.CAN_VOLUME_ML,canisterVolume));
+////				data.CAN_VOLUME_ML = canisterVolume;
+				data.rfidData.add(new DataItem(Tag.CAN_MANUFACTURER_NAME,company.getName()));
+////				data.CAN_MANUFACTURER_NAME = company.getName();
+//				data.rfidData.add(new DataItem(Tag.CAN_ISSUE_DATE_YYMMDD,dateString.format(time)));
+////				data.CAN_ISSUE_DATE_YYMMDD = dateString.format(time); // TODO: Переделать на нормальное значение
+//				
+//				calendar.add(Calendar.MONTH, agent.getShelfLife_months());
+//				data.rfidData.add(new DataItem(Tag.CAN_EXPIRATION_DATE_YYMMDD,dateString.format(calendar.getTime())));
+//				
+////				data.CAN_EXPIRATION_DATE_YYMMDD = dateString.format(calendar.getTime()); // TODO: Переделать на
+//																							// нормальное значение
+				data.rfidData.add(new DataItem(Tag.CAN_ACTIVE_INGRIDIENT_NAME,agent.getIngridientName()));
+////				data.CAN_ACTIVE_INGRIDIENT_NAME = agent.getIngridientName();
+//				data.rfidData.add(new DataItem(Tag.CAN_RESIDUAL_VOLUME_ML,canisterVolume));
+////				data.CAN_RESIDUAL_VOLUME_ML = canisterVolume;
+				data.rfidData.add(new DataItem(Tag.CAN_DESINFICTANT_NAME,agentName));
+////				data.CAN_DESINFICTANT_NAME = agentName;
+//				
+//				data.rfidData.add(new DataItem(Tag.CAN_RFID_MANUFACTURER_NAME,company.getName()));
+////				data.CAN_RFID_MANUFACTURER_NAME = company.getName();
+//				data.rfidData.add(new DataItem(Tag.CAN_RFID_ISSUE_DATE_YYMMDD,dateString.format(time)));
+////				data.CAN_RFID_ISSUE_DATE_YYMMDD = dateString.format(time);
+				data.rfidData.add(new DataItem(Tag.CAN_INGRIDIENT_CONCENTRATION, agent.getConcentration()));
+//				data.CAN_INGRIDIENT_CONCENTRATION = agent.getConcentration();
+				data.rfidData.add(new DataItem(Tag.CAN_UNIQUE_ID, id));
+//				data.CAN_UNIQUE_ID = id;
+
+//				data.rfidData.add(new DataItem(Tag.BATCH_NUMBER,"тестовая партия"));
+////				data.BATCH_NUMBER = "тестовая партия"; // НАЗВАНИЕ НЕ СООТВЕТСТВУЕТ ДОКУМЕНТУ
+
+				// РЕЖИМЫ
+				// TODO: Переделать
+//				data.rfidData.add(new DataItem(68,1));
+////				data.CAN_WORK_MODE_ID = 1;
+//				data.rfidData.add(new DataItem(69,"Стандартный"));
+////				data.CAN_WORK_MODE_NAME = "Стандартный";
+//				data.rfidData.add(new DataItem(70,10));
+////				data.CAN_CONSUMPTION_ML_M3 = agent.getConsumption_ml_m3();
+//				data.rfidData.add(new DataItem(71,1800));
+////				data.CAN_EXPOSURE_SEC = 1800;
+//				data.rfidData.add(new DataItem(72,3600));
+////				data.CAN_AIRING_SEC = 3600;
+//				data.rfidData.add(new DataItem(73,0));
+////				data.CAN_IMPULSE_PERIOD_SEC = 0;
+//				data.rfidData.add(new DataItem(74,0));
+////				data.CAN_IMPULSE_WIDTH_SEC = 0;
 
 				try {
-					data.CAN_DIGIT_SIG = sig.sign(RfidDataUtils.getKey(data));
+					data.rfidData.add(new DataItem(Tag.CAN_DIGIT_SIG,sig.sign(RfidData.getKey(data))));
+//					data.CAN_DIGIT_SIG = sig.sign(RfidDataUtils.getKey(data));
 				} catch (UnsupportedEncodingException | GeneralSecurityException e) {
 					throw new RuntimeException(e);
 				}
