@@ -18,6 +18,13 @@ public class RfidData implements Serializable {
 		}
 		return null;
 	}
+	
+	public void setValByTag(Tag tag, Object value) {
+		for (DataItem item : rfidData) {
+			if (item.tag == tag)
+				item.value = value;
+		}
+	}
 
 	public DataItem getItemByTag(Tag tag) {
 		for (DataItem item : rfidData) {
