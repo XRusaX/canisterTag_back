@@ -5,10 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.ma.hmc.iface.rfid.ruslandata.DataItem.Tag;
 import com.ma.hmc.iface.rfid.ruslandata.DataItem.ValType;
@@ -16,7 +13,7 @@ import com.ma.hmc.iface.rfid.ruslandata.DataItem.ValType;
 public class RuslanStructIO {
 
 	public static void write(RfidData data, OutputStream stream) throws IOException {
-		for (DataItem item : data.rfidData) {
+		for (DataItem item : data.getRfidData()) {
 			Tag tag = item.tag;
 
 			stream.write(tag.tagNumber);
@@ -24,7 +21,7 @@ public class RuslanStructIO {
 			if (tag.type == ValType.TYPE_UINT) {
 				if (tag.sizeBytes < 8)
 					for (int i = 0; i < tag.sizeBytes; i++)
-						stream.write((int) ((Long) item.value >> (i * 8)));
+						stream.write((int) item.value >> (i * 8));
 				else {
 					byte[] array = (byte[]) item.value;
 					if (array.length != tag.sizeBytes)
@@ -130,12 +127,12 @@ public class RuslanStructIO {
 
 			if (type == ValType.TYPE_UINT) {
 				if (len >= 8)
-					result.rfidData.add(new DataItem(rfidTag, Arrays.copyOf(bytes, len)));
+					result.add(rfidTag, Arrays.copyOf(bytes, len));
 				else {
-					long v = 0;
+					int v = 0;
 					for (int i = 0; i < len; i++)
 						v |= ((bytes[i] & 0xFF) << (i * 8));
-					result.rfidData.add(new DataItem(rfidTag, v));
+					result.add(rfidTag, v);
 				}
 			} else if (type == ValType.TYPE_CHAR) {
 				int l = 0;
@@ -149,7 +146,7 @@ public class RuslanStructIO {
 //					str = "";
 				String str = "";
 				str += new String(Arrays.copyOf(bytes, l), "Cp1251");
-				result.rfidData.add(new DataItem(rfidTag, str));
+				result.add(rfidTag, str);
 //			} else if (type == byte[].class) {
 //				field.set(obj, bytes);
 //			} else {

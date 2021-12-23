@@ -20,7 +20,7 @@ public class RfidDataReflection {
 
 	public void printFields() {
 
-		for (DataItem field : data.rfidData) {
+		for (DataItem field : data.getRfidData()) {
 			try {
 				Object fieldValue = null;
 				if (field.tag.type == ValType.TYPE_UINT) {
@@ -29,7 +29,7 @@ public class RfidDataReflection {
 						if (src != null)
 							fieldValue = Base64.getEncoder().encodeToString(src);
 					} else {
-						Long src = (Long) field.value;
+						Integer src = (Integer) field.value;
 						if (src != null)
 							fieldValue = src;
 					}
@@ -129,7 +129,7 @@ public class RfidDataReflection {
 	private LinkedHashMap<String, String> getStruct() {
 		LinkedHashMap<String, String> struct = new LinkedHashMap<>();
 
-		for (DataItem field : data.rfidData) {
+		for (DataItem field : data.getRfidData()) {
 			try {
 				Object fieldValue = null;
 				if (field.tag.type == ValType.TYPE_UINT) {
@@ -143,7 +143,7 @@ public class RfidDataReflection {
 							fieldValue = sb.toString() + "\n" + Base64.getEncoder().encodeToString(src);
 						}
 					} else {
-						Long src = (Long) field.value;
+						Integer src = (Integer) field.value;
 						if (src != null)
 							fieldValue = src;
 					}
@@ -164,7 +164,7 @@ public class RfidDataReflection {
 
 	public String getTagID() {
 		try {
-			for (DataItem field : data.rfidData) {
+			for (DataItem field : data.getRfidData()) {
 				if (field.tag == Tag.CAN_UNIQUE_ID) {
 					Object fieldValue = field.value;
 					return Integer.toHexString((Integer) fieldValue).toUpperCase();

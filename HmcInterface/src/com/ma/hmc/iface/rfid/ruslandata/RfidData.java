@@ -9,7 +9,7 @@ import com.ma.hmc.iface.rfid.ruslandata.DataItem.Tag;
 
 @SuppressWarnings("serial")
 public class RfidData implements Serializable {
-	public List<DataItem> rfidData = new ArrayList<>();
+	private List<DataItem> rfidData = new ArrayList<>();
 
 	public Object getValByTag(Tag tag) {
 		for (DataItem item : rfidData) {
@@ -18,7 +18,7 @@ public class RfidData implements Serializable {
 		}
 		return null;
 	}
-	
+
 	public void setValByTag(Tag tag, Object value) {
 		for (DataItem item : rfidData) {
 			if (item.tag == tag)
@@ -48,6 +48,21 @@ public class RfidData implements Serializable {
 		return key.getBytes("utf-8");
 	}
 
+	public void add(Tag tag, int val) {
+		rfidData.add(new DataItem(tag, val));
+	}
+
+	public void add(Tag tag, String text) {
+		rfidData.add(new DataItem(tag, text));
+	}
+
+	public void add(Tag tag, byte[] array) {
+		rfidData.add(new DataItem(tag, array));
+	}
+
+	public List<DataItem> getRfidData() {
+		return rfidData;
+	}
 //	public static byte[] getKey(Integer id, Integer volume, String manufacturer, String name,
 //			String activeIngridientName, Integer concentration) throws UnsupportedEncodingException {
 //		return ("" + id + volume + manufacturer + name + activeIngridientName + concentration).getBytes("utf-8");
