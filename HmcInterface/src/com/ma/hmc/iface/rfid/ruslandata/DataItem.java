@@ -11,7 +11,7 @@ public class DataItem {
 				&& !(value instanceof Long))
 			throw new IllegalArgumentException(tag.tagName + ": не число");
 		if (tag.type == ValType.TYPE_UINT && tag.sizeBytes >= 8 && !(value instanceof byte[]))
-				throw new IllegalArgumentException(tag.tagName + ": не массив байт");
+			throw new IllegalArgumentException(tag.tagName + ": не массив байт");
 		this.tag = tag;
 		this.value = value;
 	}
@@ -23,8 +23,15 @@ public class DataItem {
 		CAN_DESINFICTANT_NAME(10, "Наименование дезинфиктанта", ValType.TYPE_CHAR, 14), //
 		CAN_ACTIVE_INGRIDIENT_NAME(8, "Активное вещество", ValType.TYPE_CHAR, 14), //
 		CAN_INGRIDIENT_CONCENTRATION(38, "Концентрация активного вещества", ValType.TYPE_UINT, 2), //
-		CAN_DIGIT_SIG(40, "Концентрация активного вещества", ValType.TYPE_UINT, 64);
-
+		CAN_DIGIT_SIG(40, "Концентрация активного вещества", ValType.TYPE_UINT, 64),
+		TAG_UID(50, "UID", ValType.TYPE_UINT, 4),
+		TAG_REQ(51, "REQ", ValType.TYPE_UINT, 4),
+		TAG_ACK(52, "ACK", ValType.TYPE_UINT, 4),
+		TAG_NAK(53, "NAK", ValType.TYPE_UINT, 4),
+		TAG_RSP(54, "RSP", ValType.TYPE_UINT, 4),
+		TAG_MSG(55, "MSG", ValType.TYPE_UINT, 4),
+		TAG_ID(56, "ID", ValType.TYPE_UINT, 4);
+		
 		public int tagNumber;
 		public String tagName;
 		public ValType type;
