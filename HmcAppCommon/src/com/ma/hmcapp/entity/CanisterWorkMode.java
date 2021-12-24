@@ -45,7 +45,7 @@ public class CanisterWorkMode {
 	@UILabel(label = "Ширина импульса, сек", sortable = true)
 	private int can_inpulse_width_sec;
 
-//	@UILabel(label = "Средство", sortable = true, nullable = true)
+	@UILabel(label = "Средство", sortable = true, nullable = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Agent agent;
