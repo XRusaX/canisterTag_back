@@ -19,7 +19,6 @@ public class MaterialUIList extends CommonListPanel {
 	public MaterialUIList(String title) {
 		super(title, resource);
 		resource.customization().ensureInjected();
-//		setAddButtonStyle("custom-button", true, "\uF067");
 	}
 
 	@Override
@@ -40,5 +39,9 @@ public class MaterialUIList extends CommonListPanel {
 				deleteItems(set);
 			});
 	}
+
+	// TODO: заделка на будущую кастомизацию внешнего вида
+	protected void addResource() {
+	};
 
 }
