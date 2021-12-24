@@ -28,6 +28,7 @@ import com.ma.hmcapp.client.FontAwesomeBundle;
 import com.ma.hmcapp.client.MaterialUIList;
 import com.ma.hmcapp.client.MyDataGridResources;
 import com.ma.hmcapp.entity.Agent;
+import com.ma.hmcapp.entity.CanisterWorkMode;
 import com.ma.hmcapp.entity.rfid.Quota;
 import com.ma.hmcapp.entity.rfid.RfidLabel;
 import com.ma.hmcapp.shared.CompanyType;
@@ -100,12 +101,16 @@ public class MainPage extends AppMainPage {
 		}
 
 		eventBus = new PageEventBus();
-		eventBus = new PageEventBus();
 
-		MaterialUIList disinfectantList = new MaterialUIList("");
+		DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
+		MaterialUIList disinfectantList = new MaterialUIList("Средства");
 		disinfectantList.setEditable(Login.user.company == null);
-		tabPanel.add(new DockLayoutPanelX(Unit.PCT)
-				.addX(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus)), "Средства");
+		panel.addW(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus), 50);
+
+		MaterialUIList modeList = new MaterialUIList("Режимы");
+		modeList.setEditable(Login.user.company == null);
+		panel.addW(new CommonListPanelWrapper(modeList, CanisterWorkMode.class, eventBus), 50);
+		tabPanel.add(panel, "Средства");
 
 		if (Login.user.company == null)
 			tabPanel.add(new LoggerPanel(true), "Журнал");
