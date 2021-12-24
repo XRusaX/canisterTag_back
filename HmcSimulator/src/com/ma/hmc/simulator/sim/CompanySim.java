@@ -8,9 +8,8 @@ import java.util.stream.Collectors;
 
 import com.ma.common.rpc.HttpProxy;
 import com.ma.hmc.iface.rfid.rpcinterface.HmcRfidRpcInterface;
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.Tag;
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.ValType;
 import com.ma.hmc.iface.rfid.ruslandata.RfidData;
+import com.ma.hmc.iface.rfid.ruslandata.Tag;
 import com.ma.hmc.iface.servertest.rpcinterface.ServerTestRpcInterface;
 import com.ma.hmc.simulator.ConnectionSettings;
 import com.ma.hmc.simulator.HmcSimulatorFrame.FillParams;
@@ -121,7 +120,7 @@ public class CompanySim {
 			try {
 				int volume = 3000;
 				List<RfidData> sigs = proxy2.getSigs("Гриндез", volume);
-				canisters = sigs.stream().map(s -> new CanisterSim((int) s.getValByTag(Tag.CAN_UNIQUE_ID), volume))
+				canisters = sigs.stream().map(s -> new CanisterSim((int) s.getValByTag(Tag.TAG_CAN_UNIQUE_ID), volume))
 						.collect(Collectors.toList());
 			} finally {
 				proxy2.logout();

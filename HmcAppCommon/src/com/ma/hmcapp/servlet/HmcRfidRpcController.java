@@ -27,10 +27,8 @@ import com.ma.common.rsa.Sig;
 import com.ma.common.shared.Severity;
 import com.ma.hmc.iface.rfid.rpcdata.User;
 import com.ma.hmc.iface.rfid.rpcinterface.HmcRfidRpcInterface;
-import com.ma.hmc.iface.rfid.ruslandata.DataItem;
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.Tag;
 import com.ma.hmc.iface.rfid.ruslandata.RfidData;
-import com.ma.hmc.iface.rfid.ruslandata.RfidDataUtils;
+import com.ma.hmc.iface.rfid.ruslandata.Tag;
 import com.ma.hmcapp.datasource.AgentDataSource;
 import com.ma.hmcapp.datasource.CanisterWorkModeDataSource;
 import com.ma.hmcapp.datasource.CompanyDataSource;
@@ -177,35 +175,35 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				int id = (int) rfidLabel.getId();
 
 				RfidData data = new RfidData();
-//				data.add(Tag.CAN_VERSION,1));
-////				data.CAN_VERSION = 1; // TODO: Подумать куда вынести
-				data.add(Tag.CAN_VOLUME_ML, canisterVolume);
-////				data.CAN_VOLUME_ML = canisterVolume;
-				data.add(Tag.CAN_MANUFACTURER_NAME, company.getName());
-////				data.CAN_MANUFACTURER_NAME = company.getName();
-//				data.add(Tag.CAN_ISSUE_DATE_YYMMDD,dateString.format(time)));
-////				data.CAN_ISSUE_DATE_YYMMDD = dateString.format(time); // TODO: Переделать на нормальное значение
+//				data.add(Tag.TAG_CAN_VERSION,1));
+////				data.TAG_CAN_VERSION = 1; // TODO: Подумать куда вынести
+				data.add(Tag.TAG_CAN_VOLUME_ML, canisterVolume);
+////				data.TAG_CAN_VOLUME_ML = canisterVolume;
+				data.add(Tag.TAG_CAN_MANUFACTURER_NAME, company.getName());
+////				data.TAG_CAN_MANUFACTURER_NAME = company.getName();
+//				data.add(Tag.TAG_CAN_ISSUE_DATE_YYMMDD,dateString.format(time)));
+////				data.TAG_CAN_ISSUE_DATE_YYMMDD = dateString.format(time); // TODO: Переделать на нормальное значение
 //				
 //				calendar.add(Calendar.MONTH, agent.getShelfLife_months());
-//				data.add(Tag.CAN_EXPIRATION_DATE_YYMMDD,dateString.format(calendar.getTime())));
+//				data.add(Tag.TAG_CAN_EXPIRATION_DATE_YYMMDD,dateString.format(calendar.getTime())));
 //				
-////				data.CAN_EXPIRATION_DATE_YYMMDD = dateString.format(calendar.getTime()); // TODO: Переделать на
+////				data.TAG_CAN_EXPIRATION_DATE_YYMMDD = dateString.format(calendar.getTime()); // TODO: Переделать на
 //																							// нормальное значение
-				data.add(Tag.CAN_ACTIVE_INGRIDIENT_NAME, agent.getIngridientName());
-////				data.CAN_ACTIVE_INGRIDIENT_NAME = agent.getIngridientName();
-//				data.add(Tag.CAN_RESIDUAL_VOLUME_ML,canisterVolume));
-////				data.CAN_RESIDUAL_VOLUME_ML = canisterVolume;
-				data.add(Tag.CAN_DESINFICTANT_NAME, agentName);
-////				data.CAN_DESINFICTANT_NAME = agentName;
+				data.add(Tag.TAG_CAN_ACTIVE_INGRIDIENT_NAME, agent.getIngridientName());
+////				data.TAG_CAN_ACTIVE_INGRIDIENT_NAME = agent.getIngridientName();
+//				data.add(Tag.TAG_CAN_RESIDUAL_VOLUME_ML,canisterVolume));
+////				data.TAG_CAN_RESIDUAL_VOLUME_ML = canisterVolume;
+				data.add(Tag.TAG_CAN_DESINFICTANT_NAME, agentName);
+////				data.TAG_CAN_DESINFICTANT_NAME = agentName;
 //				
-//				data.add(Tag.CAN_RFID_MANUFACTURER_NAME,company.getName()));
-////				data.CAN_RFID_MANUFACTURER_NAME = company.getName();
-//				data.add(Tag.CAN_RFID_ISSUE_DATE_YYMMDD,dateString.format(time)));
-////				data.CAN_RFID_ISSUE_DATE_YYMMDD = dateString.format(time);
-				data.add(Tag.CAN_INGRIDIENT_CONCENTRATION, agent.getConcentration());
-//				data.CAN_INGRIDIENT_CONCENTRATION = agent.getConcentration();
-				data.add(Tag.CAN_UNIQUE_ID, id);
-//				data.CAN_UNIQUE_ID = id;
+//				data.add(Tag.TAG_CAN_RFID_MANUFACTURER_NAME,company.getName()));
+////				data.TAG_CAN_RFID_MANUFACTURER_NAME = company.getName();
+//				data.add(Tag.TAG_CAN_RFID_ISSUE_DATE_YYMMDD,dateString.format(time)));
+////				data.TAG_CAN_RFID_ISSUE_DATE_YYMMDD = dateString.format(time);
+				data.add(Tag.TAG_CAN_INGRIDIENT_CONCENTRATION, agent.getConcentration());
+//				data.TAG_CAN_INGRIDIENT_CONCENTRATION = agent.getConcentration();
+				data.add(Tag.TAG_CAN_UNIQUE_ID, id);
+//				data.TAG_CAN_UNIQUE_ID = id;
 
 //				data.add(Tag.BATCH_NUMBER,"тестовая партия"));
 ////				data.BATCH_NUMBER = "тестовая партия"; // НАЗВАНИЕ НЕ СООТВЕТСТВУЕТ ДОКУМЕНТУ
@@ -213,23 +211,23 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				// РЕЖИМЫ
 				// TODO: Переделать
 //				data.add(68,1));
-////				data.CAN_WORK_MODE_ID = 1;
+////				data.TAG_CAN_WORK_MODE_ID = 1;
 //				data.add(69,"Стандартный"));
-////				data.CAN_WORK_MODE_NAME = "Стандартный";
+////				data.TAG_CAN_WORK_MODE_NAME = "Стандартный";
 //				data.add(70,10));
-////				data.CAN_CONSUMPTION_ML_M3 = agent.getConsumption_ml_m3();
+////				data.TAG_CAN_CONSUMPTION_ML_M3 = agent.getConsumption_ml_m3();
 //				data.add(71,1800));
-////				data.CAN_EXPOSURE_SEC = 1800;
+////				data.TAG_CAN_EXPOSURE_SEC = 1800;
 //				data.add(72,3600));
-////				data.CAN_AIRING_SEC = 3600;
+////				data.TAG_CAN_AIRING_SEC = 3600;
 //				data.add(73,0));
-////				data.CAN_IMPULSE_PERIOD_SEC = 0;
+////				data.TAG_CAN_IMPULSE_PERIOD_SEC = 0;
 //				data.add(74,0));
-////				data.CAN_IMPULSE_WIDTH_SEC = 0;
+////				data.TAG_CAN_IMPULSE_WIDTH_SEC = 0;
 
 				try {
-					data.add(Tag.CAN_DIGIT_SIG, sig.sign(RfidData.getKey(data)));
-//					data.CAN_DIGIT_SIG = sig.sign(RfidDataUtils.getKey(data));
+					data.add(Tag.TAG_CAN_DIGIT_SIG, sig.sign(RfidData.getKey(data)));
+//					data.TAG_CAN_DIGIT_SIG = sig.sign(RfidDataUtils.getKey(data));
 				} catch (UnsupportedEncodingException | GeneralSecurityException e) {
 					throw new RuntimeException(e);
 				}
