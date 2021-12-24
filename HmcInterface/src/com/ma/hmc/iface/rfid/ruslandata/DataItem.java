@@ -1,6 +1,9 @@
 package com.ma.hmc.iface.rfid.ruslandata;
 
-public class DataItem {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class DataItem implements Serializable{
 	public Tag tag;
 	public Object value;
 
