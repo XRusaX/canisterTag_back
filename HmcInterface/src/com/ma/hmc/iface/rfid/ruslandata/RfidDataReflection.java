@@ -6,8 +6,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.StringJoiner;
 
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.Tag;
+import com.ma.hmc.iface.rfid.ruslandata.DataItem.RfidArea;
 import com.ma.hmc.iface.rfid.ruslandata.DataItem.ValType;
 
 public class RfidDataReflection {
@@ -45,95 +46,14 @@ public class RfidDataReflection {
 		}
 	}
 
-//	public void printFields() {
-//		Class<? extends RfidData> dataClass = data.getClass();
-//
-//		Field[] fields = dataClass.getDeclaredFields();
-//
-//		for (Field field : fields) {
-//			try {
-//				Object fieldValue = null;
-//				if (field.getType() == byte[].class) {
-//					byte[] src = (byte[]) field.get(data);
-//					if (src != null)
-//						fieldValue = Base64.getEncoder().encodeToString(src);
-//				} else
-//					fieldValue = field.get(data);
-//
-//				if (fieldValue != null) {
-//					String comment = field.getAnnotation(Tag.class).comment();
-//					System.out.println((comment.isEmpty() ? field.getName() : comment) + " : " + fieldValue);
-//				}
-//			} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-
-//	public String getData() {
-//		StringJoiner joiner = new StringJoiner("\n");
-//
-//		for (DataItem field : data.rfidData) {
-//			try {
-//				Object fieldValue = null;
-//				if (field.tag.type == ValType.TYPE_UINT) {
-//					if (field.tag.sizeBytes >= 8) {
-//						byte[] src = (byte[]) field.value;
-//						if (src != null)
-//							fieldValue = Base64.getEncoder().encodeToString(src);
-//					} else {
-//						Long src = (Long) field.value;
-//						if (src != null)
-//							fieldValue = src;
-//					}
-//				} else
-//					fieldValue = (String) field.value;
-//
-//				if (fieldValue != null) {
-//					joiner.add(field.tag.tagName + " : " + fieldValue);
-//				}
-//			} catch (SecurityException | IllegalArgumentException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return joiner.toString();
-//	}
-
-//	public String getData() {
-//		StringJoiner joiner = new StringJoiner("\n");
-//		Class<? extends RfidData> dataClass = data.getClass();
-//
-//		Field[] fields = dataClass.getDeclaredFields();
-//
-//		for (Field field : fields) {
-//			try {
-//				Object fieldValue = null;
-//				if (field.getType() == byte[].class) {
-//					byte[] src = (byte[]) field.get(data);
-//					if (src != null)
-//						fieldValue = Base64.getEncoder().encodeToString(src);
-//				} else
-//					fieldValue = field.get(data);
-//
-//				if (fieldValue != null) {
-//					String comment = field.getAnnotation(Tag.class).comment();
-//					joiner.add((comment.isEmpty() ? field.getName() : comment) + " : " + fieldValue);
-//				}
-//			} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return joiner.toString();
-//	}
-
 	private LinkedHashMap<String, String> getStruct() {
 		LinkedHashMap<String, String> struct = new LinkedHashMap<>();
 
-		for (DataItem field : data.getRfidData()) {
-			try {
+		try {
+			for (DataItem field : data.getRfidData()) {
 				Object fieldValue = null;
 				if (field.tag.type == ValType.TYPE_UINT) {
-					if (field.tag.sizeBytes >= 8) {
+					if (field.tag.sizeBytes > 4) {
 						byte[] src = (byte[]) field.value;
 						if (src != null) {
 							StringBuilder sb = new StringBuilder();
@@ -143,29 +63,50 @@ public class RfidDataReflection {
 							fieldValue = sb.toString() + "\n" + Base64.getEncoder().encodeToString(src);
 						}
 					} else {
-						Integer src = (Integer) field.value;
-						if (src != null)
-							fieldValue = src;
+						if (field.tag == Tag.TAG_UID) {
+							fieldValue = (int) field.value;
+							byte[] src = new byte[4];
+
+							for (int i = 0; i < field.tag.sizeBytes; i++)
+								src[i] = (byte) ((int) fieldValue >> (i * 8));
+
+							if (src != null) {
+								StringJoiner sb = new StringJoiner(":");
+								for (byte b : src) {
+									sb.add(String.format("%02X", b));
+								}
+								fieldValue = sb.toString();
+							}
+						} else {
+							Integer src = (Integer) field.value;
+							if (src != null)
+								fieldValue = src;
+						}
 					}
-				} else
-					fieldValue = (String) field.value;
+				} else {
+					fieldValue = field.value;
+				}
+				// Не добавляем в считанную структуру служебные поля кроме UID
+				if ((field.tag.area == RfidArea.NO_AREA && field.tag != Tag.TAG_UID)
+						|| field.tag.area == RfidArea.CON_AREA)
+					continue;
 
 				if (fieldValue != null) {
-					String comment = field.tag.tagName;
-					struct.put(comment,
-							field.tag == Tag.TAG_UID ? String.format("%02X", fieldValue) : fieldValue.toString());
+					struct.put(field.tag.tagName, fieldValue.toString());
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+			return struct;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return struct;
+
 	}
 
 	public String getTagID() {
 		try {
 			for (DataItem field : data.getRfidData()) {
-				if (field.tag == Tag.CAN_UNIQUE_ID) {
+				if (field.tag == Tag.TAG_CAN_UNIQUE_ID) {
 					Object fieldValue = field.value;
 					return Integer.toHexString((Integer) fieldValue).toUpperCase();
 				}

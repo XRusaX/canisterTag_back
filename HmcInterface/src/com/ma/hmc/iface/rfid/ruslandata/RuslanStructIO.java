@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.Tag;
 import com.ma.hmc.iface.rfid.ruslandata.DataItem.ValType;
 
 public class RuslanStructIO {
@@ -19,7 +18,7 @@ public class RuslanStructIO {
 			stream.write(tag.tagNumber);
 
 			if (tag.type == ValType.TYPE_UINT) {
-				if (tag.sizeBytes < 8)
+				if (tag.sizeBytes <= 4)
 					for (int i = 0; i < tag.sizeBytes; i++)
 						stream.write((int) item.value >> (i * 8));
 				else {
@@ -115,7 +114,7 @@ public class RuslanStructIO {
 
 			Tag rfidTag = Arrays.stream(Tag.values()).filter(t -> t.tagNumber == tag).findFirst().orElse(null);
 			if (rfidTag == null)
-				continue;
+				throw new IOException("Тег с номером " + tag + " не описан в enum Tag");
 
 			int len = rfidTag.sizeBytes;
 			byte[] bytes = new byte[len];
@@ -126,8 +125,9 @@ public class RuslanStructIO {
 			ValType type = rfidTag.type;
 
 			if (type == ValType.TYPE_UINT) {
-				if (len >= 8)
-					result.add(rfidTag, Arrays.copyOf(bytes, len));
+				if (len > 4)
+//					result.add(rfidTag, Arrays.copyOf(bytes, len));
+					result.add(rfidTag, bytes);
 				else {
 					int v = 0;
 					for (int i = 0; i < len; i++)

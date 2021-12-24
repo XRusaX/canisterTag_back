@@ -3,9 +3,10 @@ package com.ma.hmc.iface.rfid.ruslandata;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.Tag;
+import com.ma.hmc.iface.rfid.ruslandata.DataItem.ValType;
 
 @SuppressWarnings("serial")
 public class RfidData implements Serializable {
@@ -35,9 +36,10 @@ public class RfidData implements Serializable {
 	}
 
 	public static byte[] getKey(RfidData data) throws UnsupportedEncodingException {
-		return getKey(data.getValByTag(Tag.CAN_UNIQUE_ID), data.getValByTag(Tag.CAN_VOLUME_ML),
-				data.getValByTag(Tag.CAN_MANUFACTURER_NAME), data.getValByTag(Tag.CAN_DESINFICTANT_NAME),
-				data.getValByTag(Tag.CAN_ACTIVE_INGRIDIENT_NAME), data.getValByTag(Tag.CAN_INGRIDIENT_CONCENTRATION));
+		return getKey(data.getValByTag(Tag.TAG_CAN_UNIQUE_ID), data.getValByTag(Tag.TAG_CAN_VOLUME_ML),
+				data.getValByTag(Tag.TAG_CAN_MANUFACTURER_NAME), data.getValByTag(Tag.TAG_CAN_DESINFICTANT_NAME),
+				data.getValByTag(Tag.TAG_CAN_ACTIVE_INGRIDIENT_NAME),
+				data.getValByTag(Tag.TAG_CAN_INGRIDIENT_CONCENTRATION));
 	}
 
 	public static byte[] getKey(Object... data) throws UnsupportedEncodingException {
@@ -49,19 +51,28 @@ public class RfidData implements Serializable {
 	}
 
 	public void add(Tag tag, int val) {
+		if (tag.type != ValType.TYPE_UINT || tag.sizeBytes > 4)
+			throw new IllegalArgumentException("--------НЕ ЧИСЛО--------");
+		System.out.println("*************Наполняем " + tag.tagName);
 		rfidData.add(new DataItem(tag, val));
 	}
 
 	public void add(Tag tag, String text) {
+		if (tag.type != ValType.TYPE_CHAR)
+			throw new IllegalArgumentException("--------НЕ ТЕКСТ--------");
+		System.out.println("*************Наполняем " + tag.tagName);
 		rfidData.add(new DataItem(tag, text));
 	}
 
 	public void add(Tag tag, byte[] array) {
+		if (tag.type != ValType.TYPE_UINT || tag.sizeBytes <= 4)
+			throw new IllegalArgumentException("--------НЕ Массив--------");
+		System.out.println("*************Наполняем " + tag.tagName);
 		rfidData.add(new DataItem(tag, array));
 	}
 
 	public List<DataItem> getRfidData() {
-		return rfidData;
+		return Collections.unmodifiableList(rfidData);
 	}
 //	public static byte[] getKey(Integer id, Integer volume, String manufacturer, String name,
 //			String activeIngridientName, Integer concentration) throws UnsupportedEncodingException {
@@ -72,40 +83,40 @@ public class RfidData implements Serializable {
 	 * RFIDTYPE;
 	 * 
 	 * @Tag(tag = 3, len = 1, used=2, comment = "Версия данных") public Integer
-	 * CAN_VERSION;
+	 * TAG_CAN_VERSION;
 	 * 
 	 * @Tag(tag = 4, len = 2, used=2, comment = "Объём, мл") public Integer
-	 * CAN_VOLUME_ML;
+	 * TAG_CAN_VOLUME_ML;
 	 * 
 	 * @Tag(tag = 5, len = 14, used=2, comment = "Производитель") public String
-	 * CAN_MANUFACTURER_NAME;
+	 * TAG_CAN_MANUFACTURER_NAME;
 	 * 
 	 * @Tag(tag = 6, len = 6, used=2, comment = "Дата выпуска") public String
-	 * CAN_ISSUE_DATE_YYMMDD;
+	 * TAG_CAN_ISSUE_DATE_YYMMDD;
 	 * 
 	 * @Tag(tag = 7, len = 6, used=2, comment = "Дата годности") public String
-	 * CAN_EXPIRATION_DATE_YYMMDD;
+	 * TAG_CAN_EXPIRATION_DATE_YYMMDD;
 	 * 
 	 * @Tag(tag = 8, len = 14, used=2, comment = "Активное вещество") public String
-	 * CAN_ACTIVE_INGRIDIENT_NAME;
+	 * TAG_CAN_ACTIVE_INGRIDIENT_NAME;
 	 * 
 	 * @Tag(tag = 9, len = 2, used=2, comment = "Остаток, мл") public Integer
-	 * CAN_RESIDUAL_VOLUME_ML;
+	 * TAG_CAN_RESIDUAL_VOLUME_ML;
 	 * 
 	 * @Tag(tag = 10, len = 14, used=2, comment = "Наименование дезинфиктанта")
-	 * public String CAN_DESINFICTANT_NAME;
+	 * public String TAG_CAN_DESINFICTANT_NAME;
 	 * 
 	 * @Tag(tag = 11, len = 14, used=2, comment = "Аббревиатура") public String
-	 * CAN_ABBR;
+	 * TAG_CAN_ABBR;
 	 * 
 	 * @Tag(tag = 12, len = 2, used=2, comment = "Расход, мл/м3") public Integer
-	 * CAN_CONSUMPTION_ML_M3;
+	 * TAG_CAN_CONSUMPTION_ML_M3;
 	 * 
 	 * @Tag(tag = 13, len = 2, used=2, comment = "Расход для промывки, мл/м3")
-	 * public Integer CAN_CONSUMPTION2_ML_M3;
+	 * public Integer TAG_CAN_CONSUMPTION2_ML_M3;
 	 * 
 	 * @Tag(tag = 14, len = 2, used=2, comment = "Аэрация, мин") public Integer
-	 * CAN_AERATION_MIN;
+	 * TAG_CAN_AERATION_MIN;
 	 * 
 	 * @Tag(tag = 15, len = 1, used=22, comment = "Контрольная область") public
 	 * Integer AREA1_SECTOR;
@@ -171,25 +182,26 @@ public class RfidData implements Serializable {
 	 * PERSON_PIN_NUM;
 	 * 
 	 * @Tag(tag = 36, len = 14, used=2, comment =
-	 * "Наименование производителя метки") public String CAN_RFID_MANUFACTURER_NAME;
+	 * "Наименование производителя метки") public String
+	 * TAG_CAN_RFID_MANUFACTURER_NAME;
 	 * 
 	 * @Tag(tag = 37, len = 6, used=2, comment = "Дата производства метки") public
-	 * String CAN_RFID_ISSUE_DATE_YYMMDD;
+	 * String TAG_CAN_RFID_ISSUE_DATE_YYMMDD;
 	 * 
 	 * @Tag(tag = 38, len = 2, used=2, comment = "Концентрация активного вещества")
-	 * public Integer CAN_INGRIDIENT_CONCENTRATION;
+	 * public Integer TAG_CAN_INGRIDIENT_CONCENTRATION;
 	 * 
 	 * @Tag(tag = 39, len = 4, used=2, comment = "Уникальный номер метки") public
-	 * Integer CAN_UNIQUE_ID;
+	 * Integer TAG_CAN_UNIQUE_ID;
 	 * 
 	 * @Tag(tag = 40, len = 64, used=2, comment = "Цифровая подпись") public byte[]
-	 * CAN_DIGIT_SIG;
+	 * TAG_CAN_DIGIT_SIG;
 	 * 
 	 * @Tag(tag = 41, len = 14, used=32, comment = "Имя прибора") public String
 	 * DEVICE_NAME;
 	 * 
 	 * @Tag(tag = 42, len = 8, used=32, comment = "Уникальный номер прибора") public
-	 * Long DEVICE_CAN_UNIQUE_ID;
+	 * Long DEVICE_TAG_CAN_UNIQUE_ID;
 	 * 
 	 * @Tag(tag = 43, len = 16, used=32, comment = "Имя точки доступа") public
 	 * String WIFI_HOSTNAME;
@@ -260,25 +272,25 @@ public class RfidData implements Serializable {
 	 * ROOM_HEIGHT_CM;
 	 * 
 	 * @Tag(tag = 68, len = 1, used=2, comment = "id режима обработки") public
-	 * Integer CAN_WORK_MODE_ID;
+	 * Integer TAG_CAN_WORK_MODE_ID;
 	 * 
 	 * @Tag(tag = 69, len = 14, used=2, comment = "название режима обработки")
-	 * public String CAN_WORK_MODE_NAME;
+	 * public String TAG_CAN_WORK_MODE_NAME;
 	 * 
 	 * @Tag(tag = 70, len = 2, used=2, comment = "расход жижи на м3") public Integer
-	 * CAN_CONSUMPTION_ML;
+	 * TAG_CAN_CONSUMPTION_ML;
 	 * 
 	 * @Tag(tag = 71, len = 2, used=2, comment = "время экспозиции") public Integer
-	 * CAN_EXPOSURE_SEC;
+	 * TAG_CAN_EXPOSURE_SEC;
 	 * 
 	 * @Tag(tag = 72, len = 2, used=2, comment = "время проветривания") public
-	 * Integer CAN_AIRING_SEC;
+	 * Integer TAG_CAN_AIRING_SEC;
 	 * 
 	 * @Tag(tag = 73, len = 2, used=2, comment = "период импульса") public Integer
-	 * CAN_IMPULSE_PERIOD_SEC;
+	 * TAG_CAN_IMPULSE_PERIOD_SEC;
 	 * 
 	 * @Tag(tag = 74, len = 2, used=2, comment = "ширина импульса") public Integer
-	 * CAN_IMPULSE_WIDTH_SEC;
+	 * TAG_CAN_IMPULSE_WIDTH_SEC;
 	 * 
 	 * @Tag(tag = 75, len = 1, used=22, comment = "Идентификатор кодовой страницы")
 	 * public Integer CODE_PAGE_ID;
