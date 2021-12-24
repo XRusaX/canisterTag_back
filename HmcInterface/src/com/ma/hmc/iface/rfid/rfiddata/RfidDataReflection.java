@@ -1,4 +1,4 @@
-package com.ma.hmc.iface.rfid.ruslandata;
+package com.ma.hmc.iface.rfid.rfiddata;
 
 import java.util.Base64;
 import java.util.HashMap;
@@ -6,10 +6,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.StringJoiner;
 
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.RfidArea;
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.ValType;
+import com.ma.hmc.iface.rfid.rfiddata.DataItem.RfidArea;
+import com.ma.hmc.iface.rfid.rfiddata.DataItem.ValType;
+
+import java.util.StringJoiner;
 
 public class RfidDataReflection {
 
@@ -25,17 +26,17 @@ public class RfidDataReflection {
 			try {
 				Object fieldValue = null;
 				if (field.tag.type == ValType.TYPE_UINT) {
-					if (field.tag.sizeBytes >= 8) {
-						byte[] src = (byte[]) field.value;
+					if (field.tag.sizeBytes > 4) {
+						byte[] src = (byte[]) field.arrayValue;
 						if (src != null)
 							fieldValue = Base64.getEncoder().encodeToString(src);
 					} else {
-						Integer src = (Integer) field.value;
+						Integer src = (Integer) field.intValue;
 						if (src != null)
 							fieldValue = src;
 					}
 				} else
-					fieldValue = (String) field.value;
+					fieldValue = (String) field.stringValue;
 
 				if (fieldValue != null) {
 					System.out.println(field.tag.tagName + " : " + fieldValue);
@@ -54,7 +55,7 @@ public class RfidDataReflection {
 				Object fieldValue = null;
 				if (field.tag.type == ValType.TYPE_UINT) {
 					if (field.tag.sizeBytes > 4) {
-						byte[] src = (byte[]) field.value;
+						byte[] src = (byte[]) field.arrayValue;
 						if (src != null) {
 							StringBuilder sb = new StringBuilder();
 							for (byte b : src) {
@@ -64,7 +65,7 @@ public class RfidDataReflection {
 						}
 					} else {
 						if (field.tag == Tag.TAG_UID) {
-							fieldValue = (int) field.value;
+							fieldValue = (int) field.intValue;
 							byte[] src = new byte[4];
 
 							for (int i = 0; i < field.tag.sizeBytes; i++)
@@ -78,13 +79,13 @@ public class RfidDataReflection {
 								fieldValue = sb.toString();
 							}
 						} else {
-							Integer src = (Integer) field.value;
+							Integer src = (Integer) field.intValue;
 							if (src != null)
 								fieldValue = src;
 						}
 					}
 				} else {
-					fieldValue = field.value;
+					fieldValue = field.stringValue;
 				}
 				// Не добавляем в считанную структуру служебные поля кроме UID
 				if ((field.tag.area == RfidArea.NO_AREA && field.tag != Tag.TAG_UID)
@@ -107,7 +108,7 @@ public class RfidDataReflection {
 		try {
 			for (DataItem field : data.getRfidData()) {
 				if (field.tag == Tag.TAG_CAN_UNIQUE_ID) {
-					Object fieldValue = field.value;
+					Object fieldValue = field.intValue;
 					return Integer.toHexString((Integer) fieldValue).toUpperCase();
 				}
 			}

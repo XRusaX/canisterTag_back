@@ -1,7 +1,7 @@
-package com.ma.hmc.iface.rfid.ruslandata;
+package com.ma.hmc.iface.rfid.rfiddata;
 
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.RfidArea;
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.ValType;
+import com.ma.hmc.iface.rfid.rfiddata.DataItem.RfidArea;
+import com.ma.hmc.iface.rfid.rfiddata.DataItem.ValType;
 
 public enum Tag {
 	TAG_ZERO(0, "Ноль", ValType.TYPE_EMPTY, RfidArea.NO_AREA, 0), //

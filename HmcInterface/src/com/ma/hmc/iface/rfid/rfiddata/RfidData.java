@@ -1,4 +1,4 @@
-package com.ma.hmc.iface.rfid.ruslandata;
+package com.ma.hmc.iface.rfid.rfiddata;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.ValType;
+import com.ma.hmc.iface.rfid.rfiddata.DataItem.ValType;
 
 @SuppressWarnings("serial")
 public class RfidData implements Serializable {
@@ -14,16 +14,26 @@ public class RfidData implements Serializable {
 
 	public Object getValByTag(Tag tag) {
 		for (DataItem item : rfidData) {
-			if (item.tag == tag)
-				return item.value;
+			if (item.tag == tag) {
+				if (item.stringValue != null)
+					return item.stringValue;
+				if (item.intValue != null)
+					return item.intValue;
+				if (item.arrayValue != null)
+					return item.arrayValue;
+			}
+
 		}
 		return null;
 	}
 
-	public void setValByTag(Tag tag, Object value) {
+	public void setValByTag(Tag tag, String stringValue, Integer intValue, byte[] arrayValue) {
 		for (DataItem item : rfidData) {
-			if (item.tag == tag)
-				item.value = value;
+			if (item.tag == tag) {
+				item.stringValue = stringValue;
+				item.intValue = intValue;
+				item.arrayValue = arrayValue;
+			}
 		}
 	}
 
@@ -54,21 +64,21 @@ public class RfidData implements Serializable {
 		if (tag.type != ValType.TYPE_UINT || tag.sizeBytes > 4)
 			throw new IllegalArgumentException("--------НЕ ЧИСЛО--------");
 		System.out.println("*************Наполняем " + tag.tagName);
-		rfidData.add(new DataItem(tag, val));
+		rfidData.add(new DataItem(tag, null, val, null));
 	}
 
 	public void add(Tag tag, String text) {
 		if (tag.type != ValType.TYPE_CHAR)
 			throw new IllegalArgumentException("--------НЕ ТЕКСТ--------");
 		System.out.println("*************Наполняем " + tag.tagName);
-		rfidData.add(new DataItem(tag, text));
+		rfidData.add(new DataItem(tag, text, null, null));
 	}
 
 	public void add(Tag tag, byte[] array) {
 		if (tag.type != ValType.TYPE_UINT || tag.sizeBytes <= 4)
 			throw new IllegalArgumentException("--------НЕ Массив--------");
 		System.out.println("*************Наполняем " + tag.tagName);
-		rfidData.add(new DataItem(tag, array));
+		rfidData.add(new DataItem(tag, null, null, array));
 	}
 
 	public List<DataItem> getRfidData() {

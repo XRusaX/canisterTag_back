@@ -1,4 +1,4 @@
-package com.ma.hmc.iface.rfid.ruslandata;
+package com.ma.hmc.iface.rfid.rfiddata;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;

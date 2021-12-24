@@ -2,8 +2,8 @@ package com.ma.hmc.iface.rfid.rpcinterface;
 
 import java.util.List;
 
+import com.ma.hmc.iface.rfid.rfiddata.RfidData;
 import com.ma.hmc.iface.rfid.rpcdata.User;
-import com.ma.hmc.iface.rfid.ruslandata.RfidData;
 
 public interface HmcRfidRpcInterface {
 

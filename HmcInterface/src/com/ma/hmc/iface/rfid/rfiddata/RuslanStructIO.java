@@ -1,4 +1,4 @@
-package com.ma.hmc.iface.rfid.ruslandata;
+package com.ma.hmc.iface.rfid.rfiddata;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 
-import com.ma.hmc.iface.rfid.ruslandata.DataItem.ValType;
+import com.ma.hmc.iface.rfid.rfiddata.DataItem.ValType;
 
 public class RuslanStructIO {
 
@@ -20,9 +20,9 @@ public class RuslanStructIO {
 			if (tag.type == ValType.TYPE_UINT) {
 				if (tag.sizeBytes <= 4)
 					for (int i = 0; i < tag.sizeBytes; i++)
-						stream.write((int) item.value >> (i * 8));
+						stream.write((int) item.intValue >> (i * 8));
 				else {
-					byte[] array = (byte[]) item.value;
+					byte[] array = (byte[]) item.arrayValue;
 					if (array.length != tag.sizeBytes)
 						throw new IllegalStateException(
 								item.tag.tagName + ": Длина массива не соответствует значению в теге");
@@ -31,7 +31,7 @@ public class RuslanStructIO {
 			}
 
 			if (tag.type == ValType.TYPE_CHAR) {
-				String v = (String) item.value;
+				String v = (String) item.stringValue;
 				if (v.length() > tag.sizeBytes)
 					throw new IllegalArgumentException(item.tag.tagName + ": string length > len()");
 				byte[] bytes = v.getBytes("Cp1251");

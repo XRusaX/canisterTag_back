@@ -7,9 +7,9 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.ma.common.rpc.HttpProxy;
+import com.ma.hmc.iface.rfid.rfiddata.RfidData;
+import com.ma.hmc.iface.rfid.rfiddata.Tag;
 import com.ma.hmc.iface.rfid.rpcinterface.HmcRfidRpcInterface;
-import com.ma.hmc.iface.rfid.ruslandata.RfidData;
-import com.ma.hmc.iface.rfid.ruslandata.Tag;
 import com.ma.hmc.iface.servertest.rpcinterface.ServerTestRpcInterface;
 import com.ma.hmc.simulator.ConnectionSettings;
 import com.ma.hmc.simulator.HmcSimulatorFrame.FillParams;

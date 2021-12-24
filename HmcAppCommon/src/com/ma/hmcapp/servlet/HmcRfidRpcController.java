@@ -25,10 +25,10 @@ import com.ma.appcommon.shared.auth.UserData;
 import com.ma.appcommon.shared.connection.ConnectionStatus.ConnectionType;
 import com.ma.common.rsa.Sig;
 import com.ma.common.shared.Severity;
+import com.ma.hmc.iface.rfid.rfiddata.RfidData;
+import com.ma.hmc.iface.rfid.rfiddata.Tag;
 import com.ma.hmc.iface.rfid.rpcdata.User;
 import com.ma.hmc.iface.rfid.rpcinterface.HmcRfidRpcInterface;
-import com.ma.hmc.iface.rfid.ruslandata.RfidData;
-import com.ma.hmc.iface.rfid.ruslandata.Tag;
 import com.ma.hmcapp.datasource.AgentDataSource;
 import com.ma.hmcapp.datasource.CanisterWorkModeDataSource;
 import com.ma.hmcapp.datasource.CompanyDataSource;
@@ -175,54 +175,54 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				int id = (int) rfidLabel.getId();
 
 				RfidData data = new RfidData();
-//				data.add(Tag.TAG_CAN_VERSION,1));
+				data.add(Tag.TAG_CAN_VERSION,1);
 ////				data.TAG_CAN_VERSION = 1; // TODO: Подумать куда вынести
 				data.add(Tag.TAG_CAN_VOLUME_ML, canisterVolume);
 ////				data.TAG_CAN_VOLUME_ML = canisterVolume;
 				data.add(Tag.TAG_CAN_MANUFACTURER_NAME, company.getName());
 ////				data.TAG_CAN_MANUFACTURER_NAME = company.getName();
-//				data.add(Tag.TAG_CAN_ISSUE_DATE_YYMMDD,dateString.format(time)));
+				data.add(Tag.TAG_CAN_ISSUE_DATE_YYMMDD,dateString.format(time));
 ////				data.TAG_CAN_ISSUE_DATE_YYMMDD = dateString.format(time); // TODO: Переделать на нормальное значение
 //				
-//				calendar.add(Calendar.MONTH, agent.getShelfLife_months());
-//				data.add(Tag.TAG_CAN_EXPIRATION_DATE_YYMMDD,dateString.format(calendar.getTime())));
+				calendar.add(Calendar.MONTH, agent.getShelfLife_months());
+				data.add(Tag.TAG_CAN_EXPIRATION_DATE_YYMMDD,dateString.format(calendar.getTime()));
 //				
 ////				data.TAG_CAN_EXPIRATION_DATE_YYMMDD = dateString.format(calendar.getTime()); // TODO: Переделать на
 //																							// нормальное значение
 				data.add(Tag.TAG_CAN_ACTIVE_INGRIDIENT_NAME, agent.getIngridientName());
 ////				data.TAG_CAN_ACTIVE_INGRIDIENT_NAME = agent.getIngridientName();
-//				data.add(Tag.TAG_CAN_RESIDUAL_VOLUME_ML,canisterVolume));
+				data.add(Tag.TAG_CAN_RESIDUAL_VOLUME_ML,canisterVolume);
 ////				data.TAG_CAN_RESIDUAL_VOLUME_ML = canisterVolume;
 				data.add(Tag.TAG_CAN_DESINFICTANT_NAME, agentName);
 ////				data.TAG_CAN_DESINFICTANT_NAME = agentName;
 //				
-//				data.add(Tag.TAG_CAN_RFID_MANUFACTURER_NAME,company.getName()));
+				data.add(Tag.TAG_CAN_RFID_MANUFACTURER_NAME,company.getName());
 ////				data.TAG_CAN_RFID_MANUFACTURER_NAME = company.getName();
-//				data.add(Tag.TAG_CAN_RFID_ISSUE_DATE_YYMMDD,dateString.format(time)));
+				data.add(Tag.TAG_CAN_RFID_ISSUE_DATE_YYMMDD,dateString.format(time));
 ////				data.TAG_CAN_RFID_ISSUE_DATE_YYMMDD = dateString.format(time);
 				data.add(Tag.TAG_CAN_INGRIDIENT_CONCENTRATION, agent.getConcentration());
 //				data.TAG_CAN_INGRIDIENT_CONCENTRATION = agent.getConcentration();
 				data.add(Tag.TAG_CAN_UNIQUE_ID, id);
 //				data.TAG_CAN_UNIQUE_ID = id;
 
-//				data.add(Tag.BATCH_NUMBER,"тестовая партия"));
+				data.add(Tag.TAG_BATCH_NUMBER,"тестовая партия");
 ////				data.BATCH_NUMBER = "тестовая партия"; // НАЗВАНИЕ НЕ СООТВЕТСТВУЕТ ДОКУМЕНТУ
 
 				// РЕЖИМЫ
 				// TODO: Переделать
-//				data.add(68,1));
+				data.add(Tag.TAG_CAN_WORK_MODE_ID,1);
 ////				data.TAG_CAN_WORK_MODE_ID = 1;
-//				data.add(69,"Стандартный"));
+				data.add(Tag.TAG_CAN_WORK_MODE_NAME,"Стандартный");
 ////				data.TAG_CAN_WORK_MODE_NAME = "Стандартный";
-//				data.add(70,10));
+				data.add(Tag.TAG_CAN_CONSUMPTION_ML_M3,10);
 ////				data.TAG_CAN_CONSUMPTION_ML_M3 = agent.getConsumption_ml_m3();
-//				data.add(71,1800));
+				data.add(Tag.TAG_CAN_EXPOSURE_SEC,1800);
 ////				data.TAG_CAN_EXPOSURE_SEC = 1800;
-//				data.add(72,3600));
+				data.add(Tag.TAG_CAN_AIRING_SEC,3600);
 ////				data.TAG_CAN_AIRING_SEC = 3600;
-//				data.add(73,0));
+				data.add(Tag.TAG_CAN_IMPULSE_PERIOD_SEC,0);
 ////				data.TAG_CAN_IMPULSE_PERIOD_SEC = 0;
-//				data.add(74,0));
+				data.add(Tag.TAG_CAN_IMPULSE_WIDTH_SEC,0);
 ////				data.TAG_CAN_IMPULSE_WIDTH_SEC = 0;
 
 				try {
