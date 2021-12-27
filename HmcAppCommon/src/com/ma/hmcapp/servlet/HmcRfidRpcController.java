@@ -186,7 +186,7 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				data.add(Tag.TAG_CAN_DESINFICTANT_NAME, agentName);
 				data.add(Tag.TAG_CAN_RFID_MANUFACTURER_NAME, company.getName());
 				data.add(Tag.TAG_CAN_RFID_ISSUE_DATE_YYMMDD, dateString.format(time));
-				data.add(Tag.TAG_CAN_INGRIDIENT_CONCENTRATION, agent.getConcentration());
+				data.add(Tag.TAG_CAN_INGRIDIENT_CONCENTRATION, agent.getConcentrationForRfid());
 				data.add(Tag.TAG_CAN_UNIQUE_ID, id);
 
 				data.add(Tag.TAG_BATCH_NUMBER, "тестовая партия");
