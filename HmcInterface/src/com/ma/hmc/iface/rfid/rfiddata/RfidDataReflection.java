@@ -1,16 +1,11 @@
 package com.ma.hmc.iface.rfid.rfiddata;
 
+import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.StringJoiner;
 
 import com.ma.hmc.iface.rfid.rfiddata.DataItem.RfidArea;
 import com.ma.hmc.iface.rfid.rfiddata.DataItem.ValType;
-
-import java.util.StringJoiner;
 
 public class RfidDataReflection {
 
@@ -18,6 +13,17 @@ public class RfidDataReflection {
 
 	public RfidDataReflection(RfidData data) {
 		this.data = data;
+	}
+
+	private class CustomPair {
+		public String tagName;
+		public String value;
+
+		public CustomPair(String tagName, String value) {
+			this.tagName = tagName;
+			this.value = value;
+		}
+
 	}
 
 	public void printFields() {
@@ -47,8 +53,8 @@ public class RfidDataReflection {
 		}
 	}
 
-	private LinkedHashMap<String, String> getStruct() {
-		LinkedHashMap<String, String> struct = new LinkedHashMap<>();
+	private ArrayList<CustomPair> getStruct() {
+		ArrayList<CustomPair> struct = new ArrayList<CustomPair>();
 
 		try {
 			for (DataItem field : data.getRfidData()) {
@@ -93,7 +99,7 @@ public class RfidDataReflection {
 					continue;
 
 				if (fieldValue != null) {
-					struct.put(field.tag.tagName, fieldValue.toString());
+					struct.add(new CustomPair(field.tag.tagName, fieldValue.toString()));
 				}
 			}
 			return struct;
@@ -145,22 +151,20 @@ public class RfidDataReflection {
 
 		String body = "<body><table cellspacing=0><tr><th>Параметр</th><th>Значение</th></tr>";
 
-		HashMap<String, String> struct = getStruct();
-		Iterator<Entry<String, String>> it = struct.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry<String, String> pair = it.next();
-			String innerValues = pair.getValue();
-			if (pair.getValue().contains("\n")) {
-				String[] split = pair.getValue().split("\n");
+		ArrayList<CustomPair> struct = getStruct();
+		for (CustomPair pair : struct) {
+			String innerValues = pair.value;
+			if (innerValues.contains("\n")) {
+				String[] split = innerValues.split("\n");
 				innerValues = "<table>";
 				for (String value : split) {
 					innerValues += "<tr><td border=0>" + value + "</td></tr>";
 				}
 				innerValues += "</table>";
 			}
-			body += "<tr><td>" + pair.getKey() + "</td>" + "<td>" + innerValues + "</td>" + "</tr>";
-			it.remove();
+			body += "<tr><td>" + pair.tagName + "</td>" + "<td>" + innerValues + "</td>" + "</tr>";
 		}
+
 		body += "</table></body>";
 		return "<html>" + head + body + "</html>";
 	}
