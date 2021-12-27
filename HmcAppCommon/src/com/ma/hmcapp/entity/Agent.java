@@ -25,6 +25,7 @@ public class Agent {
 	private String ingridientName;
 	
 	@UILabel(label = "Концентрация, %")
+	//TODO: Уточнить насчет аннотации @UIFormat
 	private int concentration;
 
 //	@UILabel(label = "Расход, мл/м3")
