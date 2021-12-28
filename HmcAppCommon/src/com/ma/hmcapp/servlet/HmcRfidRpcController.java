@@ -25,6 +25,7 @@ import com.ma.appcommon.shared.auth.UserData;
 import com.ma.appcommon.shared.connection.ConnectionStatus.ConnectionType;
 import com.ma.common.rsa.Sig;
 import com.ma.common.shared.Severity;
+import com.ma.hmc.iface.rfid.rfiddata.QuotaDTO;
 import com.ma.hmc.iface.rfid.rfiddata.RfidData;
 import com.ma.hmc.iface.rfid.rfiddata.Tag;
 import com.ma.hmc.iface.rfid.rpcdata.User;
@@ -238,6 +239,18 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 		connectionStatusModule.add(threadLocalRequest.getThreadLocalRequest().getRemoteHost(), session.getId(),
 				ConnectionType.WRITER, user == null ? null : user.name);
 		return user == null ? null : new User(user.hasPermission(Permissions.PERMISSION_WRITE_RFID));
+	}
+
+	@Override
+	public List<QuotaDTO> getQuotas() throws Exception {
+		authComponent.checkPermissions(Permissions.PERMISSION_WRITE_RFID);
+		List<QuotaDTO> availableDisinfectants = new ArrayList<QuotaDTO>();
+		database.execVoid(conn -> {
+			Company company = companyDataSource.load(conn, authComponent.getUser().company);
+			quotaDataSource.get(conn, company).forEach(q -> availableDisinfectants
+					.add(new QuotaDTO(q.getAgent().getName(), q.getAgent().getConcentration(), q.getVolume())));
+		});
+		return availableDisinfectants;
 	}
 
 }

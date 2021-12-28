@@ -52,4 +52,12 @@ public class QuotaDataSource extends DataSourceImpl<Quota> {
 		return quotas;
 	}
 
+	public List<Quota> get(EM conn, Company company) {
+		List<Quota> quotas = conn.em
+				.createQuery("select q from Quota q where company=:company and remain>0", Quota.class)//
+				.setParameter("company", company)//
+				.getResultList();
+		return quotas;
+	}
+
 }
