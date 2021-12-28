@@ -212,7 +212,7 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 	private static void writeWorkModeToTag(RfidData data, CanisterWorkMode mode) {
 		data.add(Tag.TAG_CAN_WORK_MODE_ID, mode.getUid());
 		data.add(Tag.TAG_CAN_WORK_MODE_NAME, mode.getName());
-		data.add(Tag.TAG_CAN_CONSUMPTION_ML_M3, mode.getCan_consumption_ml_m3());
+		data.add(Tag.TAG_CAN_CONSUMPTION_ML, mode.getCan_consumption_ml_m3());
 		data.add(Tag.TAG_CAN_EXPOSURE_SEC, mode.getCan_exposure_sec());
 		data.add(Tag.TAG_CAN_AIRING_SEC, mode.getCan_airing_sec());
 		data.add(Tag.TAG_CAN_IMPULSE_PERIOD_SEC, mode.getCan_impulse_period_sec());
