@@ -93,9 +93,9 @@ public class RfidDataReflection {
 				} else {
 					fieldValue = field.stringValue;
 				}
-				// Не добавляем в считанную структуру служебные поля кроме UID
+				// Пропускаем служебные поля кроме UID и RFIDTYPE
 				if ((field.tag.area == RfidArea.NO_AREA && field.tag != Tag.TAG_UID)
-						|| field.tag.area == RfidArea.CON_AREA)
+						|| (field.tag.area == RfidArea.CON_AREA && field.tag != Tag.TAG_RFIDTYPE))
 					continue;
 
 				if (fieldValue != null) {
