@@ -177,6 +177,8 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 
 				RfidData data = new RfidData();
 				data.add(Tag.TAG_CAN_VERSION, 1);
+				data.add(Tag.TAG_RFIDTYPE, 1);
+				data.add(Tag.TAG_CODE_PAGE_ID, 1);
 				data.add(Tag.TAG_CAN_VOLUME_ML, canisterVolume);
 				data.add(Tag.TAG_CAN_MANUFACTURER_NAME, company.getName());
 				data.add(Tag.TAG_CAN_ISSUE_DATE_YYMMDD, dateString.format(time));
