@@ -2,7 +2,10 @@ package com.ma.hmcapp.servlet;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,15 +25,18 @@ import com.ma.appcommon.shared.auth.UserData;
 import com.ma.appcommon.shared.connection.ConnectionStatus.ConnectionType;
 import com.ma.common.rsa.Sig;
 import com.ma.common.shared.Severity;
+import com.ma.hmc.iface.rfid.rfiddata.QuotaDTO;
+import com.ma.hmc.iface.rfid.rfiddata.RfidData;
+import com.ma.hmc.iface.rfid.rfiddata.Tag;
 import com.ma.hmc.iface.rfid.rpcdata.User;
 import com.ma.hmc.iface.rfid.rpcinterface.HmcRfidRpcInterface;
-import com.ma.hmc.iface.rfid.ruslandata.RfidData;
-import com.ma.hmc.iface.rfid.ruslandata.RfidDataUtils;
 import com.ma.hmcapp.datasource.AgentDataSource;
+import com.ma.hmcapp.datasource.CanisterWorkModeDataSource;
 import com.ma.hmcapp.datasource.CompanyDataSource;
 import com.ma.hmcapp.datasource.QuotaDataSource;
 import com.ma.hmcapp.datasource.RfidLabelDataSource;
 import com.ma.hmcapp.entity.Agent;
+import com.ma.hmcapp.entity.CanisterWorkMode;
 import com.ma.hmcapp.entity.Company;
 import com.ma.hmcapp.entity.rfid.Quota;
 import com.ma.hmcapp.entity.rfid.RfidLabel;
@@ -60,6 +66,9 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 
 	@Autowired
 	private AgentDataSource agentDataSource;
+
+	@Autowired
+	private CanisterWorkModeDataSource canisterWorkModeDataSource;
 
 	@Autowired
 	private QuotaDataSource quotaDataSource;
@@ -104,6 +113,8 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 
 			if (agent == null)
 				throw new RuntimeException("Вещество " + agentName + " не зарегистрировано с системе");
+
+			List<CanisterWorkMode> canWorkMode = canisterWorkModeDataSource.getByAgent(conn, agent);
 
 			List<Quota> quotas = quotaDataSource.get(conn, company, agent, canisterVolume);
 
@@ -150,6 +161,10 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 			// DBExt.insert(conn, rfidLabelGroup);
 
 			Date time = new Date();
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(time);
+
+			DateFormat dateString = new SimpleDateFormat("yyMMdd");
 
 			for (int i = 0; i < company.getRfidBlockSize(); i++) {
 
@@ -161,15 +176,31 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 				int id = (int) rfidLabel.getId();
 
 				RfidData data = new RfidData();
-				data.CAN_UNIQUE_ID = id;
-				data.CAN_VOLUME_ML = canisterVolume;
-				data.CAN_MANUFACTURER_NAME = company.getName();
-				data.CAN_DESINFICTANT_NAME = agentName;
-				data.CAN_ACTIVE_INGRIDIENT_NAME = agent.getIngridientName();
-				data.CAN_INGRIDIENT_CONCENTRATION = agent.getConcentration();
+				data.add(Tag.TAG_CAN_VERSION, 1);
+				data.add(Tag.TAG_RFIDTYPE, 1);
+				data.add(Tag.TAG_CODE_PAGE_ID, 1);
+				data.add(Tag.TAG_CAN_VOLUME_ML, canisterVolume);
+				data.add(Tag.TAG_CAN_MANUFACTURER_NAME, company.getName());
+				data.add(Tag.TAG_CAN_ISSUE_DATE_YYMMDD, dateString.format(time));
+				calendar.add(Calendar.MONTH, agent.getShelfLife_months());
+				data.add(Tag.TAG_CAN_EXPIRATION_DATE_YYMMDD, dateString.format(calendar.getTime()));
+				data.add(Tag.TAG_CAN_ACTIVE_INGRIDIENT_NAME, agent.getIngridientName());
+				data.add(Tag.TAG_CAN_RESIDUAL_VOLUME_ML, canisterVolume);
+				data.add(Tag.TAG_CAN_DESINFICTANT_NAME, agentName);
+				data.add(Tag.TAG_CAN_RFID_MANUFACTURER_NAME, company.getName());
+				data.add(Tag.TAG_CAN_RFID_ISSUE_DATE_YYMMDD, dateString.format(time));
+				data.add(Tag.TAG_CAN_INGRIDIENT_CONCENTRATION, agent.getConcentrationForRfid());
+				data.add(Tag.TAG_CAN_UNIQUE_ID, id);
+
+				data.add(Tag.TAG_BATCH_NUMBER, "тестовая партия");
+
+				// РЕЖИМЫ
+				for (CanisterWorkMode mode : canWorkMode) {
+					writeWorkModeToTag(data, mode);
+				}
 
 				try {
-					data.CAN_DIGIT_SIG = sig.sign(RfidDataUtils.getKey(data));
+					data.add(Tag.TAG_CAN_DIGIT_SIG, sig.sign(RfidData.getKey(data)));
 				} catch (UnsupportedEncodingException | GeneralSecurityException e) {
 					throw new RuntimeException(e);
 				}
@@ -179,6 +210,16 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 		});
 
 		return list;
+	}
+
+	private static void writeWorkModeToTag(RfidData data, CanisterWorkMode mode) {
+		data.add(Tag.TAG_CAN_WORK_MODE_ID, mode.getUid());
+		data.add(Tag.TAG_CAN_WORK_MODE_NAME, mode.getName());
+		data.add(Tag.TAG_CAN_CONSUMPTION_ML, mode.getCan_consumption_ml_m3());
+		data.add(Tag.TAG_CAN_EXPOSURE_SEC, mode.getCan_exposure_sec());
+		data.add(Tag.TAG_CAN_AIRING_SEC, mode.getCan_airing_sec());
+		data.add(Tag.TAG_CAN_IMPULSE_PERIOD_SEC, mode.getCan_impulse_period_sec());
+		data.add(Tag.TAG_CAN_IMPULSE_WIDTH_SEC, mode.getCan_inpulse_width_sec());
 	}
 
 	@Override
@@ -200,6 +241,18 @@ public class HmcRfidRpcController extends RpcController implements HmcRfidRpcInt
 		connectionStatusModule.add(threadLocalRequest.getThreadLocalRequest().getRemoteHost(), session.getId(),
 				ConnectionType.WRITER, user == null ? null : user.name);
 		return user == null ? null : new User(user.hasPermission(Permissions.PERMISSION_WRITE_RFID));
+	}
+
+	@Override
+	public List<QuotaDTO> getQuotas() throws Exception {
+		authComponent.checkPermissions(Permissions.PERMISSION_WRITE_RFID);
+		List<QuotaDTO> availableDisinfectants = new ArrayList<QuotaDTO>();
+		database.execVoid(conn -> {
+			Company company = companyDataSource.load(conn, authComponent.getUser().company);
+			quotaDataSource.get(conn, company).forEach(q -> availableDisinfectants
+					.add(new QuotaDTO(q.getAgent().getName(), q.getAgent().getConcentration(), q.getVolume())));
+		});
+		return availableDisinfectants;
 	}
 
 }

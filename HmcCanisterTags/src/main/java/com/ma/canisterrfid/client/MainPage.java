@@ -1,6 +1,7 @@
 package com.ma.canisterrfid.client;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
@@ -22,12 +23,15 @@ import com.ma.common.gwtapp.client.commondata.CommonListPanelWrapper;
 import com.ma.common.gwtapp.client.commondata.PageEventBus;
 import com.ma.common.gwtapp.client.connections.ConnectionsPage;
 import com.ma.common.gwtapp.client.logger.LoggerPanel;
+import com.ma.common.gwtapp.client.ui.ContextMenu;
 import com.ma.common.gwtapp.client.ui.panel.DockLayoutPanelX;
 import com.ma.common.gwtapp.client.ui.toolbar.StatusBar;
+import com.ma.commonui.shared.cd.CDObject;
 import com.ma.hmcapp.client.FontAwesomeBundle;
 import com.ma.hmcapp.client.MaterialUIList;
 import com.ma.hmcapp.client.MyDataGridResources;
 import com.ma.hmcapp.entity.Agent;
+import com.ma.hmcapp.entity.CanisterWorkMode;
 import com.ma.hmcapp.entity.rfid.Quota;
 import com.ma.hmcapp.entity.rfid.RfidLabel;
 import com.ma.hmcapp.shared.CompanyType;
@@ -100,12 +104,22 @@ public class MainPage extends AppMainPage {
 		}
 
 		eventBus = new PageEventBus();
-		eventBus = new PageEventBus();
 
-		MaterialUIList disinfectantList = new MaterialUIList("");
+		DockLayoutPanelX panel = new DockLayoutPanelX(Unit.PCT);
+		MaterialUIList disinfectantList = new MaterialUIList("Средства") {
+			@Override
+			protected void prepareContextMenu(ContextMenu menu, Set<CDObject> set) {
+				super.prepareContextMenu(menu, set);
+			}
+		};
 		disinfectantList.setEditable(Login.user.company == null);
-		tabPanel.add(new DockLayoutPanelX(Unit.PCT)
-				.addX(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus)), "Средства");
+		panel.addW(new CommonListPanelWrapper(disinfectantList, Agent.class, eventBus), 50);
+
+		MaterialUIList modeList = new MaterialUIList("Режимы");
+		modeList.addStyleName(DEBUG_ID_PREFIX);
+		modeList.setEditable(Login.user.company == null);
+		panel.addW(new CommonListPanelWrapper(modeList, CanisterWorkMode.class, eventBus), 50);
+		tabPanel.add(panel, "Средства");
 
 		if (Login.user.company == null)
 			tabPanel.add(new LoggerPanel(true), "Журнал");

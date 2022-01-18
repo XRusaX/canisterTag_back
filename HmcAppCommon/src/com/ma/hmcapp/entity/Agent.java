@@ -21,34 +21,34 @@ public class Agent {
 	@UILabel(label = "Название", sortable = true)
 	private String name;
 
-	@UILabel(label = "Расход, мл/м3")
-	private int consumption_ml_m3;
-	@UILabel(label = "Расход профилакт., мл/м3")
-	private int consumption2_ml_m3;
-	@UILabel(label = "Время аэрации, мин.")
-	private int aeration_min;
+	@UILabel(label = "Действующее в-во")
+	private String ingridientName;
+
+	@UILabel(label = "Концентрация, %", nullable = false)
+	private double concentration;
 
 	@UILabel(label = "Срок годности, мес.")
 	private Integer shelfLife_months;
-	
-	@UILabel(label = "Действующее в-во")
-	private String ingridientName;
-	
-	@UILabel(label = "Концентрация, %")
-	private int concentration;
-	
+
 	public Agent() {
 	}
 
-	public Agent(String name, int consumption_ml_m3, int consumption2_ml_m3, int aeration_min,
-			Integer shelfLife_months, String ingridientName, int concentration) {
+	public Agent(String name, int consumption_ml_m3, int consumption2_ml_m3, int aeration_min, Integer shelfLife_months,
+			String ingridientName, double concentration) {
 		this.name = name;
-		this.consumption_ml_m3 = consumption_ml_m3;
-		this.consumption2_ml_m3 = consumption2_ml_m3;
-		this.aeration_min = aeration_min;
 		this.shelfLife_months = shelfLife_months;
 		this.ingridientName = ingridientName;
 		this.concentration = concentration;
 	}
-	
+
+	/**
+	 * Возвращает значение концентрации целым чилом в долях процента Например, для
+	 * концентрации 0.12% вернется значение 12
+	 * 
+	 * @return
+	 */
+	public int getConcentrationForRfid() {
+		return (int) (concentration * 100);
+	}
+
 }
